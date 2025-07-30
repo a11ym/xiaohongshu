@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@react-native-vector-icons/feather';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
-import ThemeText from './ThemeText';
+import ThemedText from './ThemedText';
 
 interface NavHeaderProps {
   leftComponent?: ReactNode;
@@ -36,7 +36,7 @@ const NavHeader = ({
         </View>
         {/* 中间容器 */}
         <View style={styles.centerContainer}>
-          {centerComponent ? <Pressable>{centerComponent}</Pressable> : <ThemeText style={styles.title}>{title}</ThemeText>}
+          {centerComponent ? <Pressable>{centerComponent}</Pressable> : <ThemedText style={styles.title}>{title}</ThemedText>}
         </View>
         {/* 右侧容器 */}
         <View style={styles.rightContainer}>

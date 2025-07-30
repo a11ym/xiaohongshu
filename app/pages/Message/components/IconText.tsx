@@ -1,22 +1,22 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Icon from '@react-native-vector-icons/feather'
-import ThemeText from '../../../components/ThemeText'
+import ThemedText from '../../../components/ThemedText'
 
 const IconText = () => {
   return (
     <View style={styles.messageContent}>
       <View style={styles.messageIcon}>
         <Icon name='user' size={24} color="black"></Icon>
-        <ThemeText style={styles.messageText}>赞和收藏</ThemeText>
+        <ThemedText style={styles.messageText}>赞和收藏</ThemedText>
       </View>
       <View style={styles.messageIcon}>
         <Icon name='user' size={24} color="black"></Icon>
-        <ThemeText style={styles.messageText}>新增关注</ThemeText>
+        <ThemedText style={styles.messageText}>新增关注</ThemedText>
       </View>
       <View style={styles.messageIcon}>
         <Icon name='user' size={24} color="black"></Icon>
-        <ThemeText style={styles.messageText}>评论和@</ThemeText>
+        <ThemedText style={styles.messageText}>评论和@</ThemedText>
       </View>
     </View>
   )

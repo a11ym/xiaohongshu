@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { getHeaderTitle } from '@react-navigation/elements';
 import Icon from '@react-native-vector-icons/feather';
-import ThemeText from './ThemeText';
+import ThemedText from './ThemedText';
 import { useTheme } from '../hooks/useTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const BackHeader = ({ navigation, route, options, back }: any) => {
@@ -17,11 +17,11 @@ const BackHeader = ({ navigation, route, options, back }: any) => {
           {/* {back && <Text>返回</Text>} */}
         </View>
         <View style={styles.titleContent}>
-          <ThemeText style={styles.title}>{title}</ThemeText>
+          <ThemedText style={styles.title}>{title}</ThemedText>
         </View>
         <View style={styles.rightContent}>
           {/* <Icon name="user-plus" size={24} color="black" />
-        <ThemeText onPress={() => navigation.navigate('Search')}>发现群聊</ThemeText> */}
+        <ThemedText onPress={() => navigation.navigate('Search')}>发现群聊</ThemedText> */}
         </View>
       </View>
     </View>

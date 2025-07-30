@@ -2,7 +2,7 @@ import { FlashList, MasonryFlashList } from "@shopify/flash-list";
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import ContainerView from "../../../components/ContainerView";
-import ThemeText from "../../../components/ThemeText";
+import ThemedText from "../../../components/ThemedText";
 import { useTheme } from "../../../hooks/useTheme";
 import { useNavigation } from "@react-navigation/native";
 import Icon from '@react-native-vector-icons/feather'
@@ -55,14 +55,14 @@ const Follow = () => {
             key={item.id} >
             <Image source={{ uri: item?.image_url }} style={styles.image} />
             <View style={styles.contentContainer}>
-              <ThemeText style={styles.title}>{item?.title}</ThemeText>
-              <ThemeText style={styles.content}>{item?.content}</ThemeText>
+              <ThemedText style={styles.title}>{item?.title}</ThemedText>
+              <ThemedText style={styles.content}>{item?.content}</ThemedText>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                 <Image source={{ uri: item?.avatar }} style={{ width: 20, height: 20, borderRadius: 10 }} />
-                <ThemeText style={{ marginLeft: 5 }}>User</ThemeText>
+                <ThemedText style={{ marginLeft: 5 }}>User</ThemedText>
                 <View style={{ flex: 1 }} />
                 <Icon name="heart" size={12} color="#ddd" />
-                <ThemeText style={{ marginLeft: 5 }}>12</ThemeText>
+                <ThemedText style={{ marginLeft: 5 }}>12</ThemedText>
               </View>
             </View>
           </Pressable>

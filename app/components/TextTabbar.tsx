@@ -5,9 +5,9 @@ import { useTheme } from '../hooks/useTheme';
 import Icon from '@react-native-vector-icons/feather';
 import Modal from 'react-native-modal';
 import { useState } from 'react';
-import ThemeView from './ThemeView';
+import ThemeView from './ThemedView';
 import ContainerView from './ContainerView';
-import ThemeText from './ThemeText';
+import ThemedText from './ThemedText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TextTabbar({ state, descriptors, navigation }: any) {
@@ -44,16 +44,16 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
             </Text> */}
 
             <View style={styles.settingOption}>
-              <ThemeText style={styles.settingOptionText}>从相册选择</ThemeText>
+              <ThemedText style={styles.settingOptionText}>从相册选择</ThemedText>
             </View>
 
             <View style={styles.settingOption}>
-              <ThemeText style={styles.settingOptionText}>相机</ThemeText>
-              <ThemeText style={styles.settingOptionText}>拍照与直播</ThemeText>
+              <ThemedText style={styles.settingOptionText}>相机</ThemedText>
+              <ThemedText style={styles.settingOptionText}>拍照与直播</ThemedText>
             </View>
 
             <View style={styles.settingOption}>
-              <ThemeText style={styles.settingOptionText}>写文字</ThemeText>
+              <ThemedText style={styles.settingOptionText}>写文字</ThemedText>
             </View>
             {/* <View style={styles.settingOption}>
               <Text style={styles.settingOptionText}>位置服务</Text>
@@ -68,7 +68,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
               style={[styles.modalButton]}
               onPress={() => setModalVisible(false)}
             >
-              <ThemeText style={[styles.modalButtonText]}>取消</ThemeText>
+              <ThemedText style={[styles.modalButtonText]}>取消</ThemedText>
             </TouchableOpacity>
             {/* <TouchableOpacity
               style={[styles.modalButton, styles.confirmButton]}

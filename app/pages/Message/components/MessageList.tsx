@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import ThemeText from '../../../components/ThemeText'
+import ThemedText from '../../../components/ThemedText'
 import messageData from '../data.json'
 import IconText from './IconText'
 import ContainerView from '../../../components/ContainerView'
@@ -28,8 +28,8 @@ const MessageList = () => {
               <View style={styles.content} key={item.id}>
                 <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../assets/1.png')}></Image>
                 <View style={styles.contentText}>
-                  <ThemeText>{item.title}</ThemeText>
-                  <ThemeText>{item.content}</ThemeText>
+                  <ThemedText>{item.title}</ThemedText>
+                  <ThemedText>{item.content}</ThemedText>
                 </View>
               </View>
             )

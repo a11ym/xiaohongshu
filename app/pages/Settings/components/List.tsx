@@ -1,7 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Feather from '@react-native-vector-icons/feather'
-import ThemeText from '../../../components/ThemeText'
+import ThemedText from '../../../components/ThemedText'
 import { useTheme } from '../../../hooks/useTheme'
 const List = ({onLogout}:{onLogout:()=>void}) => {
   const { iconColor, backgroundColor,containerBackgroundColor } = useTheme()
@@ -74,7 +74,7 @@ const List = ({onLogout}:{onLogout:()=>void}) => {
               <View style={[styles.containerContent]} key={index}>
                 <Feather name={item.icon} size={24} color={iconColor} />
                 <View style={[styles.containerItem, { borderBottomWidth: index === renderListDataPart.length - 1 ? 0 : 1 }]}>
-                  <ThemeText style={styles.text}>{item.title}</ThemeText>
+                  <ThemedText style={styles.text}>{item.title}</ThemedText>
                   <Feather name="chevron-right" size={24} color={iconColor} />
                 </View>
               </View>
@@ -89,7 +89,7 @@ const List = ({onLogout}:{onLogout:()=>void}) => {
               <View style={[styles.containerContent]} key={index}>
                 <Feather name={item.icon} size={24} color={iconColor} />
                 <View style={[styles.containerItem, { borderBottomWidth: index === renderListDataPart2.length - 1 ? 0 : 1 }]}>
-                  <ThemeText style={styles.text}>{item.title}</ThemeText>
+                  <ThemedText style={styles.text}>{item.title}</ThemedText>
                   <Feather name="chevron-right" size={24} color={iconColor} />
                 </View>
               </View>
@@ -104,7 +104,7 @@ const List = ({onLogout}:{onLogout:()=>void}) => {
               <View style={[styles.containerContent]} key={index}>
                 <Feather name={item.icon} size={24} color={iconColor} />
                 <View style={[styles.containerItem, { borderBottomWidth: index === renderListDataPart3.length - 1 ? 0 : 1 }]}>
-                  <ThemeText style={styles.text}>{item.title}</ThemeText>
+                  <ThemedText style={styles.text}>{item.title}</ThemedText>
                   <Feather name="chevron-right" size={24} color={iconColor} />
                 </View>
               </View>
@@ -120,7 +120,7 @@ const List = ({onLogout}:{onLogout:()=>void}) => {
                 <Pressable
                 onPress={onLogout}
                  style={[styles.containerItem, { justifyContent: 'center', borderBottomWidth: index === renderListDataPart4.length - 1 ? 0 : 1 }]}>
-                  <ThemeText style={styles.text}>{item.title}</ThemeText>
+                  <ThemedText style={styles.text}>{item.title}</ThemedText>
                 </Pressable>
               </View>
             )

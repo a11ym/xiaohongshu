@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -12,13 +12,15 @@ import Animated, {
 } from 'react-native-reanimated';
 import FontAwesome from '@react-native-vector-icons/feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 import { useNavigation } from '@react-navigation/native';
 const My = () => {
   const navigation = useNavigation();
+  console.log("🚀 ~ My ~ navigation:", navigation);
+
   const openSidebar = () => {
     console.log('打开侧边栏');
-    navigation.openDrawer();
+    navigation.dispatch({ type: 'OPEN_DRAWER' });
   };
 
   const listData = Array.from({ length: 60 }, (_, i) => ({ id: i + 1, title: `Item ${i + 1}` }));

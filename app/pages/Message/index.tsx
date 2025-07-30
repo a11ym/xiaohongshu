@@ -4,11 +4,11 @@ import { useTheme } from '../../hooks/useTheme';
 import MessageList from './components/MessageList';
 import NavHeader from '../../components/NavHeader';
 import Feather from '@react-native-vector-icons/feather';
-import ThemeText from '../../components/ThemeText';
+import ThemedText from '../../components/ThemedText';
 const RightComponent = ({ color }: { color: string }) => (
   <View style={[styles.rightContainer]}>
     <Feather name="users" size={24} color={color} />
-    <ThemeText>发现群聊</ThemeText>
+    <ThemedText>发现群聊</ThemedText>
   </View>
 )
 
