@@ -31,7 +31,7 @@ const NavHeader = ({
       <View style={styles.headerContainer}>
         {/* 左侧容器 */}
         <View style={styles.leftContainer}>
-          {back && <Feather onPress={() => navigation.goBack()} name='chevron-left' size={24} color={iconColor} />}
+          {back && <Feather onPress={() => navigation.goBack()} name='chevron-left' size={30} color={iconColor} />}
           {leftComponent && <>{leftComponent}</>}
         </View>
         {/* 中间容器 */}

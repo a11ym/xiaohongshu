@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-xiaohongshu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-xiaohongshu.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		625CAC742E5B624400E51EAB /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 625CAC712E5B624400E51EAB /* index.html */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		EF8E50666453B1AE8022C15F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
@@ -22,6 +23,7 @@
 		3B4392A12AC88292D35C810B /* Pods-xiaohongshu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xiaohongshu.debug.xcconfig"; path = "Target Support Files/Pods-xiaohongshu/Pods-xiaohongshu.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-xiaohongshu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xiaohongshu.release.xcconfig"; path = "Target Support Files/Pods-xiaohongshu/Pods-xiaohongshu.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-xiaohongshu.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-xiaohongshu.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		625CAC712E5B624400E51EAB /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = xiaohongshu/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = xiaohongshu/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -42,6 +44,7 @@
 		13B07FAE1A68108700A75B9A /* xiaohongshu */ = {
 			isa = PBXGroup;
 			children = (
+				625CAC732E5B624400E51EAB /* public */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -58,6 +61,30 @@
 				5DCACB8F33CDC322A6C60F78 /* libPods-xiaohongshu.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		625CAC702E5B624400E51EAB /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
+		625CAC722E5B624400E51EAB /* webview */ = {
+			isa = PBXGroup;
+			children = (
+				625CAC712E5B624400E51EAB /* index.html */,
+			);
+			path = webview;
+			sourceTree = "<group>";
+		};
+		625CAC732E5B624400E51EAB /* public */ = {
+			isa = PBXGroup;
+			children = (
+				625CAC702E5B624400E51EAB /* fonts */,
+				625CAC722E5B624400E51EAB /* webview */,
+			);
+			path = public;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -159,6 +186,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				625CAC742E5B624400E51EAB /* index.html in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				EF8E50666453B1AE8022C15F /* PrivacyInfo.xcprivacy in Resources */,
 			);
@@ -260,6 +288,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C48WU4JG6S;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = xiaohongshu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -288,6 +317,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C48WU4JG6S;
 				INFOPLIST_FILE = xiaohongshu/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (

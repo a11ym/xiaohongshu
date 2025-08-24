@@ -1,23 +1,18 @@
-import { View, Platform, Button, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
 import { useTheme } from '../hooks/useTheme';
 import Icon from '@react-native-vector-icons/feather';
 import Modal from 'react-native-modal';
 import { useState } from 'react';
-import ThemeView from './ThemedView';
-import ContainerView from './ContainerView';
 import ThemedText from './ThemedText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TextTabbar({ state, descriptors, navigation }: any) {
-  const { color, backgroundColor, tabBarFontColor } = useTheme();
+  const { backgroundColor, tabBarFontColor } = useTheme();
   const insets = useSafeAreaInsets();
   const { buildHref } = useLinkBuilder();
   const [isModalVisible, setModalVisible] = useState(false);
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
   return (
     <View style={[styles.container, { backgroundColor: backgroundColor }]}>
       <Modal
@@ -38,30 +33,30 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
             <Text style={styles.modalTitle}>设置选项</Text>
           </View> */}
 
-          <ScrollView style={styles.modalBody}>
-            {/* <Text style={styles.modalText}>
+          {/* <ScrollView style={styles.modalBody}> */}
+          {/* <Text style={styles.modalText}>
               您可以在此处调整应用的详细设置。
             </Text> */}
 
-            <View style={styles.settingOption}>
-              <ThemedText style={styles.settingOptionText}>从相册选择</ThemedText>
-            </View>
+          <View style={styles.settingOption}>
+            <ThemedText style={styles.settingOptionText}>从相册选择</ThemedText>
+          </View>
 
-            <View style={styles.settingOption}>
-              <ThemedText style={styles.settingOptionText}>相机</ThemedText>
-              <ThemedText style={styles.settingOptionText}>拍照与直播</ThemedText>
-            </View>
+          <View style={styles.settingOption}>
+            <ThemedText style={styles.settingOptionText}>相机</ThemedText>
+            <ThemedText style={styles.settingOptionText}>拍照与直播</ThemedText>
+          </View>
 
-            <View style={styles.settingOption}>
-              <ThemedText style={styles.settingOptionText}>写文字</ThemedText>
-            </View>
-            {/* <View style={styles.settingOption}>
+          <View style={styles.settingOption}>
+            <ThemedText style={styles.settingOptionText}>写文字</ThemedText>
+          </View>
+          {/* <View style={styles.settingOption}>
               <Text style={styles.settingOptionText}>位置服务</Text>
               <View style={[styles.toggle, styles.toggleActive]}>
                 <View style={[styles.toggleCircle, styles.toggleCircleActive]} />
               </View>
             </View> */}
-          </ScrollView>
+          {/* </ScrollView> */}
 
           <View style={styles.modalFooter}>
             <TouchableOpacity
@@ -247,7 +242,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 15,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#eee',
+    borderBottomColor: '#f0f0f0',
   },
   settingOptionText: {
     fontSize: 16,

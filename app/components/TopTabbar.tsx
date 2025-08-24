@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native';
 import Ionicons from '@react-native-vector-icons/feather';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
@@ -8,13 +8,13 @@ const { width: screenWidth } = Dimensions.get('window');
 
 
 // 自定义标签栏组件
-export default function CustomTabBar({ state, descriptors, navigation, position }: any) {
+export default function TopTabBar({ state, descriptors, navigation, position }: any) {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   // 计算标签宽度 (三个标签等宽)
   const tabWidth = (screenWidth - 112) / 3; // 112 = 左右按钮宽度(48*2) + 内边距(16)
-
+  // const tabWidth = 30;
   // 使用 Reanimated 共享值
   const indicatorPosition = useSharedValue(0);
   const searchWidth = useSharedValue(0);
@@ -47,7 +47,7 @@ export default function CustomTabBar({ state, descriptors, navigation, position 
     return {
       transform: [{ translateX: indicatorPosition.value }],
     };
-  });
+  }, [indicatorPosition]);
 
   // 搜索框动画样式
   const searchStyle = useAnimatedStyle(() => {
@@ -55,7 +55,7 @@ export default function CustomTabBar({ state, descriptors, navigation, position 
       width: searchWidth.value,
       opacity: searchOpacity.value,
     };
-  });
+  }, [searchWidth, searchOpacity]);
 
   // 打开侧边栏
   const openSidebar = () => {
@@ -74,74 +74,75 @@ export default function CustomTabBar({ state, descriptors, navigation, position 
   };
 
   return (
-    <View style={[styles.container, { backgroundColor, paddingTop: insets.top }]}>
-      {/* 顶部导航栏 */}
-      <View style={styles.tabBarContainer}>
-        {/* 左侧菜单按钮 */}
-        <TouchableOpacity
-          style={styles.sideButton}
-          onPress={openSidebar}
-        >
-          <Ionicons name="menu" size={24} color={isDarkMode ? '#fff' : '#000'} />
-        </TouchableOpacity>
+    <>
+      <View style={[styles.container, { backgroundColor, paddingTop: insets.top }]}>
+        {/* 顶部导航栏 */}
+        <View style={styles.tabBarContainer}>
+          {/* 左侧菜单按钮 */}
+          <TouchableOpacity
+            style={styles.sideButton}
+            onPress={openSidebar}
+          >
+            <Ionicons name="menu" size={24} color={isDarkMode ? '#fff' : '#000'} />
+          </TouchableOpacity>
 
-        {/* 三个居中标签 */}
-        <View style={styles.tabsContainer}>
-          {state.routes.map((route: any, index: number) => {
-            const { options } = descriptors[route.key];
-            const label = options.tabBarLabel || route.name;
-            const isFocused = state.index === index;
+          {/* 三个居中标签 */}
+          <View style={styles.tabsContainer}>
+            {state.routes.map((route: any, index: number) => {
+              const { options } = descriptors[route.key];
+              const label = options.tabBarLabel || route.name;
+              const isFocused = state.index === index;
 
-            const onPress = () => {
-              const event = navigation.emit({
-                type: 'tabPress',
-                target: route.key,
-                canPreventDefault: true,
-              });
+              const onPress = () => {
+                const event = navigation.emit({
+                  type: 'tabPress',
+                  target: route.key,
+                  canPreventDefault: true,
+                });
 
-              if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate(route.name);
-              }
-            };
+                if (!isFocused && !event.defaultPrevented) {
+                  navigation.navigate(route.name);
+                }
+              };
 
-            return (
-              <TouchableOpacity
-                key={route.key}
-                accessibilityRole="button"
-                accessibilityState={isFocused ? { selected: true } : {}}
-                onPress={onPress}
-                style={[styles.tabItem, { width: tabWidth }]}
-              >
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: isFocused ? tabBarFontColor.primary : tabBarFontColor.text }}>
-                  {label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+              return (
+                <TouchableOpacity
+                  key={route.key}
+                  accessibilityRole="button"
+                  accessibilityState={isFocused ? { selected: true } : {}}
+                  onPress={onPress}
+                  style={[styles.tabItem, { width: tabWidth }]}
+                >
+                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: isFocused ? tabBarFontColor.primary : tabBarFontColor.text }}>
+                    {label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
 
-          {/* 指示器 - 使用 Reanimated */}
-          <Animated.View
-            style={[
-              styles.indicator,
-              indicatorStyle,
-              { width: tabWidth }
-            ]}
-          />
+            {/* 指示器 - 使用 Reanimated */}
+            <Animated.View
+              style={[
+                styles.indicator,
+                indicatorStyle,
+                { width: tabWidth }
+              ]}
+            />
+          </View>
+
+          {/* 右侧搜索按钮 */}
+          <TouchableOpacity
+            style={styles.sideButton}
+            onPress={toggleSearch}
+          >
+            <Ionicons
+              name={isSearchActive ? "x" : "search"}
+              size={24}
+              color={isDarkMode ? '#fff' : '#000'}
+            />
+          </TouchableOpacity>
         </View>
-
-        {/* 右侧搜索按钮 */}
-        <TouchableOpacity
-          style={styles.sideButton}
-          onPress={toggleSearch}
-        >
-          <Ionicons
-            name={isSearchActive ? "x" : "search"}
-            size={24}
-            color={isDarkMode ? '#fff' : '#000'}
-          />
-        </TouchableOpacity>
       </View>
-
       {/* 搜索框 - 动画效果 */}
       <Animated.View style={[styles.searchContainer, searchStyle]}>
         <TextInput
@@ -155,7 +156,7 @@ export default function CustomTabBar({ state, descriptors, navigation, position 
           autoFocus={isSearchActive}
         />
       </Animated.View>
-    </View>
+    </>
   );
 };
 
@@ -167,8 +168,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#ddd',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'red',
   },
   tabBarContainer: {
     flexDirection: 'row',
@@ -203,20 +204,27 @@ const styles = StyleSheet.create({
   indicator: {
     position: 'absolute',
     bottom: 0,
+    left: 0,
+    right: 0,
     height: 3,
     backgroundColor: '#FF5777',
     borderRadius: 2,
   },
   searchContainer: {
+    flex: 1,
     position: 'absolute',
+    top: 56,
+    left: 0,
+    // alignItems: 'center',
+    // flexDirection: 'column',
 
-    marginHorizontal: 16,
-    marginTop: 8,
-    borderRadius: 20,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
+    // marginHorizontal: 16,
+    // marginTop: 8,
+    // borderRadius: 20,
+    backgroundColor: 'red',
+    // justifyContent: 'center',
     paddingHorizontal: 16,
-    overflow: 'hidden',
+    // overflow: 'hidden',
   },
   searchInput: {
     height: 40,

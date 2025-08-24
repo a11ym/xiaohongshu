@@ -1,10 +1,13 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Feather from '@react-native-vector-icons/feather'
 import ThemedText from '../../../components/ThemedText'
 import { useTheme } from '../../../hooks/useTheme'
-const List = ({onLogout}:{onLogout:()=>void}) => {
-  const { iconColor, backgroundColor,containerBackgroundColor } = useTheme()
+import Modal from 'react-native-modal'
+import { useNavigation } from '@react-navigation/native'
+const List = ({ onLogout }: { onLogout: () => void }) => {
+  const { iconColor, backgroundColor, containerBackgroundColor } = useTheme()
+  const navigation = useNavigation()
   const renderListDataPart = [
     {
       title: '账号与安全',
@@ -65,19 +68,43 @@ const List = ({onLogout}:{onLogout:()=>void}) => {
       icon: ''
     }
   ]
+  const [isVisible, setIsVisible] = useState(false)
+  const handleClose = () => {
+    setIsVisible(false)
+  }
+  const handleOpen = (index) => {
+    if (index === 1) {
+      setIsVisible(true)
+    }
+  }
+  const handleOpenGeneral = (index) => {
+    if (index === 1) {
+      navigation.navigate('General')
+    }
+  }
+
+
+
   return (
-    <ScrollView style={[styles.container,{backgroundColor: containerBackgroundColor}]}>
+    <ScrollView style={[styles.container, { backgroundColor: containerBackgroundColor }]}>
       <View style={[styles.containerPart, { backgroundColor }]}>
         {
           renderListDataPart.map((item, index) => {
             return (
-              <View style={[styles.containerContent]} key={index}>
-                <Feather name={item.icon} size={24} color={iconColor} />
-                <View style={[styles.containerItem, { borderBottomWidth: index === renderListDataPart.length - 1 ? 0 : 1 }]}>
-                  <ThemedText style={styles.text}>{item.title}</ThemedText>
-                  <Feather name="chevron-right" size={24} color={iconColor} />
+              <Pressable
+                onPress={() => handleOpenGeneral(index)}
+                style={({ pressed }) => [styles.containerContent, pressed && { backgroundColor: '#eee' }]}
+                key={index}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                  <Feather name={item.icon} size={24} color={iconColor} />
+                  <View style={styles.containerItem}>
+                    <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart.length - 1 ? 0 : StyleSheet.hairlineWidth }]}>
+                      <ThemedText style={styles.text}>{item.title}</ThemedText>
+                      <Feather name="chevron-right" size={24} color={iconColor} />
+                    </View>
+                  </View>
                 </View>
-              </View>
+              </Pressable>
             )
           })
         }
@@ -86,13 +113,19 @@ const List = ({onLogout}:{onLogout:()=>void}) => {
         {
           renderListDataPart2.map((item, index) => {
             return (
-              <View style={[styles.containerContent]} key={index}>
-                <Feather name={item.icon} size={24} color={iconColor} />
-                <View style={[styles.containerItem, { borderBottomWidth: index === renderListDataPart2.length - 1 ? 0 : 1 }]}>
-                  <ThemedText style={styles.text}>{item.title}</ThemedText>
-                  <Feather name="chevron-right" size={24} color={iconColor} />
+              <Pressable
+                style={({ pressed }) => [styles.containerContent, pressed && { backgroundColor: '#eee' }]}
+                key={index}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                  <Feather name={item.icon} size={24} color={iconColor} />
+                  <View style={styles.containerItem}>
+                    <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart2.length - 1 ? 0 : 0.5 }]}>
+                      <ThemedText style={styles.text}>{item.title}</ThemedText>
+                      <Feather name="chevron-right" size={24} color={iconColor} />
+                    </View>
+                  </View>
                 </View>
-              </View>
+              </Pressable>
             )
           })
         }
@@ -101,13 +134,19 @@ const List = ({onLogout}:{onLogout:()=>void}) => {
         {
           renderListDataPart3.map((item, index) => {
             return (
-              <View style={[styles.containerContent]} key={index}>
-                <Feather name={item.icon} size={24} color={iconColor} />
-                <View style={[styles.containerItem, { borderBottomWidth: index === renderListDataPart3.length - 1 ? 0 : 1 }]}>
-                  <ThemedText style={styles.text}>{item.title}</ThemedText>
-                  <Feather name="chevron-right" size={24} color={iconColor} />
+              <Pressable
+                style={({ pressed }) => [styles.containerContent, pressed && { backgroundColor: '#eee' }]}
+                key={index}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                  <Feather name={item.icon} size={24} color={iconColor} />
+                  <View style={styles.containerItem}>
+                    <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart3.length - 1 ? 0 : 0.5 }]}>
+                      <ThemedText style={styles.text}>{item.title}</ThemedText>
+                      <Feather name="chevron-right" size={24} color={iconColor} />
+                    </View>
+                  </View>
                 </View>
-              </View>
+              </Pressable>
             )
           })
         }
@@ -116,17 +155,62 @@ const List = ({onLogout}:{onLogout:()=>void}) => {
         {
           renderListDataPart4.map((item, index) => {
             return (
-              <View style={[styles.containerContent]} key={index}>
-                <Pressable
-                onPress={onLogout}
-                 style={[styles.containerItem, { justifyContent: 'center', borderBottomWidth: index === renderListDataPart4.length - 1 ? 0 : 1 }]}>
-                  <ThemedText style={styles.text}>{item.title}</ThemedText>
-                </Pressable>
-              </View>
+              <Pressable
+                key={index}
+                onPress={() => { handleOpen(index) }}
+                style={({ pressed }) => [styles.loginContent, pressed && { backgroundColor: '#eee' }]}
+              >
+                <View
+                  style={styles.containerItem}
+                >
+                  <View style={[styles.textContent, { borderBottomWidth: index === renderListDataPart4.length - 1 ? 0 : 0.5 }]}>
+                    <ThemedText style={styles.text}>{item.title}</ThemedText>
+                  </View>
+                </View>
+              </Pressable>
             )
           })
         }
       </View>
+      <Modal
+        isVisible={isVisible}
+        onBackdropPress={handleClose}
+        style={{ margin: 0, justifyContent: 'flex-end' }}
+        swipeDirection="down"
+        animationIn='slideInUp'
+        animationOut='slideOutDown'
+      >
+        <View style={[styles.modalContainer, { backgroundColor: containerBackgroundColor }]}>
+          <View style={[styles.modalHeader, { backgroundColor }]}>
+            <Text style={{ textAlign: 'center' }}>确认退出该账号@BearWu吗？</Text>
+          </View>
+          <View style={[styles.modalBody, { backgroundColor }]}>
+            <Pressable
+              style={({ pressed }) => [styles.modalContent, pressed && { backgroundColor: '#eee' }]}
+            >
+              <View style={[styles.modalItem, { borderBottomWidth: 0.5, borderBottomColor: '#ddd' }]}>
+                <ThemedText >切换账号</ThemedText>
+              </View>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [styles.modalContent, pressed && { backgroundColor: '#eee' }]}
+              onPress={onLogout}>
+              <View style={styles.modalItem}>
+                <ThemedText >退出登录</ThemedText>
+              </View>
+            </Pressable>
+          </View>
+          <View style={[styles.modalFooter, { backgroundColor }]}>
+            <Pressable
+              style={({ pressed }) => [styles.modalContent, pressed && { backgroundColor: '#eee' }]}
+              onPress={handleClose}>
+              <View style={styles.modalItem}>
+                <ThemedText >取消</ThemedText>
+              </View>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   )
 }
@@ -141,24 +225,74 @@ const styles = StyleSheet.create({
   containerPart: {
     borderRadius: 20,
     marginTop: 20,
+    overflow: 'hidden',
   },
   containerContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingLeft: 20,
+    gap: 10
   },
   containerItem: {
-    marginLeft: 8,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#ddd',
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
     justifyContent: 'space-between',
   },
   text: {
     fontSize: 16,
-    // fontWeight: 'bold',
-  }
+  },
+  contentItem: {
+    flex: 1,
+    paddingRight: 10,
+    paddingVertical: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: '#ddd',
+  },
+  loginContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  textContent: {
+    flex: 1,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: '#ddd',
+  },
+  modalContainer: {
+    maxHeight: '80%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: 'hidden',
+  },
+  modalContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+  },
+  modalHeader: {
+    paddingVertical: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#ddd',
+  },
+  modalBody: {
+    // flex: 1,
+    // backgroundColor: 'blue',
+  },
+  modalFooter: {
+    marginTop: 10,
+    paddingBottom: 40,
+  },
 })

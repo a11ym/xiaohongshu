@@ -5,9 +5,7 @@ import Animated, {
   useAnimatedStyle,
   useAnimatedRef,
   useAnimatedScrollHandler,
-  interpolate,
   withSpring,
-  withTiming,
   useScrollViewOffset,
 } from 'react-native-reanimated';
 import FontAwesome from '@react-native-vector-icons/feather';
@@ -36,15 +34,15 @@ const My = () => {
   const navHeight = useSharedValue(50); // 顶部导航栏高度
   const scrollOffset = useScrollViewOffset(scrollRef); // 滚动偏移量
   console.log("🚀 ~ My ~ scrollOffset:", scrollOffset)
-  const titleOpacity = useSharedValue(0); // 顶部标题透明度
-  const topNavOpacity = useSharedValue(0); // 顶部导航栏透明度
+  // const titleOpacity = useSharedValue(0); // 顶部标题透明度
+  // const topNavOpacity = useSharedValue(0); // 顶部导航栏透明度
   const avatarOpacity = useSharedValue(0); // 头像透明度
   const avatarSize = useSharedValue(30); // 头像大小
-  const avatarY = useSharedValue(30); // 头像Y坐标
-  const avatarX = useSharedValue(width / 2); // 头像X坐标
-  const tabBarOpacity = useSharedValue(0); // 标签栏透明度
-  const backgroundOpacity = useSharedValue(1); // 背景图透明度
-  const navBackgroundColor = useSharedValue('transparent'); // 背景颜色
+  // const avatarY = useSharedValue(30); // 头像Y坐标
+  // const avatarX = useSharedValue(width / 2); // 头像X坐标
+  // const tabBarOpacity = useSharedValue(0); // 标签栏透明度
+  // const backgroundOpacity = useSharedValue(1); // 背景图透明度
+  // const navBackgroundColor = useSharedValue('transparent'); // 背景颜色
 
   // useEffect(() => {
   //   // 获取sticky元素的位置信息
@@ -66,7 +64,7 @@ const My = () => {
       // const newScrollOffset = Math.max(0, Math.min(y, headerHeight.value));
       // scrollOffset.value = withSpring(newScrollOffset);
       // 根据滚动位置调整动画值
-      navBackgroundColor.value = withSpring(y > 100 ? '#f12' : 'transparent');
+      // navBackgroundColor.value = withSpring(y > 100 ? '#f12' : 'transparent');
       avatarOpacity.value = withSpring(y > 100 ? 1 : 0);
     },
   });
@@ -76,22 +74,22 @@ const My = () => {
     return {
       height: headerHeight.value + insets.top,
     }
-  });
+  }, [insets.top]);
   //
   const headerStylePaddingTop = useAnimatedStyle(() => {
     return {
       paddingTop: insets.top + navHeight.value,
     }
-  })
+  }, [insets.top, navHeight.value])
 
   // 顶部导航栏样式动画
   const topNavStyle = useAnimatedStyle(() => {
     return {
       paddingTop: insets.top,
       height: navHeight.value + insets.top,
-      backgroundColor: navBackgroundColor.value,
+      // backgroundColor: navBackgroundColor.value,
     }
-  })
+  }, [insets.top, navHeight.value]);
 
 
 
@@ -109,7 +107,7 @@ const My = () => {
     //     translateY: avatarY.value,
     //   },
     // ]
-  }));
+  }), [avatarSize.value, avatarOpacity.value]);
 
   // 背景图样式动画
   // const backgroundStyle = useAnimatedStyle(() => ({
@@ -139,9 +137,18 @@ const My = () => {
           style={[avatarStyle]}
           resizeMode="cover"
         />
-        <TouchableOpacity style={styles.menuButton}>
-          <FontAwesome name="share-2" size={24} color="white" />
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity
+          onPress={() => navigation.navigate('ScanScreen')}
+          style={styles.menuButton}>
+            <FontAwesome name="camera" size={24} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+          style={styles.menuButton}>
+            <FontAwesome name="share-2" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+
       </Animated.View>
       {/* 内容区域 */}
       <Animated.ScrollView

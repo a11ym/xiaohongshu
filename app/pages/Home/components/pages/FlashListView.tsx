@@ -1,9 +1,9 @@
 import { FlashList } from "@shopify/flash-list";
 import React, { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import ContainerView from "../../../components/ContainerView";
-import ThemedText from "../../../components/ThemedText";
-import { useTheme } from "../../../hooks/useTheme";
+import ContainerView from "../../../../components/ContainerView";
+import ThemedText from "../../../../components/ThemedText";
+import { useTheme } from "../../../../hooks/useTheme";
 import { useNavigation } from "@react-navigation/native";
 import Icon from '@react-native-vector-icons/feather'
 
@@ -15,7 +15,7 @@ interface Item {
   avatar: string;
 }
 
-const Follow = () => {
+const FlashListView = () => {
   const navigation = useNavigation()
   const { darkContainerBackgroundColor } = useTheme()
   const DATA: Item[] = Array.from({ length: 100 }, (_, i) =>
@@ -33,7 +33,7 @@ const Follow = () => {
   const [refreshing, setRefreshing] = useState(false)
   const handlePress = (item: Item) => {
     console.log("🚀 ~ handlePress ~ item:", item.id)
-    navigation.navigate('Detail', { itemId: item.id, item })
+    navigation.navigate('Detail', { itemId: item.id })
   }
   return (
     <ContainerView style={{ flex: 1 }}>
@@ -73,7 +73,7 @@ const Follow = () => {
   )
 }
 
-export default Follow
+export default FlashListView
 
 const styles = StyleSheet.create({
   container: {

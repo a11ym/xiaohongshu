@@ -1,376 +1,275 @@
-// import React, { useRef } from 'react'
-// import { StyleSheet, Animated, Text, View, TouchableOpacity, Platform, ScrollView } from 'react-native';
-// import { useLinkBuilder } from '@react-navigation/native';
-// import { useTheme } from '../hooks/useTheme';
-// const DiscoverTopTabbar = ({ state, descriptors, navigation, position }: any) => {
-//   const { color, backgroundColor,darkContainerBackgroundColor, tabBarFontColor } = useTheme();
-//   const { buildHref } = useLinkBuilder();
-//   const scrollViewRef = useRef(null);
-//   return (
-//     // <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: backgroundColor, }}>
-//     <View style={[styles.tabBarContainer, { backgroundColor: backgroundColor }]}>
-//       <ScrollView
-//         ref={scrollViewRef}
-//         horizontal
-//         showsHorizontalScrollIndicator={false}
-//         contentContainerStyle={styles.tabScrollContent}
-//       >
-//         {state.routes.map((route: { key: string | number; name: any; params: any; }, index: React.Key | null | undefined) => {
-//           const { options } = descriptors[route.key];
-//           const label =
-//             options.tabBarLabel !== undefined
-//               ? options.tabBarLabel
-//               : options.title !== undefined
-//                 ? options.title
-//                 : route.name;
-
-//           const isFocused = state.index === index;
-
-//           const onPress = () => {
-//             const event = navigation.emit({
-//               type: 'tabPress',
-//               target: route.key,
-//               canPreventDefault: true,
-//             });
-
-//             if (!isFocused && !event.defaultPrevented) {
-//               navigation.navigate(route.name, route.params);
-//             }
-//           };
-
-//           const onLongPress = () => {
-//             navigation.emit({
-//               type: 'tabLongPress',
-//               target: route.key,
-//             });
-//           };
-
-//           const inputRange = state.routes.map((_: any, i: any) => i);
-//           const opacity = position.interpolate({
-//             inputRange,
-//             outputRange: inputRange.map((i: any) => (i === index ? 1 : 0.6)),
-//           });
-
-//           return (
-//             <TouchableOpacity
-//               // href={buildHref(route.name, route.params)}
-//               accessibilityRole={Platform.OS === 'web' ? 'link' : 'button'}
-//               accessibilityState={isFocused ? { selected: true } : {}}
-//               accessibilityLabel={options.tabBarAccessibilityLabel}
-//               testID={options.tabBarButtonTestID}
-//               onPress={onPress}
-//               onLongPress={onLongPress}
-//               key={index}
-//               style={{ flex: 1, alignItems: 'center' }}
-//             >
-//               <Animated.Text style={{ opacity, color: color, alignItems: 'center', paddingRight: 100 }}>
-//                 {label}
-//               </Animated.Text>
-//             </TouchableOpacity>
-//           );
-
-//         })}
-//       </ScrollView>
-//     </View>
-//   )
-// }
-
-// export default DiscoverTopTabbar
-
-// const styles = StyleSheet.create({
-//   tabBarContainer: {
-//     elevation: 4, // for android
-
-//   },
-//   tabScrollContent: {
-//     flexDirection: 'row',
-//     paddingHorizontal: 16,
-//     paddingVertical: 8,
-//     alignItems: 'center',
-//   },
-// })
-
-
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, TextInput, LayoutChangeEvent } from 'react-native';
-import Ionicons from '@react-native-vector-icons/feather';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-  Easing,
+  runOnJS
 } from 'react-native-reanimated';
 
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-// 自定义标签栏组件
-const DiscoverTopTabbar = ({ state, descriptors, navigation, position }:any) => {
-  const [tabWidths, setTabWidths] = useState({});
-  const scrollViewRef = useRef(null);
-  // const [isSearchActive, setIsSearchActive] = useState(false);
-  // const [searchQuery, setSearchQuery] = useState('');
-  
-  // 使用 Reanimated 共享值
-  const indicatorPosition = useSharedValue(0);
-  const indicatorWidth = useSharedValue(0);
-  // const searchOpacity = useSharedValue(0);
-  // const searchWidth = useSharedValue(0);
-  
-  // 初始化时计算指示器位置
-  useEffect(() => {
-    if (state.index === 0) {
-      indicatorPosition.value = 0;
-      indicatorWidth.value = tabWidths[state.routes[0].key] || 0;
-    }
-  }, [tabWidths]);
-  
-  // 监听标签变化
-  useEffect(() => {
-    let offset = 0;
-    for (let i = 0; i < state.index; i++) {
-      offset += tabWidths[state.routes[i].key] || 0;
-    }
-    
-    const newWidth = tabWidths[state.routes[state.index].key] || 0;
-    
-    indicatorPosition.value = withTiming(offset, {
-      duration: 300,
-      easing: Easing.out(Easing.exp),
+const CustomTabBar = ({ state, navigation, descriptors }: any) => {
+  // 状态管理
+  const [tabLayouts, setTabLayouts] = useState<{ x: number; width: number }[]>([]);
+  const [contentWidth, setContentWidth] = useState(0);
+
+  // Reanimated 值
+  const translateX = useSharedValue(0);
+  const containerWidth = useRef(SCREEN_WIDTH);
+
+  // 当前激活的 Tab 索引
+  const activeIndex = state.index;
+
+  // 处理 Tab 布局变化
+  const onTabLayout = (index: number, event: any) => {
+    const { layout } = event.nativeEvent;
+    setTabLayouts(prev => {
+      const newLayouts = [...prev];
+      newLayouts[index] = { x: layout.x, width: layout.width };
+      return newLayouts;
     });
-    
-    indicatorWidth.value = withTiming(newWidth, {
-      duration: 300,
-      easing: Easing.out(Easing.exp),
-    });
-  }, [state.index, tabWidths]);
-  
-  // 搜索动画
-  // useEffect(() => {
-  //   if (isSearchActive) {
-  //     searchOpacity.value = withTiming(1, { duration: 300 });
-  //     searchWidth.value = withTiming(200, { duration: 300 });
-  //   } else {
-  //     searchOpacity.value = withTiming(0, { duration: 300 });
-  //     searchWidth.value = withTiming(0, { duration: 300 });
-  //     setSearchQuery('');
-  //   }
-  // }, [isSearchActive]);
-  
-  // 测量标签宽度
-  const handleTabLayout = (event: LayoutChangeEvent, routeKey: any) => {
-    const { width } = event.nativeEvent.layout;
-    setTabWidths(prev => ({ ...prev, [routeKey]: width }));
   };
-  
-  // // 打开侧边栏
-  // const openSidebar = () => {
-  //   console.log('打开侧边栏');
-  // };
-  
-  // // 打开搜索
-  // const toggleSearch = () => {
-  //   setIsSearchActive(!isSearchActive);
-  // };
-  
-  // // 处理搜索提交
-  // const handleSearchSubmit = () => {
-  //   console.log('搜索:', searchQuery);
-  // };
 
-  // // 指示器动画样式
-  // const indicatorStyle = useAnimatedStyle(() => {
-  //   return {
-  //     transform: [{ translateX: indicatorPosition.value }],
-  //     width: indicatorWidth.value,
-  //   };
-  // });
-  
-  // // 搜索框动画样式
-  // const searchStyle = useAnimatedStyle(() => {
-  //   return {
-  //     width: searchWidth.value,
-  //     opacity: searchOpacity.value,
-  //   };
-  // });
+  // 处理内容容器布局
+  const onContentLayout = (event: any) => {
+    const { width } = event.nativeEvent.layout;
+    setContentWidth(width);
+  };
+
+  // 滚动到激活的 Tab（居中效果）
+  const scrollToActiveTab = (animated = true) => {
+    if (activeIndex < 0 || activeIndex >= tabLayouts.length || !tabLayouts[activeIndex]) return;
+
+    const { x, width } = tabLayouts[activeIndex];
+    const tabCenter = x + width / 2;
+    const targetOffset = tabCenter - containerWidth.current / 2;
+
+    // 计算最大可滚动距离
+    const maxScroll = Math.max(0, contentWidth - containerWidth.current);
+    const clampedOffset = Math.max(0, Math.min(targetOffset, maxScroll));
+
+    // 执行动画
+    if (animated) {
+      translateX.value = withTiming(-clampedOffset, { duration: 300 });
+    } else {
+      translateX.value = -clampedOffset;
+    }
+  };
+
+  // 当激活索引或布局变化时滚动
+  useEffect(() => {
+    if (tabLayouts.length > 0 && contentWidth > 0) {
+      scrollToActiveTab();
+    }
+  }, [activeIndex, tabLayouts, contentWidth]);
+
+  // 处理容器尺寸变化（如旋转）
+  const onContainerLayout = (event: any) => {
+    containerWidth.current = event.nativeEvent.layout.width;
+    scrollToActiveTab(false);
+  };
+
+  // 处理 Tab 点击
+  const handleTabPress = (route: any, index: number) => {
+    const isFocused = state.index === index;
+
+    if (!isFocused) {
+      navigation.navigate(route.name);
+    }
+
+    // 如果布局信息尚未准备好，稍后滚动
+    if (!tabLayouts[index] || contentWidth === 0) {
+      requestAnimationFrame(() => runOnJS(scrollToActiveTab)());
+    }
+  };
+
+  // 动画样式
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }]
+  }), [translateX]);
 
   return (
-    <View style={styles.tabBarContainer}>
-      {/* 左侧菜单按钮 */}
-      {/* <TouchableOpacity 
-        style={styles.sideButton} 
-        onPress={openSidebar}
+    <View
+      style={styles.container}
+      onLayout={onContainerLayout}
+    >
+      <Animated.ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        // scrollEnabled={false} // 禁用原生滚动
+        contentContainerStyle={styles.scrollContent}
       >
-        <Ionicons name="menu" size={24} color="#333" />
-      </TouchableOpacity> */}
-      
-      {/* 中间标签区域 */}
-      <View style={styles.tabsContainer}>
-        <Animated.ScrollView
-          ref={scrollViewRef}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.tabScrollContent}
+        <Animated.View
+          style={[styles.tabsContainer, animatedStyle]}
+          onLayout={onContentLayout}
         >
-          {state.routes.map((route: any, index:any) => {
+          {state.routes.map((route: any, index: number) => {
             const { options } = descriptors[route.key];
             const label = options.tabBarLabel || route.name;
             const isFocused = state.index === index;
-            
-            const onPress = () => {
-              const event = navigation.emit({
-                type: 'tabPress',
-                target: route.key,
-                canPreventDefault: true,
-              });
-              
-              if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate(route.name);
-              }
-              
-              // 滚动到可见区域
-              scrollViewRef.current?.scrollTo({
-                x: tabWidths[route.key] * index,
-                animated: true
-              });
-            };
-            
+
             return (
               <TouchableOpacity
                 key={route.key}
-                accessibilityRole="button"
-                accessibilityState={isFocused ? { selected: true } : {}}
-                onPress={onPress}
-                onLayout={(e) => handleTabLayout(e, route.key)}
-                style={styles.tabItem}
+                onPress={() => handleTabPress(route, index)}
+                onLayout={(e) => onTabLayout(index, e)}
+                activeOpacity={0.7}
               >
-                <Text style={[styles.tabLabel, isFocused && styles.activeTabLabel]}>
-                  {label}
-                </Text>
+                <View style={[
+                  styles.tabItem,
+                  // isFocused && styles.activeTab
+                ]}>
+                  <Text style={[
+                    styles.tabText,
+                    isFocused && styles.activeText
+                  ]}>
+                    {label}
+                  </Text>
+                </View>
               </TouchableOpacity>
             );
           })}
-          
-          {/* 指示器 - 使用 Reanimated */}
-          {/* <Animated.View 
-            style={[
-              styles.indicator, 
-              indicatorStyle
-            ]} 
-          /> */}
-        </Animated.ScrollView>
-      </View>
-      
-      {/* 右侧区域 - 搜索按钮或搜索框 */}
-      {/* <View style={styles.rightContainer}>
-        <Animated.View style={[styles.searchContainer, searchStyle]}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="搜索内容..."
-            placeholderTextColor="#999"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            onSubmitEditing={handleSearchSubmit}
-            returnKeyType="search"
-          />
         </Animated.View>
-        
-        <TouchableOpacity 
-          style={styles.sideButton} 
-          onPress={toggleSearch}
-        >
-          <Ionicons 
-            name={isSearchActive ? "x" : "search"} 
-            size={24} 
-            color="#333" 
-          />
-        </TouchableOpacity>
-      </View> */}
+      </Animated.ScrollView>
     </View>
   );
 };
 
-export default DiscoverTopTabbar
-
-
+// 样式定义
 const styles = StyleSheet.create({
-  tabBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    // height: 56,
-    paddingHorizontal: 8,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+  container: {
+    // flex: 1,
+    // height: 48,
+    // backgroundColor: '#FFFFFF',
+    // borderBottomWidth: StyleSheet.hairlineWidth,
+    // borderBottomColor: '#E0E0E0',
   },
-  sideButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 20,
+  scrollContent: {
+    flexGrow: 1,
   },
   tabsContainer: {
-    flex: 1,
-    marginHorizontal: 8,
-  },
-  tabScrollContent: {
     flexDirection: 'row',
-    alignItems: 'center',
-    // paddingBottom: 8,
+    paddingHorizontal: 8,
   },
   tabItem: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginHorizontal: 4,
   },
-  tabLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#999',
+  activeTab: {
+    backgroundColor: 'rgba(98, 0, 238, 0.1)',
+    borderRadius: 20,
   },
-  activeTabLabel: {
-    color: '#000',
-    fontWeight: 'bold',
-  },
-  indicator: {
-    position: 'absolute',
-    bottom: 0,
-    height: 3,
-    backgroundColor: '#2196f3',
-    borderRadius: 2,
-  },
-  rightContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchContainer: {
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-    overflow: 'hidden',
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
+  tabText: {
     fontSize: 16,
-    color: '#333',
-    paddingVertical: 0,
-    minWidth: 100,
+    color: '#616161',
+    fontWeight: '500',
   },
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
-  },
-  screenText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+  activeText: {
+    color: '#6200EE',
+    fontWeight: '600',
   },
 });
+
+export default CustomTabBar;
+
+
+
+
+
+
+// import React, { useRef } from 'react';
+// import {
+//   View,
+//   Text,
+//   TouchableOpacity,
+//   FlatList,
+//   Dimensions
+// } from 'react-native';
+// import {
+//   useSharedValue,
+//   useAnimatedScrollHandler,
+//   withSpring,
+//   useAnimatedStyle,
+// } from 'react-native-reanimated';
+
+// const { width: screenWidth } = Dimensions.get('window');
+
+// // 自定义顶部 TabBar
+// const CustomTabBar = ({ navigation, state }) => {
+//   const scrollX = useSharedValue(0);
+//   const flatListRef = useRef(null);
+
+//   // 每个 tab 的固定宽度
+//   const tabWidth = 120;
+
+//   // 点击 tab 时滚动到对应位置
+//   const handleTabPress = (index) => {
+//     const centerOffset = tabWidth * index + tabWidth / 2;
+//     const scrollToX = centerOffset - screenWidth / 2;
+//     scrollX.value = withSpring(scrollToX);
+//     if (flatListRef.current) {
+//       flatListRef.current.scrollToOffset({ offset: scrollToX, animated: true });
+//     }
+//     navigation.navigate(state.routes[index].name);
+//   };
+
+//   // 监听滚动，更新当前 tab 索引
+//   const onScroll = useAnimatedScrollHandler({
+//     onScroll: (event) => {
+//       const currentCenter = event.contentOffset.x + screenWidth / 2;
+//       const currentIndex = Math.round((currentCenter - tabWidth / 2) / tabWidth);
+//       if (currentIndex >= 0 && currentIndex < state.routes.length && currentIndex !== state.index) {
+//         navigation.navigate(state.routes[currentIndex].name);
+//       }
+//     },
+//   });
+
+//   // 动画样式：缩放当前 tab
+//   const animatedStyle = useAnimatedStyle(() => {
+//     return {
+//       transform: [{ scale: withSpring(state.index === 0 ? 1.2 : 1) }],
+//     };
+//   });
+
+//   return (
+//     <View style={{ height: 50 }}>
+//       <FlatList
+//         ref={flatListRef}
+//         data={state.routes}
+//         horizontal
+//         showsHorizontalScrollIndicator={false}
+//         scrollEventThrottle={16}
+//         onScroll={onScroll}
+//         getItemLayout={(data, index) => ({
+//           length: tabWidth,
+//           offset: tabWidth * index,
+//           index,
+//         })}
+//         renderItem={({ item, index }) => {
+//           const isActive = index === state.index;
+
+//           return (
+//             <TouchableOpacity
+//               style={{
+//                 width: tabWidth,
+//                 justifyContent: 'center',
+//                 alignItems: 'center',
+//                 paddingHorizontal: 16,
+//               }}
+//               onPress={() => handleTabPress(index)}
+//             >
+//               <Text style={isActive ? { fontWeight: 'bold' } : {}}>
+//                 {item.name}
+//               </Text>
+//             </TouchableOpacity>
+//           );
+//         }}
+//         keyExtractor={(item) => item.name}
+//       />
+//     </View>
+//   );
+// };
+
+// export default CustomTabBar;

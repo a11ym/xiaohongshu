@@ -7,10 +7,14 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
+    "copy:android": "bash copy-public-to-android.sh",
+    "dev:web": "vite --host",
+    "build:web": "vite build",
     "test": "jest"
   },
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
+    "@babel/preset-react": "^7.27.1",
     "@gorhom/bottom-sheet": "^5",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-masked-view/masked-view": "^0.3.2",
@@ -26,6 +30,7 @@
     "@shopify/flash-list": "^2.0.0-rc.11",
     "axios": "^1.10.0",
     "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-native": "0.80.1",
     "react-native-gesture-handler": "^2.27.1",
     "react-native-modal": "^14.0.0-rc.1",
@@ -34,8 +39,11 @@
     "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.11.1",
     "react-native-video": "^6.16.1",
-    "react-native-web": "^0.20.0",
-    "react-native-webview": "^13.15.0"
+    "react-native-vision-camera": "^4.7.1",
+    "react-native-web": "^0.21.1",
+    "react-native-webview": "^13.15.0",
+    "vite": "^7.1.3",
+    "vite-plugin-qrcode": "^0.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -51,11 +59,13 @@
     "@types/jest": "^29.5.13",
     "@types/react": "^19.1.0",
     "@types/react-test-renderer": "^19.1.0",
+    "@vitejs/plugin-react": "^5.0.1",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
     "react-test-renderer": "19.1.0",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "vite-plugin-commonjs": "^0.10.4"
   },
   "engines": {
     "node": ">=18"

@@ -1,63 +1,35 @@
-import { StyleSheet, Text, View, useColorScheme } from 'react-native'
 import React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import DiscoverTopTabbar from '../../../components/DiscoverTopTabbar';
-import Trending from './pages/Trending';
-import Live from './pages/Live';
-import MenMakeup from './pages/MenMakeup';
-import Recommend from './pages/Recommend';
-import Dressing from './pages/Dressing';
-import Shoes from './pages/Shoes';
-import Music from './pages/Music';
 const Tab = createMaterialTopTabNavigator();
+import FlashListView from '../components/pages/FlashListView'
+import { Dimensions } from 'react-native';
+const { width } = Dimensions.get('window');
+const tabs = [
+  { name: 'Recommend', label: '推荐' },
+  { name: 'Trending', label: '趋势' },
+  { name: 'Live', label: '直播' },
+  { name: 'MenMakeup', label: '男士发容' },
+  { name: 'Dressing', label: '穿搭' },
+  { name: 'Shoes', label: '潮鞋' },
+  { name: 'Music', label: '音乐' },
+]
 
 const Discover = () => {
-  const colorScheme = useColorScheme() // 'light' or 'dark'
   return (
     <Tab.Navigator
-      tabBar={props => <DiscoverTopTabbar {...props} />}
-    >
-      <Tab.Screen name="Recommend"
-        options={{
-          tabBarLabel: '推荐', // 设置标签栏的标题
-        }}
-        component={Recommend} />
-      <Tab.Screen name="Trending"
-        options={{
-          tabBarLabel: '趋势',
-        }}
-        component={Trending} />
-      <Tab.Screen name="Live"
-        options={{
-          tabBarLabel: '直播',
-        }
-        }
-        component={Live} />
-      <Tab.Screen name="MenMakeup"
-        options={{
-          tabBarLabel: '男士发容',
-        }
-        }
-        component={MenMakeup} />
-      <Tab.Screen name="Dressing"
-        options={{
-          tabBarLabel: '穿搭',
-        }}
-        component={Dressing} />
-      <Tab.Screen name="Shoes"
-        options={{
-          tabBarLabel: '潮鞋',
-        }}
-        component={Shoes} />
-      <Tab.Screen name="Music"
-        options={{
-          tabBarLabel: '音乐',
-        }}
-        component={Music} />
+      initialLayout={{ width: width }}
+      tabBar={props => <DiscoverTopTabbar {...props} />}>
+      {
+        tabs.map(tab => (
+          <Tab.Screen key={tab.name} name={tab.name} options={{ tabBarLabel: tab.label }} >
+            {/* {props => <Item {...props} name={tab.name} label={tab.label} />} */}
+            {() => <FlashListView />}
+          </Tab.Screen>
+        ))
+      }
     </Tab.Navigator>
   )
 }
 
 export default Discover
-
-const styles = StyleSheet.create({})

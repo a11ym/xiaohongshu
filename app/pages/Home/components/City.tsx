@@ -1,16 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import React from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, Link } from '@react-navigation/native';
 import ThemedText from '../../../components/ThemedText';
 import ContainerView from '../../../components/ContainerView';
 const City = () => {
   const navigation = useNavigation();
+  // const handleClick = (value:string)=>{
+  //   Link(value)
+  // }
   return (
     <ContainerView style={styles.container}>
       <Text>Home Screen</Text>
       <Text style={styles.text} onPress={() => navigation.navigate('My' as never)}>Go to My</Text>
       <Text style={styles.text} onPress={() => navigation.navigate('Detail' as never)}>Go to Details</Text>
       <ThemedText style={styles.text} onPress={() => navigation.navigate('Search' as never)}>Go to Search</ThemedText>
+      <ThemedText style={styles.text} onPress={() => navigation.navigate('WebView' as never)}>Go to WebView</ThemedText>
+      <Link screen={'WebView'}>Go to WebView2</Link>
     </ContainerView>
   )
 }

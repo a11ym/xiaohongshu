@@ -16,11 +16,11 @@ const TabbarButton = ({ onPress, onLongPress, routeName, label, isFocused }: any
     const scaleValue = interpolate(scale.value, [0, 1], [1, 1.2])
     const top = interpolate(scale.value, [0, 1], [0, 9])
     return { transform: [{ scale: scaleValue }], top }
-  })
+  }, [scale])
   const animatedTextStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(scale.value, [0, 1], [1, 0])
+    const opacity = interpolate(scale.value, [0, 0.7], [0, 0.8])
     return { opacity }
-  })
+  }, [scale])
   return (
     <PlatformPressable
       onPress={onPress}

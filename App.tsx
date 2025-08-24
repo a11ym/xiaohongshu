@@ -4,29 +4,26 @@
  *
  * @format
  */
-
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import DrawerNavigator from './app/navigation/DrawerNavigator';
+// import HomeStack from './app/navigation/HomeStack';
 import { StatusBar } from 'react-native';
 import { useTheme } from './app/hooks/useTheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React from 'react';
-import { AuthProvider } from './app/contexts/AuthContext';
-function App() {
+export default function App() {
   const navigationRef = useNavigationContainerRef();
+  console.log("🚀 ~ App ~ navigationRef:", navigationRef)
   const { isDarkMode } = useTheme();
 
   return (
-    <AuthProvider>
-
-      <SafeAreaProvider>
-        <NavigationContainer ref={navigationRef}>
-          <DrawerNavigator />
-        </NavigationContainer>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      </SafeAreaProvider>
-    </AuthProvider>
+    <SafeAreaProvider>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <NavigationContainer ref={navigationRef}>
+        <DrawerNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
-export default App;
+

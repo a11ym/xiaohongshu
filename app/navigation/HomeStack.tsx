@@ -1,16 +1,17 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import DetailHeader from '../components/DetailHeader';
 import Index from '../pages/Index';
 import Detail from '../pages/Detail';
 import Search from '../pages/Search';
 import Settings from '../pages/Settings'
-import BackHeader from '../components/BackHeader';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+// import ScanScreen from '../pages/My/components/ScanScreen';
+import General from '../pages/Settings/page/General';
+import DarkMode from '../pages/Settings/page/DarkMode';
+import WebView from '../pages/WebView';
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
@@ -89,6 +90,7 @@ const HomeStack = () => {
                 // header: (props) => <NavHeader {...props} />
               }}
             />
+            {/* <Stack.Screen name="ScanScreen" component={ScanScreen} /> */}
             <Stack.Screen name="Search" component={Search} />
             <Stack.Screen
               name="Settings"
@@ -100,18 +102,16 @@ const HomeStack = () => {
             >
               {() => <Settings onLogout={handleLogout} />}
             </Stack.Screen>
+            <Stack.Screen name="General" component={General} />
+            <Stack.Screen name="DarkMode" component={DarkMode} />
+            <Stack.Screen name="WebView" component={WebView} />
           </>
         ) : (
           <>
-            <Stack.Screen
-              name="SignIn"
-            >
-              {() => isLoding ? <ActivityIndicator size="large" /> : <SignIn onLogin={handleLogin} />}
+            <Stack.Screen name="SignIn">
+              {() => <SignIn onLogin={handleLogin} />}
             </Stack.Screen>
-            <Stack.Screen
-              name="SignUp"
-              component={SignUp}
-            ></Stack.Screen>
+            <Stack.Screen name="SignUp" component={SignUp} ></Stack.Screen>
           </>
         )
       }
@@ -121,5 +121,3 @@ const HomeStack = () => {
 }
 
 export default HomeStack
-
-const styles = StyleSheet.create({})

@@ -12,7 +12,6 @@ const DrawerView = (props: any) => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const drawerStatus = useDrawerStatus();
-  console.log("🚀 ~ DrawerView ~ drawerStatus:", drawerStatus)
   // useFocusEffect(
   //   React.useCallback(() => {
   //     // props.navigation.openDrawer()
@@ -30,12 +29,12 @@ const DrawerView = (props: any) => {
   return (
     <View style={{ flex: 1, backgroundColor: containerBackgroundColor }}>
       <DrawerContentScrollView style={[styles.container]} {...props}>
-        <DrawerItem
+        {/* <DrawerItem
           label={() => <ThemedText>设置</ThemedText>}
           icon={() => <Ionicons name="home" size={22} color={isDarkMode ? "#fff" : "#000"} />}
           onPress={() => { props.navigation.jumpTo('Home', { screen: 'Search' }) }}
         >
-        </DrawerItem>
+        </DrawerItem> */}
         {/* <ThemedText>{drawerStatus}</ThemedText> */}
         <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}

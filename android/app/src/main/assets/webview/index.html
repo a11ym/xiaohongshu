@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>移动端适配 - Vue2 + Element UI 动态嵌套表单</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      min-height: 100vh;
+      padding: 10px;
+      color: #333;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #app {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 10px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 15px 10px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin-bottom: 8px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      line-height: 1.3;
+    }
+    .subtitle {
+      font-size: 1rem;
+      color: #7f8c8d;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      padding: 18px;
+      transition: transform 0.3s ease;
+    }
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #3498db;
+    }
+    .card-title h2 {
+      color: #2c3e50;
+      font-size: 1.4rem;
+    }
+    .form-section {
+      margin-bottom: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      background-color: #f8fafc;
+      border-left: 3px solid #3498db;
+    }
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .form-header h3 {
+      color: #2c3e50;
+      font-size: 1.1rem;
+      margin-right: 10px;
+    }
+    .nested-form {
+      padding: 12px;
+      margin: 12px 0;
+      background-color: #f1f5f9;
+      border-radius: 8px;
+      border: 1px dashed #3498db;
+    }
+    .nested-form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .nested-form-header h4 {
+      font-size: 1rem;
+      color: #2c3e50;
+    }
+    .nested-form-header h5 {
+      font-size: 0.95rem;
+      color: #2c3e50;
+    }
+    .form-row {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-item {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 25px;
+    }
+    .json-viewer {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+    .json-key {
+      color: #3498db;
+    }
+    .json-value {
+      color: #2ecc71;
+    }
+    .json-string {
+      color: #f1c40f;
+    }
+    .add-btn {
+      background-color: #3498db;
+      border-color: #3498db;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+    .remove-btn {
+      background-color: #e74c3c;
+      border-color: #e74c3c;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+    .submit-btn {
+      background-color: #2ecc71;
+      border-color: #2ecc71;
+      width: 100%;
+      height: 45px;
+      font-size: 1rem;
+    }
+    .reset-btn {
+      background-color: #95a5a6;
+      border-color: #95a5a6;
+      width: 100%;
+      height: 45px;
+      font-size: 1rem;
+    }
+    .info-panel {
+      background-color: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+    .info-panel h3 {
+      margin-bottom: 8px;
+      color: #0d47a1;
+      font-size: 1.1rem;
+    }
+    .info-panel ul {
+      padding-left: 20px;
+    }
+    .info-panel li {
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    
+    /* 移动端优化 */
+    .el-form-item__label {
+      font-size: 0.95rem;
+      padding-bottom: 6px !important;
+    }
+    .el-input__inner, .el-textarea__inner {
+      font-size: 0.95rem;
+      padding: 10px 12px !important;
+      height: auto !important;
+    }
+    .el-select {
+      width: 100%;
+    }
+    .el-date-editor {
+      width: 100%;
+    }
+    .el-button {
+      font-size: 0.95rem;
+    }
+    
+    /* 响应式调整 */
+    @media (min-width: 768px) {
+      .form-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0 -8px;
+      }
+      .form-item {
+        flex: 1 0 calc(50% - 16px);
+        padding: 0 8px;
+      }
+      .action-buttons {
+        flex-direction: row;
+      }
+      .submit-btn, .reset-btn {
+        width: auto;
+        flex: 1;
+      }
+    }
+    
+    /* 底部操作栏 */
+    .action-bar {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      padding: 12px;
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+    }
+    
+    /* 滚动优化 */
+    .json-viewer::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .json-viewer::-webkit-scrollbar-thumb {
+      background: #3498db;
+      border-radius: 3px;
+    }
+    
+    /* 切换标签 */
+    .tabs {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    .tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active {
+      border-bottom: 2px solid #3498db;
+      color: #3498db;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Vue2 + Element UI 动态嵌套表单</h1>
+      <p class="subtitle">移动端适配版 - 支持Android/iOS设备</p>
+    </header>
+
+    <div class="tabs">
+      <div class="tab" :class="{active: activeTab === 'form'}" @click="activeTab = 'form'">表单编辑器</div>
+      <div class="tab" :class="{active: activeTab === 'data'}" @click="activeTab = 'data'">数据结构</div>
+    </div>
+    
+    <!-- 表单区域 -->
+    <div class="card" v-show="activeTab === 'form'">
+      <div class="card-title">
+        <h2>动态表单编辑器</h2>
+      </div>
+      
+      <div class="info-panel">
+        <h3>功能说明</h3>
+        <ul>
+          <li>支持多级嵌套表单结构（对象、数组）</li>
+          <li>动态添加/删除表单字段</li>
+          <li>实时表单验证</li>
+          <li>支持必填项、邮箱、手机号等验证规则</li>
+          <li>可重置表单数据</li>
+        </ul>
+      </div>
+
+      <el-form 
+        ref="dynamicForm" 
+        :model="formData" 
+        :rules="formRules" 
+        label-width="120px"
+      >
+        <!-- 基本信息 -->
+        <div class="form-section">
+          <div class="form-header">
+            <h3>基本信息</h3>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-item">
+              <el-form-item label="姓名" prop="name">
+                <el-input v-model="formData.name" placeholder="请输入姓名"></el-input>
+              </el-form-item>
+            </div>
+            
+            <div class="form-item">
+              <el-form-item label="年龄" prop="age">
+                <el-input v-model.number="formData.age" placeholder="请输入年龄" type="number"></el-input>
+              </el-form-item>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-item">
+              <el-form-item label="邮箱" prop="email">
+                <el-input v-model="formData.email" placeholder="请输入邮箱"></el-input>
+              </el-form-item>
+            </div>
+            
+            <div class="form-item">
+              <el-form-item label="手机号" prop="phone">
+                <el-input v-model="formData.phone" placeholder="请输入手机号"></el-input>
+              </el-form-item>
+            </div>
+          </div>
+        </div>
+
+        <!-- 地址信息（嵌套对象） -->
+        <div class="form-section">
+          <div class="form-header">
+            <h3>地址信息</h3>
+          </div>
+          
+          <div class="nested-form">
+            <div class="form-row">
+              <div class="form-item">
+                <el-form-item label="省份" prop="address.province">
+                  <el-input v-model="formData.address.province" placeholder="请输入省份"></el-input>
+                </el-form-item>
+              </div>
+              
+              <div class="form-item">
+                <el-form-item label="城市" prop="address.city">
+                  <el-input v-model="formData.address.city" placeholder="请输入城市"></el-input>
+                </el-form-item>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-item">
+                <el-form-item label="详细地址" prop="address.detail">
+                  <el-input v-model="formData.address.detail" placeholder="请输入详细地址"></el-input>
+                </el-form-item>
+              </div>
+              
+              <div class="form-item">
+                <el-form-item label="邮政编码" prop="address.zipCode">
+                  <el-input v-model="formData.address.zipCode" placeholder="请输入邮政编码"></el-input>
+                </el-form-item>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 教育经历（嵌套数组） -->
+        <div class="form-section">
+          <div class="form-header">
+            <h3>教育经历</h3>
+            <el-button type="primary" class="add-btn" icon="el-icon-plus" @click="addEducation">添加</el-button>
+          </div>
+          
+          <div v-for="(edu, index) in formData.education" :key="index" class="nested-form">
+            <div class="nested-form-header">
+              <h4>教育经历 #{{ index + 1 }}</h4>
+              <el-button type="danger" icon="el-icon-delete" class="remove-btn" @click="removeEducation(index)">删除</el-button>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-item">
+                <el-form-item 
+                  :label="`学校名称`" 
+                  :prop="`education.${index}.school`" 
+                  :rules="formRules.educationSchool"
+                >
+                  <el-input v-model="edu.school" placeholder="请输入学校名称"></el-input>
+                </el-form-item>
+              </div>
+              
+              <div class="form-item">
+                <el-form-item 
+                  :label="`学历`" 
+                  :prop="`education.${index}.degree`" 
+                  :rules="formRules.educationDegree"
+                >
+                  <el-select v-model="edu.degree" placeholder="请选择学历">
+                    <el-option label="高中" value="high school"></el-option>
+                    <el-option label="本科" value="bachelor"></el-option>
+                    <el-option label="硕士" value="master"></el-option>
+                    <el-option label="博士" value="phd"></el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-item">
+                <el-form-item 
+                  :label="`开始时间`" 
+                  :prop="`education.${index}.startDate`" 
+                  :rules="formRules.educationStartDate"
+                >
+                  <el-date-picker 
+                    v-model="edu.startDate" 
+                    type="date" 
+                    placeholder="选择开始日期"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+              </div>
+              
+              <div class="form-item">
+                <el-form-item 
+                  :label="`结束时间`" 
+                  :prop="`education.${index}.endDate`" 
+                  :rules="formRules.educationEndDate"
+                >
+                  <el-date-picker 
+                    v-model="edu.endDate" 
+                    type="date" 
+                    placeholder="选择结束日期"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+              </div>
+            </div>
+            
+            <div class="form-item">
+              <el-form-item 
+                :label="`描述`" 
+                :prop="`education.${index}.description`" 
+                :rules="formRules.educationDescription"
+              >
+                <el-input 
+                  v-model="edu.description" 
+                  type="textarea" 
+                  placeholder="请输入经历描述"
+                  :rows="2"
+                ></el-input>
+              </el-form-item>
+            </div>
+          </div>
+        </div>
+
+        <!-- 工作经历（更深层嵌套） -->
+        <div class="form-section">
+          <div class="form-header">
+            <h3>工作经历</h3>
+            <el-button type="primary" class="add-btn" icon="el-icon-plus" @click="addWorkExperience">添加</el-button>
+          </div>
+          
+          <div v-for="(work, workIndex) in formData.workExperience" :key="workIndex" class="nested-form">
+            <div class="nested-form-header">
+              <h4>工作经历 #{{ workIndex + 1 }}</h4>
+              <el-button type="danger" icon="el-icon-delete" class="remove-btn" @click="removeWorkExperience(workIndex)">删除</el-button>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-item">
+                <el-form-item 
+                  :label="`公司名称`" 
+                  :prop="`workExperience.${workIndex}.company`" 
+                  :rules="formRules.workCompany"
+                >
+                  <el-input v-model="work.company" placeholder="请输入公司名称"></el-input>
+                </el-form-item>
+              </div>
+              
+              <div class="form-item">
+                <el-form-item 
+                  :label="`职位`" 
+                  :prop="`workExperience.${workIndex}.position`" 
+                  :rules="formRules.workPosition"
+                >
+                  <el-input v-model="work.position" placeholder="请输入职位"></el-input>
+                </el-form-item>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-item">
+                <el-form-item 
+                  :label="`开始时间`" 
+                  :prop="`workExperience.${workIndex}.startDate`" 
+                  :rules="formRules.workStartDate"
+                >
+                  <el-date-picker 
+                    v-model="work.startDate" 
+                    type="date" 
+                    placeholder="选择开始日期"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+              </div>
+              
+              <div class="form-item">
+                <el-form-item 
+                  :label="`结束时间`" 
+                  :prop="`workExperience.${workIndex}.endDate`" 
+                  :rules="formRules.workEndDate"
+                >
+                  <el-date-picker 
+                    v-model="work.endDate" 
+                    type="date" 
+                    placeholder="选择结束日期"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+              </div>
+            </div>
+            
+            <div class="form-section" style="margin-top: 15px;">
+              <div class="form-header">
+                <h4>项目经验</h4>
+                <el-button type="primary" size="small" icon="el-icon-plus" @click="addProject(workIndex)">添加项目</el-button>
+              </div>
+              
+              <div v-for="(project, projectIndex) in work.projects" :key="projectIndex" class="nested-form" style="background: #e8f4fd;">
+                <div class="nested-form-header">
+                  <h5>项目 #{{ projectIndex + 1 }}</h5>
+                  <el-button type="danger" size="small" icon="el-icon-delete" @click="removeProject(workIndex, projectIndex)">删除</el-button>
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-item">
+                    <el-form-item 
+                      :label="`项目名称`" 
+                      :prop="`workExperience.${workIndex}.projects.${projectIndex}.name`" 
+                      :rules="formRules.projectName"
+                    >
+                      <el-input v-model="project.name" placeholder="请输入项目名称"></el-input>
+                    </el-form-item>
+                  </div>
+                  
+                  <div class="form-item">
+                    <el-form-item 
+                      :label="`担任角色`" 
+                      :prop="`workExperience.${workIndex}.projects.${projectIndex}.role`" 
+                      :rules="formRules.projectRole"
+                    >
+                      <el-input v-model="project.role" placeholder="请输入担任角色"></el-input>
+                    </el-form-item>
+                  </div>
+                </div>
+                
+                <div class="form-item">
+                  <el-form-item 
+                    :label="`项目描述`" 
+                    :prop="`workExperience.${workIndex}.projects.${projectIndex}.description`" 
+                    :rules="formRules.projectDescription"
+                  >
+                    <el-input 
+                      v-model="project.description" 
+                      type="textarea" 
+                      placeholder="请输入项目描述"
+                      :rows="2"
+                    ></el-input>
+                  </el-form-item>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-form>
+    </div>
+
+    <!-- JSON预览区域 -->
+    <div class="card" v-show="activeTab === 'data'">
+      <div class="card-title">
+        <h2>表单数据结构</h2>
+        <el-tag type="success">实时更新</el-tag>
+      </div>
+      
+      <div class="json-viewer">
+        <div v-html="formatJson(formData)"></div>
+      </div>
+    </div>
+    
+    <!-- 底部操作栏 -->
+    <div class="action-bar">
+      <el-button class="reset-btn" @click="resetForm">重置表单</el-button>
+      <el-button type="primary" class="submit-btn" @click="submitForm">提交表单</el-button>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        // 自定义验证规则
+        const validatePhone = (rule, value, callback) => {
+          if (!value) {
+            return callback(new Error('手机号不能为空'));
+          }
+          setTimeout(() => {
+            if (!/^1[3-9]\d{9}$/.test(value)) {
+              callback(new Error('请输入正确的手机号码'));
+            } else {
+              callback();
+            }
+          }, 300);
+        };
+        
+        const validateEndDate = (rule, value, callback) => {
+          const index = rule.field.split('.')[1];
+          const startDate = this.formData.education[index].startDate;
+          if (!value) {
+            callback(new Error('请选择结束日期'));
+          } else if (startDate && new Date(value) < new Date(startDate)) {
+            callback(new Error('结束日期不能早于开始日期'));
+          } else {
+            callback();
+          }
+        };
+        
+        return {
+          activeTab: 'form',
+          formData: {
+            name: '',
+            age: null,
+            email: '',
+            phone: '',
+            address: {
+              province: '',
+              city: '',
+              detail: '',
+              zipCode: ''
+            },
+            education: [
+              {
+                school: '',
+                degree: '',
+                startDate: '',
+                endDate: '',
+                description: ''
+              }
+            ],
+            workExperience: [
+              {
+                company: '',
+                position: '',
+                startDate: '',
+                endDate: '',
+                projects: [
+                  {
+                    name: '',
+                    role: '',
+                    description: ''
+                  }
+                ]
+              }
+            ]
+          },
+          formRules: {
+            name: [
+              { required: true, message: '请输入姓名', trigger: 'blur' },
+              { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+            ],
+            age: [
+              { required: true, message: '请输入年龄', trigger: 'blur' },
+              { type: 'number', message: '年龄必须为数字值' },
+              { validator: (rule, value, callback) => {
+                if (value < 18) {
+                  callback(new Error('年龄必须大于18岁'));
+                } else if (value > 100) {
+                  callback(new Error('年龄必须小于100岁'));
+                } else {
+                  callback();
+                }
+              }, trigger: 'blur' }
+            ],
+            email: [
+              { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+              { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+            ],
+            phone: [
+              { required: true, validator: validatePhone, trigger: 'blur' }
+            ],
+            'address.province': [
+              { required: true, message: '请输入省份', trigger: 'blur' }
+            ],
+            'address.city': [
+              { required: true, message: '请输入城市', trigger: 'blur' }
+            ],
+            'address.detail': [
+              { required: true, message: '请输入详细地址', trigger: 'blur' }
+            ],
+            'address.zipCode': [
+              { required: true, message: '请输入邮政编码', trigger: 'blur' },
+              { pattern: /^[0-9]{6}$/, message: '邮政编码为6位数字', trigger: 'blur' }
+            ],
+            educationSchool: [
+              { required: true, message: '请输入学校名称', trigger: 'blur' }
+            ],
+            educationDegree: [
+              { required: true, message: '请选择学历', trigger: 'change' }
+            ],
+            educationStartDate: [
+              { required: true, message: '请选择开始日期', trigger: 'change' }
+            ],
+            educationEndDate: [
+              { required: true, validator: validateEndDate, trigger: 'change' }
+            ],
+            educationDescription: [
+              { required: true, message: '请输入经历描述', trigger: 'blur' },
+              { min: 10, message: '描述不能少于10个字符', trigger: 'blur' }
+            ],
+            workCompany: [
+              { required: true, message: '请输入公司名称', trigger: 'blur' }
+            ],
+            workPosition: [
+              { required: true, message: '请输入职位', trigger: 'blur' }
+            ],
+            workStartDate: [
+              { required: true, message: '请选择开始日期', trigger: 'change' }
+            ],
+            workEndDate: [
+              { required: true, message: '请选择结束日期', trigger: 'change' }
+            ],
+            projectName: [
+              { required: true, message: '请输入项目名称', trigger: 'blur' }
+            ],
+            projectRole: [
+              { required: true, message: '请输入担任角色', trigger: 'blur' }
+            ],
+            projectDescription: [
+              { required: true, message: '请输入项目描述', trigger: 'blur' }
+            ]
+          }
+        };
+      },
+      methods: {
+        // 添加教育经历
+        addEducation() {
+          this.formData.education.push({
+            school: '',
+            degree: '',
+            startDate: '',
+            endDate: '',
+            description: ''
+          });
+        },
+        
+        // 删除教育经历
+        removeEducation(index) {
+          if (this.formData.education.length > 1) {
+            this.formData.education.splice(index, 1);
+          } else {
+            this.$message.warning('至少保留一个教育经历');
+          }
+        },
+        
+        // 添加工作经历
+        addWorkExperience() {
+          this.formData.workExperience.push({
+            company: '',
+            position: '',
+            startDate: '',
+            endDate: '',
+            projects: [{
+              name: '',
+              role: '',
+              description: ''
+            }]
+          });
+        },
+        
+        // 删除工作经历
+        removeWorkExperience(index) {
+          if (this.formData.workExperience.length > 1) {
+            this.formData.workExperience.splice(index, 1);
+          } else {
+            this.$message.warning('至少保留一个工作经历');
+          }
+        },
+        
+        // 添加项目
+        addProject(workIndex) {
+          this.formData.workExperience[workIndex].projects.push({
+            name: '',
+            role: '',
+            description: ''
+          });
+        },
+        
+        // 删除项目
+        removeProject(workIndex, projectIndex) {
+          const projects = this.formData.workExperience[workIndex].projects;
+          if (projects.length > 1) {
+            projects.splice(projectIndex, 1);
+          } else {
+            this.$message.warning('至少保留一个项目');
+          }
+        },
+        
+        // 提交表单
+        submitForm() {
+          this.$refs.dynamicForm.validate(valid => {
+            if (valid) {
+              this.$message.success('表单验证成功！数据已提交');
+              console.log('表单数据:', JSON.stringify(this.formData, null, 2));
+              // 在实际应用中，这里可以发送数据到服务器
+            } else {
+              this.$message.error('表单验证失败，请检查输入');
+              return false;
+            }
+          });
+        },
+        
+        // 重置表单
+        resetForm() {
+          this.$refs.dynamicForm.resetFields();
+          this.$message.info('表单已重置');
+        },
+        
+        // 格式化JSON用于显示
+        formatJson(obj) {
+          if (!obj) return '';
+          
+          const jsonString = JSON.stringify(obj, null, 2);
+          return jsonString
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
+              let cls = 'json-value';
+              if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                  cls = 'json-key';
+                } else {
+                  cls = 'json-string';
+                }
+              } else if (/true|false/.test(match)) {
+                cls = 'json-boolean';
+              } else if (/null/.test(match)) {
+                cls = 'json-null';
+              }
+              return `<span class="${cls}">${match}</span>`;
+            });
+        }
+      }
+    });
+  </script>
+</body>
+</html>

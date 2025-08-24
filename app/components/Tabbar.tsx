@@ -1,15 +1,14 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import { useState } from 'react';
-import { LayoutChangeEvent, Platform, StyleSheet, View } from 'react-native';
+import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import TabbarButton from './TabbarButton';
 // 导入BottomTabBarProps，useLinkBuilder，useTheme，useState，LayoutChangeEvent，StyleSheet，View，useAnimatedStyle，useSharedValue，withSpring，TabbarButton
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   // 定义TabBar函数，接收state，descriptors，navigation参数
-  const { colors } = useTheme();
-  // 使用useTheme获取主题颜色
-  const { buildHref } = useLinkBuilder();
+  // const { colors } = useTheme();
+  // // 使用useTheme获取主题颜色
+  // const { buildHref } = useLinkBuilder();
 
   // 使用useLinkBuilder获取buildHref函数
   const [dimensions, setDimensions] = useState({ width: 100, height: 20 });
@@ -29,7 +28,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     return {
       transform: [{ translateX: tabPositionX.value }],
     };
-  })
+  }, [tabPositionX])
   // 使用useAnimatedStyle定义animatedStyle函数，返回transform属性
   return (
     <View onLayout={onTabbarLayout} style={styles.tabbar}>

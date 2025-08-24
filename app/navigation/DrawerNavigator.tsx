@@ -1,13 +1,8 @@
-// navigation/DrawerNavigator.js
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeStack from './HomeStack';
-// import ProfileStack from './ProfileStack';
 import DrawerView from '../components/DrawerView';
 const Drawer = createDrawerNavigator();
-import TopTabbar from '../components/TopTabbar';
-import Settings from '../pages/Settings';
-import BackHeader from '../components/BackHeader';
 
 function DrawerNavigator() {
   return (
