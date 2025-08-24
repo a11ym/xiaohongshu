@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   tabBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 56,
+    // height: 56,
     // paddingHorizontal: 8,
   },
   sideButton: {

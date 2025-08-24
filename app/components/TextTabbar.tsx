@@ -13,8 +13,75 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
   const insets = useSafeAreaInsets();
   const { buildHref } = useLinkBuilder();
   const [isModalVisible, setModalVisible] = useState(false);
+  const [height, setHeight] = useState(0);
+  console.log("🚀 ~ TextTabbar ~ height:", height)
+
+  const getHeight = (e: any) => {
+    setHeight(e.nativeEvent.layout.height);
+  }
   return (
-    <View style={[styles.container, { backgroundColor: backgroundColor }]}>
+    <>
+      <View onLayout={getHeight} style={[styles.container, {height:50 + insets.bottom, backgroundColor: backgroundColor }]}>
+        {state.routes.map((route: { key: string | number; name: string; params: object | undefined; }, index: any) => {
+          const { options } = descriptors[route.key];
+          const label =
+            options.tabBarLabel !== undefined
+              ? options.tabBarLabel
+              : options.title !== undefined
+                ? options.title
+                : route.name;
+
+          const isFocused = state.index === index;
+
+          const onPress = () => {
+            if (route.name === "Add") {
+              setModalVisible(true);
+              return;
+            }
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
+
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name, route.params);
+            }
+          };
+
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            });
+          };
+
+          return (
+            <PlatformPressable
+              href={buildHref(route.name, route.params)}
+              accessibilityState={isFocused ? { selected: true } : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              testID={options.tabBarButtonTestID}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              key={index}
+              style={[styles.tabBarItem, { paddingBottom: insets.bottom }]}
+            >
+              {
+                route.name === "Add"
+                  ?
+                  <View key={index} style={{ width: 50, height: 35, borderRadius: 6, backgroundColor: '#ff2e4d', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon name="plus" size={28} color='#fff' />
+                  </View>
+                  :
+                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: isFocused ? tabBarFontColor.primary : tabBarFontColor.text }}>
+                    {label}
+                  </Text>
+              }
+            </PlatformPressable>
+          );
+        })}
+      </View>
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => setModalVisible(false)}
@@ -74,66 +141,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
           </View>
         </View>
       </Modal>
-      {state.routes.map((route: { key: string | number; name: string; params: object | undefined; }, index: any) => {
-        const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-              ? options.title
-              : route.name;
-
-        const isFocused = state.index === index;
-
-        const onPress = () => {
-          if (route.name === "Add") {
-            setModalVisible(true);
-            return;
-          }
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name, route.params);
-          }
-        };
-
-        const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-        };
-
-        return (
-          <PlatformPressable
-            href={buildHref(route.name, route.params)}
-            accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarButtonTestID}
-            onPress={onPress}
-            onLongPress={onLongPress}
-            key={index}
-            style={[styles.tabBarItem, { paddingBottom: insets.bottom + 6 }]}
-          >
-            {
-              route.name === "Add"
-                ?
-                <View key={index} style={{ width: 50, height: 35, borderRadius: 6, backgroundColor: '#ff2e4d', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon name="plus" size={28} color='#fff' />
-                </View>
-                :
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: isFocused ? tabBarFontColor.primary : tabBarFontColor.text }}>
-                  {label}
-                </Text>
-            }
-          </PlatformPressable>
-        );
-      })}
-    </View>
+    </>
   );
 }
 
@@ -144,45 +152,6 @@ const styles = StyleSheet.create({
     padding: 20,
     maxHeight: '85%',
   },
-  modalHeader: {
-    alignItems: 'center',
-    paddingBottom: 15,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#eee',
-  },
-  modalHandle: {
-    width: 40,
-    height: 5,
-    backgroundColor: '#ddd',
-    borderRadius: 3,
-    marginBottom: 15,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  modalBody: {
-    // paddingVertical: 20,
-  },
-  modalText: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 20,
-    lineHeight: 24,
-  },
-  optionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 15,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#f0f0f0',
-  },
-  optionText: {
-    fontSize: 16,
-    marginLeft: 15,
-    color: '#555',
-  },
   modalFooter: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -191,50 +160,10 @@ const styles = StyleSheet.create({
   modalButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    // borderRadius: 8,
-    // marginLeft: 10,
-  },
-  cancelButton: {
-    backgroundColor: '#f0f0f0',
-  },
-  confirmButton: {
-    backgroundColor: '#6a11cb',
   },
   modalButtonText: {
     fontSize: 16,
     fontWeight: '600',
-  },
-  cancelButtonText: {
-    color: '#666',
-  },
-  settingGroup: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 15,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-  },
-  settingGroupTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#6a11cb',
-    marginBottom: 10,
-  },
-  settingItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#f0f0f0',
-  },
-  settingText: {
-    fontSize: 16,
-    color: '#444',
   },
   settingOption: {
     flexDirection: 'row',
@@ -248,28 +177,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     // color: '#444',
   },
-  toggle: {
-    width: 50,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#e0e0e0',
-    justifyContent: 'center',
-    paddingHorizontal: 2,
-  },
-  toggleActive: {
-    backgroundColor: '#6a11cb',
-  },
-  toggleCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: 'white',
-  },
-  toggleCircleActive: {
-    marginLeft: 'auto',
-  },
 
   container: {
+    // height:50,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -278,6 +188,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingTop: 6,
+    // paddingTop: 6,
   }
 })

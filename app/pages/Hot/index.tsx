@@ -1,12 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import ContainerVideo from '../../components/ContainerVideo'
 import ShortVideoPlayer from '../../components/ShortVideoPlayer'
 const Hot = () => {
-  const [paused, setPaused] = useState(false);
-  const handle = () => {
-    setPaused(!paused)
-  }
   return (
     <View style={{ flex: 1 }}>
       <ShortVideoPlayer />

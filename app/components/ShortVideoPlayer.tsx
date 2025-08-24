@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   Animated,
   Image,
-  SafeAreaView,
   FlatList
 } from 'react-native';
 import Video from 'react-native-video';
 import Feather from '@react-native-vector-icons/feather';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 const background = require('../assets/video/frist.mp4');
@@ -74,6 +74,8 @@ const ShortVideoPlayer = () => {
   const [progress, setProgress] = useState(0);
   const videoRefs = useRef([]);
 
+  const insets = useSafeAreaInsets();
+
   // 处理视频进度
   const onProgress = (data, index) => {
     if (currentIndex === index) {
@@ -121,7 +123,7 @@ const ShortVideoPlayer = () => {
   // 渲染单个视频项
   const renderVideoItem = ({ item, index }) => {
     return (
-      <View style={styles.videoContainer}>
+      <View style={[styles.videoContainer, { height: height - 50 - insets.bottom, paddingBottom: insets.bottom }]}>
         {/* 视频播放器 */}
         <Video
           ref={ref => (videoRefs.current[index] = ref)}
@@ -154,17 +156,17 @@ const ShortVideoPlayer = () => {
           {/* 左侧用户信息 */}
           <View style={styles.userInfo}>
             <Image source={{ uri: item.avatar }} style={styles.avatar} />
+            <Text style={styles.username}>{item.username}</Text>
             <TouchableOpacity style={styles.followButton}>
-              <Feather name="plus" size={14} color="white" />
+              <Text style={styles.followText}>关注</Text>
             </TouchableOpacity>
           </View>
 
-          {/* 中间视频描述 */}
+          {/* 视频文字描述 */}
           <View style={styles.videoInfo}>
-            <Text style={styles.username}>@{item.username}</Text>
             <Text style={styles.title}>{item.title}</Text>
             <View style={styles.hashtagContainer}>
-              {item.hashtags.map((tag, i) => (
+              {item.hashtags.map((tag: string, i: number) => (
                 <Text key={i} style={styles.hashtag}>{tag}</Text>
               ))}
             </View>
@@ -173,51 +175,53 @@ const ShortVideoPlayer = () => {
               <Text style={styles.music}>{item.music}</Text>
             </View>
           </View>
+        </View>
 
-          {/* 右侧互动按钮 */}
-          <View style={styles.actionContainer}>
-            {/* 点赞按钮 */}
-            <TouchableOpacity
-              style={styles.actionButton}
-              onPress={() => handleLike(index)}
-            >
-              <Feather
-                name="heart"
-                size={30}
-                color={likes[index] > item.likes ? '#ff0058' : 'white'}
-              />
-              <Text style={styles.actionText}>{likes[index]}</Text>
-            </TouchableOpacity>
 
-            {/* 评论按钮 */}
-            <TouchableOpacity style={styles.actionButton}>
-              <Feather name="user" size={28} color="white" />
-              <Text style={styles.actionText}>{item.comments}</Text>
-            </TouchableOpacity>
+        {/* 右侧互动按钮 */}
+        <View style={styles.actionContainer}>
+          {/* 点赞按钮 */}
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => handleLike(index)}
+          >
+            <Feather
+              name="heart"
+              size={30}
+              color={likes[index] > item.likes ? '#ff0058' : 'white'}
+            />
+            <Text style={styles.actionText}>{likes[index]}</Text>
+          </TouchableOpacity>
 
-            {/* 分享按钮 */}
-            <TouchableOpacity style={styles.actionButton}>
-              <Feather name="send" size={28} color="white" />
-              <Text style={styles.actionText}>{item.shares}</Text>
-            </TouchableOpacity>
+          {/* 评论按钮 */}
+          <TouchableOpacity style={styles.actionButton}>
+            <Feather name="user" size={28} color="white" />
+            <Text style={styles.actionText}>{item.comments}</Text>
+          </TouchableOpacity>
 
-            {/* 更多按钮 */}
-            <TouchableOpacity style={[styles.actionButton, { marginTop: 20 }]}>
-              <Feather name="user" size={28} color="white" />
-            </TouchableOpacity>
+          {/* 分享按钮 */}
+          <TouchableOpacity style={styles.actionButton}>
+            <Feather name="send" size={28} color="white" />
+            <Text style={styles.actionText}>{item.shares}</Text>
+          </TouchableOpacity>
 
-            {/* 音乐封面 */}
-            <View style={styles.musicCover}>
-              <Image source={{ uri: item.avatar }} style={styles.coverImage} />
-            </View>
+          {/* 更多按钮 */}
+          <TouchableOpacity style={[styles.actionButton, { marginTop: 20 }]}>
+            <Feather name="user" size={28} color="white" />
+          </TouchableOpacity>
+
+          {/* 音乐封面 */}
+          <View style={styles.musicCover}>
+            <Image source={{ uri: item.avatar }} style={styles.coverImage} />
           </View>
         </View>
+
       </View>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={videos}
         renderItem={renderVideoItem}
@@ -227,7 +231,7 @@ const ShortVideoPlayer = () => {
         onMomentumScrollEnd={onScrollEnd}
         decelerationRate="fast"
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -238,7 +242,6 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     width: width,
-    height: height - 80,
     backgroundColor: 'black',
     position: 'relative',
   },
@@ -263,10 +266,10 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     position: 'absolute',
-    top: 0,
+    bottom: 0,
     left: 0,
     right: 0,
-    height: 2,
+    height: 4,
     backgroundColor: 'rgba(255,255,255,0.3)',
     zIndex: 10,
   },
@@ -276,14 +279,15 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
+    bottom: 10,
+    flexDirection: 'column',
     paddingHorizontal: 15,
+    rowGap: 10,
     zIndex: 10,
   },
   userInfo: {
+    flexDirection: 'row',
+    gap: 10,
     alignItems: 'center',
     marginRight: 15,
   },
@@ -295,16 +299,18 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
   },
   followButton: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    borderRadius: 30,
     backgroundColor: '#ff0058',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 5,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+  },
+  followText: {
+    color: 'white',
+    fontSize: 14,
   },
   videoInfo: {
-    flex: 1,
   },
   username: {
     color: 'white',
@@ -337,6 +343,10 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   actionContainer: {
+    position: 'absolute',
+    bottom: 10,
+    right: 0,
+    paddingHorizontal: 6,
     alignItems: 'center',
     marginLeft: 10,
   },
