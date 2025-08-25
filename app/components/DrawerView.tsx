@@ -1,41 +1,21 @@
 // components/CustomDrawerContent.js
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { DrawerContentScrollView, DrawerItem, useDrawerStatus } from '@react-navigation/drawer';
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
 import Ionicons from '@react-native-vector-icons/feather';
 import ThemedText from './ThemedText';
 import { useTheme } from '../hooks/useTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
 // 自定义侧边栏内容
 const DrawerView = (props: any) => {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
-  const drawerStatus = useDrawerStatus();
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     // props.navigation.openDrawer()
-  //     return () => {
-  //       console.log('Settings页面卸载')
-  //       if (props.navigation && drawerStatus !== 'open') {
-  //         setTimeout(() => {
-  //           // props.navigation.openDrawer()
-  //         }, 50)
-  //       }
-  //     }
-  //   }, [navigation, drawerStatus])
-  // )
-  const { backgroundColor, containerBackgroundColor, isDarkMode, drawerContentScrollView } = useTheme();
+  const { backgroundColor, containerBackgroundColor, isDarkMode } = useTheme();
   return (
     <View style={{ flex: 1, backgroundColor: containerBackgroundColor }}>
-      <DrawerContentScrollView style={[styles.container]} {...props}>
-        {/* <DrawerItem
-          label={() => <ThemedText>设置</ThemedText>}
-          icon={() => <Ionicons name="home" size={22} color={isDarkMode ? "#fff" : "#000"} />}
-          onPress={() => { props.navigation.jumpTo('Home', { screen: 'Search' }) }}
-        >
-        </DrawerItem> */}
-        {/* <ThemedText>{drawerStatus}</ThemedText> */}
+      {/* <View style={{ height: insets.top }} /> */}
+      <DrawerContentScrollView
+        showsVerticalScrollIndicator={false}
+        style={[styles.container]} {...props}>
         <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>

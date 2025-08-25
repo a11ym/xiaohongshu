@@ -25,13 +25,13 @@ const NavHeader = ({
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { iconColor } = useTheme();
-  
+
   return (
     <View style={[styles.container, { backgroundColor, paddingTop: insets.top + 10 }]}>
       <View style={styles.headerContainer}>
         {/* 左侧容器 */}
         <View style={styles.leftContainer}>
-          {back && <Feather onPress={() => navigation.goBack()} name='chevron-left' size={30} color={iconColor} />}
+          {back && <Pressable onPress={() => navigation.goBack()}><Feather name='chevron-left' size={30} color={iconColor} /></Pressable>}
           {leftComponent && <>{leftComponent}</>}
         </View>
         {/* 中间容器 */}

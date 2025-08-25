@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Ionicons from '@react-native-vector-icons/feather';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { useTheme } from '../hooks/useTheme';
@@ -9,16 +9,11 @@ const { width: screenWidth } = Dimensions.get('window');
 
 // 自定义标签栏组件
 export default function TopTabBar({ state, descriptors, navigation, position }: any) {
-  const [isSearchActive, setIsSearchActive] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-
   // 计算标签宽度 (三个标签等宽)
   const tabWidth = (screenWidth - 112) / 3; // 112 = 左右按钮宽度(48*2) + 内边距(16)
   // const tabWidth = 30;
   // 使用 Reanimated 共享值
   const indicatorPosition = useSharedValue(0);
-  const searchWidth = useSharedValue(0);
-  const searchOpacity = useSharedValue(0);
   const { backgroundColor, tabBarFontColor, isDarkMode } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -30,18 +25,6 @@ export default function TopTabBar({ state, descriptors, navigation, position }: 
     });
   }, [state.index]);
 
-  // 搜索动画
-  useEffect(() => {
-    if (isSearchActive) {
-      searchWidth.value = withTiming(screenWidth - 96, { duration: 300 });
-      searchOpacity.value = withTiming(1, { duration: 300 });
-    } else {
-      searchWidth.value = withTiming(0, { duration: 300 });
-      searchOpacity.value = withTiming(0, { duration: 300 });
-      setSearchQuery('');
-    }
-  }, [isSearchActive]);
-
   // 指示器动画样式
   const indicatorStyle = useAnimatedStyle(() => {
     return {
@@ -49,13 +32,6 @@ export default function TopTabBar({ state, descriptors, navigation, position }: 
     };
   }, [indicatorPosition]);
 
-  // 搜索框动画样式
-  const searchStyle = useAnimatedStyle(() => {
-    return {
-      width: searchWidth.value,
-      opacity: searchOpacity.value,
-    };
-  }, [searchWidth, searchOpacity]);
 
   // 打开侧边栏
   const openSidebar = () => {
@@ -65,13 +41,9 @@ export default function TopTabBar({ state, descriptors, navigation, position }: 
 
   // 切换搜索
   const toggleSearch = () => {
-    setIsSearchActive(!isSearchActive);
+    navigation.navigate('Search');
   };
 
-  // 处理搜索提交
-  const handleSearchSubmit = () => {
-    console.log('搜索:', searchQuery);
-  };
 
   return (
     <>
@@ -136,26 +108,13 @@ export default function TopTabBar({ state, descriptors, navigation, position }: 
             onPress={toggleSearch}
           >
             <Ionicons
-              name={isSearchActive ? "x" : "search"}
+              name="search"
               size={24}
               color={isDarkMode ? '#fff' : '#000'}
             />
           </TouchableOpacity>
         </View>
       </View>
-      {/* 搜索框 - 动画效果 */}
-      <Animated.View style={[styles.searchContainer, searchStyle]}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="搜索内容..."
-          placeholderTextColor="#999"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onSubmitEditing={handleSearchSubmit}
-          returnKeyType="search"
-          autoFocus={isSearchActive}
-        />
-      </Animated.View>
     </>
   );
 };
@@ -174,8 +133,6 @@ const styles = StyleSheet.create({
   tabBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    // height: 56,
-    // paddingHorizontal: 8,
   },
   sideButton: {
     width: 48,
@@ -215,16 +172,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 56,
     left: 0,
-    // alignItems: 'center',
-    // flexDirection: 'column',
-
-    // marginHorizontal: 16,
-    // marginTop: 8,
-    // borderRadius: 20,
     backgroundColor: 'red',
-    // justifyContent: 'center',
     paddingHorizontal: 16,
-    // overflow: 'hidden',
   },
   searchInput: {
     height: 40,

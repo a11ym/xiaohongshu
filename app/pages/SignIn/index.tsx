@@ -1,5 +1,5 @@
 import { Button, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import ThemedView from '../../components/ThemedView'
 import ThemedText from '../../components/ThemedText'
 import Feather from '@react-native-vector-icons/feather'
@@ -7,6 +7,8 @@ import { useTheme } from '../../hooks/useTheme'
 // import Modal from 'react-native-modal'
 import BottomSheet, {
   BottomSheetView,
+  BottomSheetModal,
+  BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
 const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
   const { iconColor } = useTheme()
@@ -29,26 +31,41 @@ const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
     // 可以添加更多选项，弹窗会自动适应高度
   ];
 
-  // ref
-  const sheetRef = useRef<BottomSheet>(null);
+  // // ref
+  // const sheetRef = useRef<BottomSheet>(null);
 
-  // variables
-  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
+  // // variables
+  // const snapPoints = useMemo(() => ["25%"], []);
+
+  // // callbacks
+  // const handleSheetChange = useCallback((index) => {
+  //   console.log("handleSheetChange", index);
+  // }, []);
+  // const handleSnapPress = useCallback((index) => {
+  //   sheetRef.current?.snapToIndex(index);
+  // }, []);
+  // const handleClosePress = useCallback(() => {
+  //   sheetRef.current?.close();
+  // }, []);
+
+  // ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   // callbacks
-  const handleSheetChange = useCallback((index) => {
-    console.log("handleSheetChange", index);
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
   }, []);
-  const handleSnapPress = useCallback((index) => {
-    sheetRef.current?.snapToIndex(index);
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
   }, []);
+
   const handleClosePress = useCallback(() => {
-    sheetRef.current?.close();
+    bottomSheetModalRef.current?.close();
   }, []);
 
   return (
     <>
-      <ThemedView style={styles.container}>
+      <ThemedView style={[styles.container, { backgroundColor: 'green' }]}>
         <View style={styles.headerContainer}>
           <ThemedText>小红书</ThemedText>
           <ThemedText>你的生活兴趣社区</ThemedText>
@@ -63,19 +80,20 @@ const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
           <ThemedText>《隐私政策》</ThemedText>
           <ThemedText>《未成年人个人信息保护规则》</ThemedText>
         </View>
-        <Pressable onPress={() => handleSnapPress(1)} style={styles.footerContainer}>
+        <Pressable onPress={handlePresentModalPress} style={styles.footerContainer}>
           <ThemedText>其他登录方式</ThemedText>
           <Feather name='chevron-right' size={18} color={iconColor} />
         </Pressable>
         <Button title="Close" onPress={() => handleClosePress()} />
       </ThemedView>
       {/* 底部弹窗 */}
-      <BottomSheet
+      {/* <BottomSheet
         ref={sheetRef}
         snapPoints={snapPoints}
         enablePanDownToClose
         enableDynamicSizing={false}
         onChange={handleSheetChange}
+        style={styles.bottomSheetContainer}
       >
         <BottomSheetView style={styles.contentContainer}>
           <Text style={styles.sheetTitle}>选择登录方式</Text>
@@ -90,7 +108,31 @@ const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
             </TouchableOpacity>
           ))}
         </BottomSheetView>
-      </BottomSheet>
+      </BottomSheet> */}
+
+      <BottomSheetModalProvider>
+
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          enableDismissOnClose
+          onDismiss={handleClosePress}
+          onChange={handleSheetChanges}
+        >
+          <BottomSheetView style={styles.contentContainer}>
+            <Text style={styles.sheetTitle}>选择登录方式</Text>
+            {loginOptions.map((option) => (
+              <TouchableOpacity
+                key={option.id}
+                style={styles.loginOption}
+              // onPress={() => handleLogin(option.id)}
+              >
+                <Text style={styles.optionIcon}>{option.icon}</Text>
+                <Text style={styles.optionTitle}>{option.title}</Text>
+              </TouchableOpacity>
+            ))}
+          </BottomSheetView>
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
     </>
   )
 }
@@ -147,8 +189,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  bottomSheet: {
-    backgroundColor: 'transparent',
+  bottomSheetContainer: {
+    // backgroundColor: 'red',
+    // marginHorizontal: 24,
+    backgroundColor: 'yellow'
   },
   sheetBackground: {
     backgroundColor: 'white',
@@ -162,10 +206,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 8,
     borderRadius: 2,
-  },
-  sheetContent: {
-    flex: 1,
-    padding: 20,
   },
   sheetTitle: {
     fontSize: 18,
@@ -190,5 +230,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: 'red'
   },
 })

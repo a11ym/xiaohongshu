@@ -1,6 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
 import React, { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import ContainerView from "../../../components/ContainerView";
 import ThemedText from "../../../components/ThemedText";
 import { useTheme } from "../../../hooks/useTheme";
@@ -28,8 +28,6 @@ const Follow = () => {
   })
   );
 
-  const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const handlePress = (item: Item) => {
     console.log("🚀 ~ handlePress ~ item:", item.id)
@@ -57,8 +55,8 @@ const Follow = () => {
             <View style={styles.contentContainer}>
               <ThemedText style={styles.title}>{item?.title}</ThemedText>
               <ThemedText style={styles.content}>{item?.content}</ThemedText>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                <Image source={{ uri: item?.avatar }} style={{ width: 20, height: 20, borderRadius: 10 }} />
+              <View style={styles.userInfo}>
+                <Image source={{ uri: item?.avatar }} style={styles.avatar} />
                 <ThemedText style={{ marginLeft: 5 }}>User</ThemedText>
                 <View style={{ flex: 1 }} />
                 <Icon name="heart" size={12} color="#ddd" />
@@ -101,6 +99,16 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 14,
     color: '#666'
+  },
+  userInfo: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 20,
+    height: 20,
+    borderRadius: 10
   }
 
 })

@@ -1,14 +1,15 @@
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
 import { useTheme } from '../hooks/useTheme';
 import Icon from '@react-native-vector-icons/feather';
 import Modal from 'react-native-modal';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import ThemedText from './ThemedText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TextTabbar({ state, descriptors, navigation }: any) {
+  console.log("🚀 ~ TextTabbar ~ state, descriptors, navigation:", state, descriptors, navigation)
   const { backgroundColor, tabBarFontColor } = useTheme();
   const insets = useSafeAreaInsets();
   const { buildHref } = useLinkBuilder();
@@ -19,9 +20,24 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
   const getHeight = (e: any) => {
     setHeight(e.nativeEvent.layout.height);
   }
+
+  const closeModal = useCallback(() => {
+    setModalVisible(!isModalVisible);
+  }, [isModalVisible]);
+
+  // 完全关闭modal后的回调
+  const onModalHide = useCallback(() => {
+    console.log('Modal完全隐藏');
+  }, []);
+
+  // 完全显示modal后的回调
+  const onModalShow = useCallback(() => {
+    console.log('Modal完全显示');
+  }, []);
+
   return (
     <>
-      <View onLayout={getHeight} style={[styles.container, {height:50 + insets.bottom, backgroundColor: backgroundColor }]}>
+      <View onLayout={getHeight} style={[styles.container, { height: 50 + insets.bottom, backgroundColor: state.index === 1 ? '#222' : backgroundColor }]}>
         {state.routes.map((route: { key: string | number; name: string; params: object | undefined; }, index: any) => {
           const { options } = descriptors[route.key];
           const label =
@@ -35,7 +51,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
 
           const onPress = () => {
             if (route.name === "Add") {
-              setModalVisible(true);
+              closeModal();
               return;
             }
             const event = navigation.emit({
@@ -70,11 +86,13 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
               {
                 route.name === "Add"
                   ?
-                  <View key={index} style={{ width: 50, height: 35, borderRadius: 6, backgroundColor: '#ff2e4d', alignItems: 'center', justifyContent: 'center' }}>
+                  <View key={index} style={styles.addButton}>
                     <Icon name="plus" size={28} color='#fff' />
                   </View>
                   :
-                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: isFocused ? tabBarFontColor.primary : tabBarFontColor.text }}>
+                  <Text style={[styles.tabbarText,
+                  { transform: [{ scale: isFocused ? 1.2 : 1 }] },
+                  { color: isFocused ? route.name === 'Hot' ? '#fff' : tabBarFontColor.primary : tabBarFontColor.text }]}>
                     {label}
                   </Text>
               }
@@ -84,27 +102,23 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
       </View>
       <Modal
         isVisible={isModalVisible}
-        onBackdropPress={() => setModalVisible(false)}
-        onSwipeComplete={() => setModalVisible(false)}
-        style={{
-          justifyContent: 'flex-end',
-          margin: 0,
-        }}
-        swipeDirection="down"
-        animationIn='slideInUp'
-        animationOut='slideOutDown'
+        onBackdropPress={closeModal}
+        onSwipeComplete={closeModal}
+        onModalHide={onModalHide}
+        onModalShow={onModalShow}
+        useNativeDriver={true}
+        // useNativeDriverForBackdrop={true}
+        hideModalContentWhileAnimating={true}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        // animationInTiming={350}
+        // animationOutTiming={350}
+        // backdropTransitionInTiming={0}
+        backdropTransitionOutTiming={1}
+        backdropOpacity={0.3}
+        style={styles.modal}
       >
         <View style={[styles.modalContent, { backgroundColor: backgroundColor }]}>
-          {/* <View style={styles.modalHeader}>
-            <View style={styles.modalHandle} />
-            <Text style={styles.modalTitle}>设置选项</Text>
-          </View> */}
-
-          {/* <ScrollView style={styles.modalBody}> */}
-          {/* <Text style={styles.modalText}>
-              您可以在此处调整应用的详细设置。
-            </Text> */}
-
           <View style={styles.settingOption}>
             <ThemedText style={styles.settingOptionText}>从相册选择</ThemedText>
           </View>
@@ -114,16 +128,12 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
             <ThemedText style={styles.settingOptionText}>拍照与直播</ThemedText>
           </View>
 
-          <View style={styles.settingOption}>
+          <TouchableOpacity style={styles.settingOption} onPress={() => {
+            closeModal();
+            navigation.navigate('TextView');
+          }}>
             <ThemedText style={styles.settingOptionText}>写文字</ThemedText>
-          </View>
-          {/* <View style={styles.settingOption}>
-              <Text style={styles.settingOptionText}>位置服务</Text>
-              <View style={[styles.toggle, styles.toggleActive]}>
-                <View style={[styles.toggleCircle, styles.toggleCircleActive]} />
-              </View>
-            </View> */}
-          {/* </ScrollView> */}
+          </TouchableOpacity>
 
           <View style={styles.modalFooter}>
             <TouchableOpacity
@@ -132,12 +142,6 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
             >
               <ThemedText style={[styles.modalButtonText]}>取消</ThemedText>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-              style={[styles.modalButton, styles.confirmButton]}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.modalButtonText}>保存设置</Text>
-            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -146,6 +150,10 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
 }
 
 const styles = StyleSheet.create({
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
   modalContent: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -175,11 +183,17 @@ const styles = StyleSheet.create({
   },
   settingOptionText: {
     fontSize: 16,
-    // color: '#444',
+  },
+  addButton: {
+    width: 50,
+    height: 35,
+    borderRadius: 6,
+    backgroundColor: '#ff2e4d',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   container: {
-    // height:50,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -188,6 +202,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    // paddingTop: 6,
+  },
+  tabbarText: {
+    fontSize: 16,
+    fontWeight: 'bold',
   }
 })

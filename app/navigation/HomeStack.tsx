@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import General from '../pages/Settings/page/General';
 import DarkMode from '../pages/Settings/page/DarkMode';
 import WebView from '../pages/WebView';
+import TextView from '../pages/TextView';
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
@@ -91,7 +92,14 @@ const HomeStack = () => {
               }}
             />
             {/* <Stack.Screen name="ScanScreen" component={ScanScreen} /> */}
-            <Stack.Screen name="Search" component={Search} />
+            {/* <Stack.Screen name="Search" component={Search} /> */}
+            <Stack.Group screenOptions={{ presentation: 'containedModal' }}>
+              <Stack.Screen name="Search" component={Search} />
+            </Stack.Group>
+            <Stack.Group screenOptions={{ presentation: 'fullScreenModal' }}>
+              <Stack.Screen name="TextView" component={TextView} />
+            </Stack.Group>
+
             <Stack.Screen
               name="Settings"
               options={{

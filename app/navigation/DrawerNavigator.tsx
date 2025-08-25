@@ -10,7 +10,7 @@ function DrawerNavigator() {
       initialRouteName='Home'
       drawerContent={(props) => <DrawerView {...props} />}
       screenOptions={{
-        popToTopOnBlur: true, // 返回时回到顶部
+        // popToTopOnBlur: true, // 返回时回到顶部
         headerShown: false,
         swipeEdgeWidth: 0, //滑动距离
         drawerType: 'front', // 'back', 'front', 'slide', 'permanent'

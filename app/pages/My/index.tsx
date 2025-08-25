@@ -154,7 +154,7 @@ const My = () => {
       <Animated.ScrollView
         ref={scrollRef}
         // showsHorizontalScrollIndicator={false}
-        // showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         style={styles.contentContainer}
         onScroll={scrollHandler}
         scrollEventThrottle={16}

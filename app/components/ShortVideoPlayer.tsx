@@ -9,12 +9,15 @@ import {
   Image,
   FlatList
 } from 'react-native';
-import Video from 'react-native-video';
+import Video, { VideoRef } from 'react-native-video';
 import Feather from '@react-native-vector-icons/feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
-const background = require('../assets/video/frist.mp4');
+const background = require('../assets/video/1.mp4');
+const background2 = require('../assets/video/2.mp4');
+const background3 = require('../assets/video/3.mp4');
+
 // 模拟视频数据
 const videos = [
   {
@@ -31,7 +34,7 @@ const videos = [
   },
   {
     id: '2',
-    uri: background,
+    uri: background2,
     title: '深夜吉他弹唱',
     username: '音乐人小李',
     avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
@@ -43,7 +46,7 @@ const videos = [
   },
   {
     id: '3',
-    uri: background,
+    uri: background3,
     title: '日落山景延时摄影',
     username: '旅行摄影师',
     avatar: 'https://randomuser.me/api/portraits/men/67.jpg',
@@ -72,12 +75,13 @@ const ShortVideoPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [likes, setLikes] = useState(videos.map(video => video.likes));
   const [progress, setProgress] = useState(0);
-  const videoRefs = useRef([]);
+  const videoRefs = useRef<VideoRef[]>([]);
 
   const insets = useSafeAreaInsets();
 
   // 处理视频进度
   const onProgress = (data, index) => {
+    console.log("🚀 ~ onProgress ~ data:", data)
     if (currentIndex === index) {
       setProgress(data.currentTime / data.seekableDuration);
     }
@@ -128,11 +132,18 @@ const ShortVideoPlayer = () => {
         <Video
           ref={ref => (videoRefs.current[index] = ref)}
           source={{ uri: item.uri }}
+          //处理竖屏和横屏
           style={styles.video}
-          resizeMode="cover"
+          resizeMode='cover'
           paused={currentIndex !== index || !isPlaying}
           repeat={true}
           onProgress={(data) => onProgress(data, index)}
+          renderLoader=
+          {() => (
+            <View style={{justifyContent:'center',alignItems:'center',flex:1}}>
+              <Text style={{color:'#fff',justifyContent:'center',alignItems:'center'}}>自定义内容</Text>
+            </View>
+          )}
         />
 
         {/* 播放/暂停控制层 */}
@@ -246,8 +257,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   video: {
-    width: '100%',
-    height: '100%',
     position: 'absolute',
     top: 0,
     left: 0,
@@ -271,7 +280,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: 4,
     backgroundColor: 'rgba(255,255,255,0.3)',
-    zIndex: 10,
+    // zIndex: 10,
   },
   progressBar: {
     height: '100%',
@@ -283,7 +292,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 15,
     rowGap: 10,
-    zIndex: 10,
+    // zIndex: 10,
   },
   userInfo: {
     flexDirection: 'row',

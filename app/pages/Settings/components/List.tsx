@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Feather from '@react-native-vector-icons/feather'
 import ThemedText from '../../../components/ThemedText'
 import { useTheme } from '../../../hooks/useTheme'
@@ -68,13 +68,13 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
       icon: ''
     }
   ]
-  const [isVisible, setIsVisible] = useState(false)
-  const handleClose = () => {
-    setIsVisible(false)
-  }
+  const [isModalVisible, setModalVisible] = useState(false)
+  const closeModal = useCallback(() => {
+    setModalVisible(!isModalVisible);
+  }, [isModalVisible]);
   const handleOpen = (index) => {
     if (index === 1) {
-      setIsVisible(true)
+      setModalVisible(true)
     }
   }
   const handleOpenGeneral = (index) => {
@@ -82,6 +82,16 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
       navigation.navigate('General')
     }
   }
+
+  // 完全关闭modal后的回调
+  const onModalHide = useCallback(() => {
+    console.log('Modal完全隐藏');
+  }, []);
+  
+  // 完全显示modal后的回调
+  const onModalShow = useCallback(() => {
+    console.log('Modal完全显示');
+  }, []);
 
 
 
@@ -173,12 +183,22 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
         }
       </View>
       <Modal
-        isVisible={isVisible}
-        onBackdropPress={handleClose}
-        style={{ margin: 0, justifyContent: 'flex-end' }}
-        swipeDirection="down"
-        animationIn='slideInUp'
-        animationOut='slideOutDown'
+        isVisible={isModalVisible}
+        onBackdropPress={closeModal}
+        onSwipeComplete={closeModal}
+        onModalHide={onModalHide}
+        onModalShow={onModalShow}
+        useNativeDriver={true}
+        // useNativeDriverForBackdrop={true}
+        hideModalContentWhileAnimating={true}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        backdropOpacity={0.3}
+        // animationInTiming={350}
+        // animationOutTiming={350}
+        // backdropTransitionInTiming={0}
+        backdropTransitionOutTiming={1}
+        style={styles.modal}
       >
         <View style={[styles.modalContainer, { backgroundColor: containerBackgroundColor }]}>
           <View style={[styles.modalHeader, { backgroundColor }]}>
@@ -203,7 +223,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
           <View style={[styles.modalFooter, { backgroundColor }]}>
             <Pressable
               style={({ pressed }) => [styles.modalContent, pressed && { backgroundColor: '#eee' }]}
-              onPress={handleClose}>
+              onPress={closeModal}>
               <View style={styles.modalItem}>
                 <ThemedText >取消</ThemedText>
               </View>
@@ -264,6 +284,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomColor: '#ddd',
+  },
+  modal: {
+    margin: 0,
+    justifyContent: 'flex-end',
   },
   modalContainer: {
     maxHeight: '80%',

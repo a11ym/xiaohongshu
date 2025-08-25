@@ -1,9 +1,8 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ThemedText from '../../../components/ThemedText'
 import messageData from '../data.json'
 import IconText from './IconText'
-import ContainerView from '../../../components/ContainerView'
 import { useTheme } from '../../../hooks/useTheme'
 type Message = {
   id: number,
@@ -17,7 +16,7 @@ const MessageList = () => {
   const { backgroundColor } = useTheme()
   useEffect(() => {
     setMessageList(messageData)
-  })
+  }, [])
   return (
     <ScrollView style={{ backgroundColor: backgroundColor }}>
       <IconText></IconText>
