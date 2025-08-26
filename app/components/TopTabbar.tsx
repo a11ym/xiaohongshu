@@ -1,194 +1,142 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import Ionicons from '@react-native-vector-icons/feather';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
-import { useTheme } from '../hooks/useTheme';
+import { View, TouchableOpacity, Platform, StyleSheet, Text, Pressable } from 'react-native';
+import { useLinkBuilder } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-const { width: screenWidth } = Dimensions.get('window');
-
-
-// 自定义标签栏组件
-export default function TopTabBar({ state, descriptors, navigation, position }: any) {
-  // 计算标签宽度 (三个标签等宽)
-  const tabWidth = (screenWidth - 112) / 3; // 112 = 左右按钮宽度(48*2) + 内边距(16)
-  // const tabWidth = 30;
-  // 使用 Reanimated 共享值
-  const indicatorPosition = useSharedValue(0);
+import Ionicons from '@react-native-vector-icons/feather';
+import { useEffect, useState } from 'react';
+import Animated from 'react-native-reanimated';
+import { useTheme } from '../hooks/useTheme';
+export default function TopTabBar({ state, descriptors, navigation, position }) {
+  const [width, setWidth] = useState(0);
+  const { buildHref } = useLinkBuilder();
   const { backgroundColor, tabBarFontColor, isDarkMode } = useTheme();
   const insets = useSafeAreaInsets();
+  const getLayout = (e) => {
+    setWidth(e.nativeEvent.layout.width)
+    console.log(e.nativeEvent.layout);
+  };
+  console.log(Platform.OS)
 
-  // 更新指示器位置
   useEffect(() => {
-    indicatorPosition.value = withTiming(state.index * tabWidth, {
-      duration: 300,
-      easing: Easing.out(Easing.exp),
-    });
-  }, [state.index]);
-
-  // 指示器动画样式
-  const indicatorStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: indicatorPosition.value }],
-    };
-  }, [indicatorPosition]);
-
-
-  // 打开侧边栏
-  const openSidebar = () => {
-    console.log('打开侧边栏');
-    navigation.openDrawer();
-  };
-
-  // 切换搜索
-  const toggleSearch = () => {
-    navigation.navigate('Search');
-  };
-
+    getLayout
+  }, [width])
 
   return (
-    <>
-      <View style={[styles.container, { backgroundColor, paddingTop: insets.top }]}>
-        {/* 顶部导航栏 */}
-        <View style={styles.tabBarContainer}>
-          {/* 左侧菜单按钮 */}
-          <TouchableOpacity
-            style={styles.sideButton}
-            onPress={openSidebar}
+    <View style={[styles.TopTabBarContainer, { backgroundColor, paddingTop: insets.top }]}>
+      <View style={styles.container}>
+        <View style={styles.leftContainer}>
+          <Pressable
+            onPress={() => {
+              navigation.openDrawer();
+            }}
           >
             <Ionicons name="menu" size={24} color={isDarkMode ? '#fff' : '#000'} />
-          </TouchableOpacity>
+          </Pressable>
+        </View>
 
-          {/* 三个居中标签 */}
-          <View style={styles.tabsContainer}>
-            {state.routes.map((route: any, index: number) => {
-              const { options } = descriptors[route.key];
-              const label = options.tabBarLabel || route.name;
-              const isFocused = state.index === index;
 
-              const onPress = () => {
-                const event = navigation.emit({
-                  type: 'tabPress',
-                  target: route.key,
-                  canPreventDefault: true,
-                });
+        {state.routes.map((route, index) => {
+          const { options } = descriptors[route.key];
+          const label =
+            options.tabBarLabel !== undefined
+              ? options.tabBarLabel
+              : options.title !== undefined
+                ? options.title
+                : route.name;
 
-                if (!isFocused && !event.defaultPrevented) {
-                  navigation.navigate(route.name);
-                }
-              };
+          const isFocused = state.index === index;
 
-              return (
-                <TouchableOpacity
-                  key={route.key}
-                  accessibilityRole="button"
-                  accessibilityState={isFocused ? { selected: true } : {}}
-                  onPress={onPress}
-                  style={[styles.tabItem, { width: tabWidth }]}
-                >
-                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: isFocused ? tabBarFontColor.primary : tabBarFontColor.text }}>
-                    {label}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
 
-            {/* 指示器 - 使用 Reanimated */}
-            <Animated.View
-              style={[
-                styles.indicator,
-                indicatorStyle,
-                { width: tabWidth }
-              ]}
-            />
-          </View>
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name, route.params);
+            }
+          };
 
-          {/* 右侧搜索按钮 */}
-          <TouchableOpacity
-            style={styles.sideButton}
-            onPress={toggleSearch}
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            });
+          };
+
+          return (
+            <TouchableOpacity
+              key={route.key}
+              onLayout={getLayout}
+              href={buildHref(route.name, route.params)}
+              accessibilityRole={Platform.OS === 'web' ? 'link' : 'button'}
+              accessibilityState={isFocused ? { selected: true } : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              testID={options.tabBarButtonTestID}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              style={styles.centerContainer}
+            >
+              <Animated.Text style={[styles.Text, { color: isFocused ? tabBarFontColor.primary : tabBarFontColor.text }]}>
+                {label}
+              </Animated.Text>
+
+              {isFocused && (
+                <View style={styles.indicator} />
+              )}
+            </TouchableOpacity>
+          );
+        })}
+        <View style={styles.searchContainer}>
+
+          <Pressable
+            onPress={() => {
+              navigation.navigate('Search');
+            }}
           >
-            <Ionicons
-              name="search"
-              size={24}
-              color={isDarkMode ? '#fff' : '#000'}
-            />
-          </TouchableOpacity>
+            <Ionicons name="search" size={24} color={isDarkMode ? '#fff' : '#000'} />
+          </Pressable>
         </View>
       </View>
-    </>
+    </View>
   );
-};
-
+}
 
 const styles = StyleSheet.create({
-  container: {
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'red',
-  },
-  tabBarContainer: {
+  TopTabBarContainer: {
+    paddingHorizontal: 12,
     flexDirection: 'row',
-    alignItems: 'center',
   },
-  sideButton: {
-    width: 48,
-    height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 24,
+  container: {
+    flexDirection: 'row',
+    flex: 1,
+    paddingVertical: 8
   },
-  tabsContainer: {
+  leftContainer: {
     flex: 1,
     flexDirection: 'row',
+  },
+  centerContainer: {
+    flex: 1,
     position: 'relative',
-  },
-  tabItem: {
-    height: 48,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-  tabLabel: {
+  Text: {
     fontSize: 16,
-    fontWeight: '500',
-  },
-  activeTabLabel: {
     fontWeight: 'bold',
   },
   indicator: {
+    height: 2,
+    width: 20,
+    backgroundColor: '#ff2e4d',
+    borderRadius: 10,
     position: 'absolute',
     bottom: 0,
-    left: 0,
-    right: 0,
-    height: 3,
-    backgroundColor: '#FF5777',
-    borderRadius: 2,
   },
   searchContainer: {
     flex: 1,
-    position: 'absolute',
-    top: 56,
-    left: 0,
-    backgroundColor: 'red',
-    paddingHorizontal: 16,
-  },
-  searchInput: {
-    height: 40,
-    fontSize: 16,
-    color: '#333',
-  },
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
-  },
-  screenText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-  },
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  }
 });
