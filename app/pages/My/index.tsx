@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -64,7 +64,7 @@ const My = () => {
       // const newScrollOffset = Math.max(0, Math.min(y, headerHeight.value));
       // scrollOffset.value = withSpring(newScrollOffset);
       // 根据滚动位置调整动画值
-      // navBackgroundColor.value = withSpring(y > 100 ? '#f12' : 'transparent');
+      // navBackgroundColor.value = withSpring(y > 100 ? '#f5f5f5' : 'transparent');
       avatarOpacity.value = withSpring(y > 100 ? 1 : 0);
     },
   });
@@ -137,14 +137,16 @@ const My = () => {
           style={[avatarStyle]}
           resizeMode="cover"
         />
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity
-          onPress={() => navigation.navigate('ScanScreen')}
-          style={styles.menuButton}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {
+            Platform.OS === 'ios' && 'android' && <TouchableOpacity
+            onPress={() => navigation.navigate('ScanScreen')}
+            style={styles.menuButton}>
             <FontAwesome name="camera" size={24} color="white" />
           </TouchableOpacity>
+          }
           <TouchableOpacity
-          style={styles.menuButton}>
+            style={styles.menuButton}>
             <FontAwesome name="share-2" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -450,9 +452,8 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     flexDirection: 'column',
-    borderRadius: 8,
+    borderRadius: 6,
     backgroundColor: '#333',
-    borderWidth: 1,
     width: 130,
     padding: 10,
   },

@@ -1,11 +1,12 @@
-import { View, TouchableOpacity, Platform, StyleSheet, Text, Pressable } from 'react-native';
+import { View, TouchableOpacity, Platform, StyleSheet, Pressable } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/feather';
+import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 import { useEffect, useState } from 'react';
 import Animated from 'react-native-reanimated';
 import { useTheme } from '../hooks/useTheme';
-export default function TopTabBar({ state, descriptors, navigation, position }) {
+export default function TopTabBar({ state, descriptors, navigation }: MaterialTopTabBarProps) {
   const [width, setWidth] = useState(0);
   const { buildHref } = useLinkBuilder();
   const { backgroundColor, tabBarFontColor, isDarkMode } = useTheme();
@@ -19,15 +20,16 @@ export default function TopTabBar({ state, descriptors, navigation, position }) 
   useEffect(() => {
     getLayout
   }, [width])
+  const openDrawer = () => {
+      navigation.dispatch({ type: 'OPEN_DRAWER' });
+  }
 
   return (
     <View style={[styles.TopTabBarContainer, { backgroundColor, paddingTop: insets.top }]}>
       <View style={styles.container}>
         <View style={styles.leftContainer}>
           <Pressable
-            onPress={() => {
-              navigation.openDrawer();
-            }}
+            onPress={openDrawer}
           >
             <Ionicons name="menu" size={24} color={isDarkMode ? '#fff' : '#000'} />
           </Pressable>

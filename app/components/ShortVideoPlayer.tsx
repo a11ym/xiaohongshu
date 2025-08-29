@@ -7,11 +7,14 @@ import {
   TouchableOpacity,
   Animated,
   Image,
-  FlatList
+  FlatList,
+  TextInput,
+  Modal,
 } from 'react-native';
 import Video, { VideoRef } from 'react-native-video';
-import Feather from '@react-native-vector-icons/feather';
+import Ionicons from '@react-native-vector-icons/feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// import Modal from 'react-native-modal';
 
 const { width, height } = Dimensions.get('window');
 const background = require('../assets/video/1.mp4');
@@ -70,11 +73,32 @@ const videos = [
   }
 ];
 
+// 模拟评论数据
+const commentData = [
+  {
+    id: '1',
+    user: '用户A',
+    avatar: 'https://example.com/avatarA.jpg',
+    content: '这个视频太棒了！',
+    time: '2小时前',
+    likes: 23,
+  },
+  {
+    id: '2',
+    user: '用户B',
+    avatar: 'https://example.com/avatarB.jpg',
+    content: '我也喜欢这个视频！',
+    time: '1小时前',
+    likes: 18,
+  },
+];
+
 const ShortVideoPlayer = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [likes, setLikes] = useState(videos.map(video => video.likes));
   const [progress, setProgress] = useState(0);
+  const [showComments, setShowComments] = useState(false);
   const videoRefs = useRef<VideoRef[]>([]);
 
   const insets = useSafeAreaInsets();
@@ -140,8 +164,8 @@ const ShortVideoPlayer = () => {
           onProgress={(data) => onProgress(data, index)}
           renderLoader=
           {() => (
-            <View style={{justifyContent:'center',alignItems:'center',flex:1}}>
-              <Text style={{color:'#fff',justifyContent:'center',alignItems:'center'}}>自定义内容</Text>
+            <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+              <Text style={{ color: '#fff', justifyContent: 'center', alignItems: 'center' }}>自定义内容</Text>
             </View>
           )}
         />
@@ -153,7 +177,7 @@ const ShortVideoPlayer = () => {
           onPress={togglePlayPause}
         >
           {!isPlaying && currentIndex === index && (
-            <Feather name="play" size={70} color="rgba(255,255,255,0.7)" />
+            <Ionicons name="play" size={70} color="rgba(255,255,255,0.7)" />
           )}
         </TouchableOpacity>
 
@@ -182,7 +206,7 @@ const ShortVideoPlayer = () => {
               ))}
             </View>
             <View style={styles.musicContainer}>
-              <Feather name="user" size={16} color="white" />
+              <Ionicons name="user" size={16} color="white" />
               <Text style={styles.music}>{item.music}</Text>
             </View>
           </View>
@@ -196,7 +220,7 @@ const ShortVideoPlayer = () => {
             style={styles.actionButton}
             onPress={() => handleLike(index)}
           >
-            <Feather
+            <Ionicons
               name="heart"
               size={30}
               color={likes[index] > item.likes ? '#ff0058' : 'white'}
@@ -205,20 +229,23 @@ const ShortVideoPlayer = () => {
           </TouchableOpacity>
 
           {/* 评论按钮 */}
-          <TouchableOpacity style={styles.actionButton}>
-            <Feather name="user" size={28} color="white" />
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => setShowComments(true)}
+          >
+            <Ionicons name="message-circle" size={28} color="white" />
             <Text style={styles.actionText}>{item.comments}</Text>
           </TouchableOpacity>
 
           {/* 分享按钮 */}
           <TouchableOpacity style={styles.actionButton}>
-            <Feather name="send" size={28} color="white" />
+            <Ionicons name="share-2" size={28} color="white" />
             <Text style={styles.actionText}>{item.shares}</Text>
           </TouchableOpacity>
 
           {/* 更多按钮 */}
           <TouchableOpacity style={[styles.actionButton, { marginTop: 20 }]}>
-            <Feather name="user" size={28} color="white" />
+            <Ionicons name="more-horizontal" size={28} color="white" />
           </TouchableOpacity>
 
           {/* 音乐封面 */}
@@ -226,6 +253,14 @@ const ShortVideoPlayer = () => {
             <Image source={{ uri: item.avatar }} style={styles.coverImage} />
           </View>
         </View>
+
+        {/* 评论弹窗 */}
+        <CommentModal
+          visible={showComments}
+          onClose={() => setShowComments(false)}
+          comments={commentData}
+          videoId={item.id}
+        />
 
       </View>
     );
@@ -243,6 +278,93 @@ const ShortVideoPlayer = () => {
         decelerationRate="fast"
       />
     </View>
+  );
+};
+
+// 评论弹窗
+const CommentModal = ({ visible, onClose, comments, videoId }) => {
+  const [newComment, setNewComment] = useState('');
+  const [modalHeight] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    if (visible) {
+      Animated.timing(modalHeight, {
+        toValue: height * 0.7,
+        duration: 300,
+        useNativeDriver: false
+      }).start();
+    } else {
+      Animated.timing(modalHeight, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: false
+      }).start();
+    }
+  }, [visible]);
+
+  const handleSubmitComment = () => {
+    if (newComment.trim()) {
+      // 这里处理提交评论的逻辑
+      console.log('提交评论:', newComment);
+      setNewComment('');
+    }
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      transparent={true}
+      animationType="none"
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalContainer}>
+        <TouchableOpacity
+          style={styles.modalBackdrop}
+          onPress={onClose}
+        />
+
+        <Animated.View style={[styles.commentPanel, { height: modalHeight }]}>
+          <View style={styles.commentHeader}>
+            <Text style={styles.commentTitle}>{comments.length}条评论</Text>
+            <TouchableOpacity onPress={onClose}>
+              <Ionicons name="x" size={24} color="#333" />
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            data={comments}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.commentItem}>
+                <Text style={styles.commentUser}>{item.user}</Text>
+                <Text style={styles.commentContent}>{item.content}</Text>
+                <View style={styles.commentFooter}>
+                  <Text style={styles.commentTime}>{item.time}</Text>
+                  <View style={styles.commentActions}>
+                    <TouchableOpacity>
+                      <Ionicons name="thumbs-up" size={14} color="#666" />
+                    </TouchableOpacity>
+                    <Text style={styles.commentLikes}>{item.likes}</Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          />
+
+          <View style={styles.commentInputContainer}>
+            <TextInput
+              style={styles.commentInput}
+              placeholder="添加评论..."
+              value={newComment}
+              onChangeText={setNewComment}
+            />
+            <TouchableOpacity onPress={handleSubmitComment}>
+              <Ionicons name="send" size={24} color="#007AFF" />
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </View>
+    </Modal>
   );
 };
 
@@ -380,6 +502,81 @@ const styles = StyleSheet.create({
   coverImage: {
     width: '100%',
     height: '100%',
+  },
+
+  // 评论弹窗
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  commentPanel: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    overflow: 'hidden',
+  },
+  commentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  commentTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  commentItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  commentUser: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  commentContent: {
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  commentFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  commentTime: {
+    fontSize: 12,
+    color: '#666',
+  },
+  commentActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  commentLikes: {
+    fontSize: 12,
+    color: '#666',
+    marginLeft: 5,
+  },
+  commentInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+  },
+  commentInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    marginRight: 10,
   },
 });
 

@@ -40,7 +40,6 @@ const TextView = ({ navigation }: { navigation: any }) => {
     <View>
       <NavHeader
         title="写文字"
-        back={true}
         leftComponent={<LeftComponent navigation={navigation} />}
         rightComponent={<RightComponent text={text} />}
       />

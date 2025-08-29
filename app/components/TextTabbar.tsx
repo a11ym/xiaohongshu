@@ -9,13 +9,13 @@ import ThemedText from './ThemedText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TextTabbar({ state, descriptors, navigation }: any) {
-  console.log("🚀 ~ TextTabbar ~ state, descriptors, navigation:", state, descriptors, navigation)
+  // console.log("🚀 ~ TextTabbar ~ state, descriptors, navigation:", state, descriptors, navigation)
   const { backgroundColor, tabBarFontColor } = useTheme();
   const insets = useSafeAreaInsets();
   const { buildHref } = useLinkBuilder();
   const [isModalVisible, setModalVisible] = useState(false);
   const [height, setHeight] = useState(0);
-  console.log("🚀 ~ TextTabbar ~ height:", height)
+  // console.log("🚀 ~ TextTabbar ~ height:", height)
 
   const getHeight = (e: any) => {
     setHeight(e.nativeEvent.layout.height);

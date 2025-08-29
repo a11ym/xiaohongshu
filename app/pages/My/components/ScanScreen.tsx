@@ -1,4 +1,3 @@
-// ScanScreen.tsx
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import { Camera, useCameraDevice, useFrameProcessor, BarcodeFormat, scanBarcodes } from 'react-native-vision-camera';
 import { runOnJS } from 'react-native-reanimated';
+import NavHeader from '../../../components/NavHeader';
 
 const ScanScreen = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -24,11 +24,11 @@ const ScanScreen = () => {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,
           {
-            title: 'Camera Permission',
-            message: 'App needs access to your camera.',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
+            title: '相机权限',
+            message: 'App 需要访问您的相机。',
+            buttonNeutral: '稍后询问',
+            buttonNegative: '取消',
+            buttonPositive: '确定',
           }
         );
         setHasPermission(granted === PermissionsAndroid.RESULTS.GRANTED);
@@ -55,21 +55,76 @@ const ScanScreen = () => {
   const resetScan = () => {
     setScannedValue(null);
   };
+  // 重新请求相机权限
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: '相机权限',
+          message: 'App 需要访问您的相机。',
+          buttonNeutral: '稍后询问',
+          buttonNegative: '取消',
+          buttonPositive: '确定',
+        }
+      );
+      setHasPermission(granted === PermissionsAndroid.RESULTS.GRANTED);
+    } else {
+      // iOS 权限请求
+      const status = await Camera.requestCameraPermission();
+      setHasPermission(status === 'granted');
+    }
+  };
 
   if (hasPermission === null) {
-    return <View style={styles.container}><Text>Requesting camera permission...</Text></View>;
+    return <>
+      <NavHeader
+        title='扫描'
+        back={true}
+      />
+      <View style={styles.container}>
+        <Text>请求相机权限中...</Text>
+        <TouchableOpacity style={styles.button} onPress={requestCameraPermission}>
+          <Text style={styles.buttonText}>重新请求权限</Text>
+        </TouchableOpacity>
+      </View>
+    </>;
   }
 
   if (!device) {
-    return <View style={styles.container}><Text>No camera device found.</Text></View>;
+    return <>
+      <NavHeader
+        title='扫描'
+        back={true}
+      />
+      <View style={styles.container}>
+        <Text>相机设备未找到</Text>
+        <TouchableOpacity style={styles.button} onPress={requestCameraPermission}>
+          <Text style={styles.buttonText}>重新请求权限</Text>
+        </TouchableOpacity>
+      </View>
+    </>;
   }
 
   if (hasPermission === false) {
-    return <View style={styles.container}><Text>Camera permission denied.</Text></View>;
+    return <>
+      <NavHeader
+        title='扫描'
+        back={true}
+      />
+      <View style={styles.container}><Text>相机权限被拒绝</Text>
+        <TouchableOpacity style={styles.button} onPress={requestCameraPermission}>
+          <Text style={styles.buttonText}>重新请求权限</Text>
+        </TouchableOpacity>
+      </View></>;
   }
 
   return (
     <View style={styles.container}>
+      <NavHeader
+        title="扫描"
+        back={true}
+      />
       <Camera
         style={styles.camera}
         device={device}

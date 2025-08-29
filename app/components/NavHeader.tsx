@@ -52,7 +52,6 @@ export default NavHeader
 const styles = StyleSheet.create({
   container: {
     // height: 44,
-    // backgroundColor: 'yellow',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

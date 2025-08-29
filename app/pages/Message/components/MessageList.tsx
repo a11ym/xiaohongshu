@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import { FlatList, Image, StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ThemedText from '../../../components/ThemedText'
 import messageData from '../data.json'
@@ -18,24 +18,20 @@ const MessageList = () => {
     setMessageList(messageData)
   }, [])
   return (
-    <ScrollView style={{ backgroundColor: backgroundColor }}>
-      <IconText></IconText>
-      <View style={styles.container}>
-        {
-          messageList.map(item => {
-            return (
-              <View style={styles.content} key={item.id}>
-                <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../assets/1.png')}></Image>
-                <View style={styles.contentText}>
-                  <ThemedText>{item.title}</ThemedText>
-                  <ThemedText>{item.content}</ThemedText>
-                </View>
-              </View>
-            )
-          })
-        }
-      </View>
-    </ScrollView>
+    <View style={[styles.container,{ backgroundColor }]}>
+      <IconText />
+      <FlatList
+        data={messageList}
+        renderItem={({ item }) => (
+          <View style={styles.content} key={item.id}>
+            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{ uri: item.image }}></Image>
+            <View style={styles.contentText}>
+              <ThemedText>{item.title}</ThemedText>
+              <ThemedText>{item.content}</ThemedText>
+            </View>
+          </View>
+        )}/>
+    </View>
   )
 }
 
@@ -46,12 +42,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    flex: 1,
+    gap: 10,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    // borderBottomWidth: 0.5,
   },
   contentText: {
-    marginLeft: 10,
-  }
+    flex: 1,
+    gap: 5,
+  },
 })

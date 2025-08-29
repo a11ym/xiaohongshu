@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import Icon from '@react-native-vector-icons/feather'
 import ThemedText from '../../../components/ThemedText'
@@ -28,18 +28,16 @@ const styles = StyleSheet.create({
   // 消息顶部
   messageContent: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: "space-between",
-    paddingHorizontal: 50,
-    paddingVertical: 16
+    paddingVertical: 10,
   },
   messageIcon: {
+    flex: 1,
+    gap: 10,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
   messageText: {
-    marginTop: 10,
     fontSize: 14,
     fontWeight: 'bold'
   }

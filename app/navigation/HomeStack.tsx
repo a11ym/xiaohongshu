@@ -1,4 +1,4 @@
-import { ActivityIndicator, View } from 'react-native'
+import { ActivityIndicator, View, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Index from '../pages/Index';
@@ -69,6 +69,8 @@ const HomeStack = () => {
       console.log(error)
     }
   }
+  console.log(Platform.OS);
+  
   return (
     <Stack.Navigator
       initialRouteName={isSignedIn ? 'Index' : 'SignIn'}
@@ -91,7 +93,10 @@ const HomeStack = () => {
                 // header: (props) => <NavHeader {...props} />
               }}
             />
-            {/* <Stack.Screen name="ScanScreen" component={ScanScreen} /> */}
+            {
+              // Platform.OS !== 'web' &&  <Stack.Screen name="ScanScreen" component={ScanScreen} />
+            }
+            
             {/* <Stack.Screen name="Search" component={Search} /> */}
             <Stack.Group screenOptions={{ presentation: 'containedModal' }}>
               <Stack.Screen name="Search" component={Search} />
