@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import React, { ReactNode } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@react-native-vector-icons/feather';
@@ -51,7 +51,6 @@ export default NavHeader
 
 const styles = StyleSheet.create({
   container: {
-    // height: 44,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

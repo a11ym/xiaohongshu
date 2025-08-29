@@ -1,20 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  useAnimatedRef,
   useAnimatedScrollHandler,
   withSpring,
-  useScrollViewOffset,
 } from 'react-native-reanimated';
 import FontAwesome from '@react-native-vector-icons/feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { width } = Dimensions.get('window');
 import { useNavigation } from '@react-navigation/native';
+import BottomModal from '../../components/BottomModal';
 const My = () => {
   const navigation = useNavigation();
-  console.log("🚀 ~ My ~ navigation:", navigation);
+  // console.log("🚀 ~ My ~ navigation:", navigation);
 
   const openSidebar = () => {
     console.log('打开侧边栏');
@@ -22,49 +21,25 @@ const My = () => {
   };
 
   const listData = Array.from({ length: 60 }, (_, i) => ({ id: i + 1, title: `Item ${i + 1}` }));
-  const [sticky, setSticky] = useState(false); // 是否吸顶
-  const scrollViewRef = useRef(null);
-  const stickyHeaderRef = useRef(null);
-  const stickyOffset = 100; // 滚动到距离顶部100px时固定
+  // const [sticky, setSticky] = useState(false); // 是否吸顶
+  // const stickyHeaderRef = useRef(null);
 
   const insets = useSafeAreaInsets();
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
   // 动画值
   const headerHeight = useSharedValue(350); // 顶部区域初始高度
   const navHeight = useSharedValue(50); // 顶部导航栏高度
-  const scrollOffset = useScrollViewOffset(scrollRef); // 滚动偏移量
-  console.log("🚀 ~ My ~ scrollOffset:", scrollOffset)
-  // const titleOpacity = useSharedValue(0); // 顶部标题透明度
-  // const topNavOpacity = useSharedValue(0); // 顶部导航栏透明度
   const avatarOpacity = useSharedValue(0); // 头像透明度
   const avatarSize = useSharedValue(30); // 头像大小
-  // const avatarY = useSharedValue(30); // 头像Y坐标
-  // const avatarX = useSharedValue(width / 2); // 头像X坐标
-  // const tabBarOpacity = useSharedValue(0); // 标签栏透明度
-  // const backgroundOpacity = useSharedValue(1); // 背景图透明度
-  // const navBackgroundColor = useSharedValue('transparent'); // 背景颜色
-
-  // useEffect(() => {
-  //   // 获取sticky元素的位置信息
-  //   if (stickyHeaderRef.current) {
-  //     stickyHeaderRef.current.measure((x, y, width, height, pageX, pageY) => {
-  //       console.log('Sticky element position:', pageY);
-  //     });
-  //   }
-  // }, []);
+  const navBackgroundColor = useSharedValue('transparent');
 
   // 滚动事件处理
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       const y = event.contentOffset.y;
-      console.log("🚀 ~ My ~ y:", y)
+      // console.log("🚀 ~ My ~ y:", y)
       // setSticky(y > stickyOffset); // 滚动距离超过stickyOffset时固定
-
-      //限制滚动值范围
-      // const newScrollOffset = Math.max(0, Math.min(y, headerHeight.value));
-      // scrollOffset.value = withSpring(newScrollOffset);
       // 根据滚动位置调整动画值
-      // navBackgroundColor.value = withSpring(y > 100 ? '#f5f5f5' : 'transparent');
+      navBackgroundColor.value = withSpring(y > 100 ? '#f12' : 'transparent');
       avatarOpacity.value = withSpring(y > 100 ? 1 : 0);
     },
   });
@@ -74,22 +49,22 @@ const My = () => {
     return {
       height: headerHeight.value + insets.top,
     }
-  }, [insets.top]);
+  }, [headerHeight]);
   //
   const headerStylePaddingTop = useAnimatedStyle(() => {
     return {
       paddingTop: insets.top + navHeight.value,
     }
-  }, [insets.top, navHeight.value])
+  }, [navHeight])
 
   // 顶部导航栏样式动画
   const topNavStyle = useAnimatedStyle(() => {
     return {
       paddingTop: insets.top,
       height: navHeight.value + insets.top,
-      // backgroundColor: navBackgroundColor.value,
+      backgroundColor: navBackgroundColor.value,
     }
-  }, [insets.top, navHeight.value]);
+  }, [navHeight]);
 
 
 
@@ -102,27 +77,25 @@ const My = () => {
     borderWidth: 2,
     borderColor: 'white',
     elevation: 5,
-    // transform: [
-    //   {
-    //     translateY: avatarY.value,
-    //   },
-    // ]
-  }), [avatarSize.value, avatarOpacity.value]);
+  }), [avatarSize, avatarOpacity]);
 
-  // 背景图样式动画
-  // const backgroundStyle = useAnimatedStyle(() => ({
-  //   opacity: backgroundOpacity.value,
-  // }));
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // 标签栏样式动画
-  // const tabBarStyle = useAnimatedStyle(() => ({
-  //   opacity: tabBarOpacity.value,
-  //   transform: [
-  //     {
-  //       translateY: interpolate(headerHeight.value, [160, 300], [0, 20], Extrapolate.CLAMP)
-  //     },
-  //   ],
-  // }));
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+  const onModalHide = () => {
+    setIsModalVisible(false);
+  };
+  const onModalShow = () => {
+    setIsModalVisible(true);
+  };
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+  const openScan = () => {
+    navigation.navigate('ScanScreen' as never);
+  }
 
   return (
     <Animated.View style={styles.container}>
@@ -137,15 +110,16 @@ const My = () => {
           style={[avatarStyle]}
           resizeMode="cover"
         />
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
           {
-            Platform.OS === 'ios' && 'android' && <TouchableOpacity
-            onPress={() => navigation.navigate('ScanScreen')}
-            style={styles.menuButton}>
-            <FontAwesome name="camera" size={24} color="white" />
-          </TouchableOpacity>
+            Platform.OS !== 'web' && <TouchableOpacity
+              onPress={openScan}
+              style={styles.menuButton}>
+              <FontAwesome name="camera" size={24} color="white" />
+            </TouchableOpacity>
           }
           <TouchableOpacity
+            onPress={toggleModal}
             style={styles.menuButton}>
             <FontAwesome name="share-2" size={24} color="white" />
           </TouchableOpacity>
@@ -154,7 +128,6 @@ const My = () => {
       </Animated.View>
       {/* 内容区域 */}
       <Animated.ScrollView
-        ref={scrollRef}
         // showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         style={styles.contentContainer}
@@ -262,13 +235,11 @@ const My = () => {
 
         {/* 笔记网格 */}
         {/* 粘性元素容器 */}
-        {!sticky ? (
-          <Animated.View ref={stickyHeaderRef} style={styles.stickyHeaderContainer}>
-            <View style={styles.stickyHeader}>
-              <Text style={styles.stickyText}>粘性标题</Text>
-            </View>
-          </Animated.View>
-        ) : null}
+        <Animated.View style={styles.stickyHeaderContainer}>
+          <View style={styles.stickyHeader}>
+            <Text style={styles.stickyText}>粘性标题</Text>
+          </View>
+        </Animated.View>
         <View>
           {
             listData.map((item) => (
@@ -287,6 +258,15 @@ const My = () => {
           /> */}
         </View>
       </Animated.ScrollView>
+
+      <BottomModal
+        isVisible={isModalVisible}
+        onBackdropPress={closeModal}
+        onModalHide={onModalHide}
+        onModalShow={onModalShow}
+      >
+        <Text>这是底部弹窗内容</Text>
+      </BottomModal>
     </Animated.View>
   );
 };
@@ -309,8 +289,9 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   topNav: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     paddingHorizontal: 16,
     alignItems: 'center',
     position: 'absolute',
@@ -320,6 +301,7 @@ const styles = StyleSheet.create({
   },
 
   backButton: {
+    flex: 1,
     width: 30,
     height: 30,
   },

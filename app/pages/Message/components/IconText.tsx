@@ -7,15 +7,15 @@ const IconText = () => {
   return (
     <View style={styles.messageContent}>
       <View style={styles.messageIcon}>
-        <Icon name='user' size={24} color="black"></Icon>
+        <Icon name='thumbs-up' size={24} color="black"></Icon>
         <ThemedText style={styles.messageText}>赞和收藏</ThemedText>
       </View>
       <View style={styles.messageIcon}>
-        <Icon name='user' size={24} color="black"></Icon>
+        <Icon name='plus' size={24} color="black"></Icon>
         <ThemedText style={styles.messageText}>新增关注</ThemedText>
       </View>
       <View style={styles.messageIcon}>
-        <Icon name='user' size={24} color="black"></Icon>
+        <Icon name='message-circle' size={24} color="black"></Icon>
         <ThemedText style={styles.messageText}>评论和@</ThemedText>
       </View>
     </View>

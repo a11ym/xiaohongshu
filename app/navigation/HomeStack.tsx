@@ -8,7 +8,7 @@ import Settings from '../pages/Settings'
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-// import ScanScreen from '../pages/My/components/ScanScreen';
+import ScanScreen from '../pages/My/components/ScanScreen';
 import General from '../pages/Settings/page/General';
 import DarkMode from '../pages/Settings/page/DarkMode';
 import WebView from '../pages/WebView';
@@ -94,7 +94,7 @@ const HomeStack = () => {
               }}
             />
             {
-              // Platform.OS !== 'web' &&  <Stack.Screen name="ScanScreen" component={ScanScreen} />
+              Platform.OS !== 'web' &&  <Stack.Screen name="ScanScreen" component={ScanScreen} />
             }
             
             {/* <Stack.Screen name="Search" component={Search} /> */}

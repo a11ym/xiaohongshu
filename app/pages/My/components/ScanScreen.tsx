@@ -7,13 +7,11 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
-import { Camera, useCameraDevice, useFrameProcessor, BarcodeFormat, scanBarcodes } from 'react-native-vision-camera';
-import { runOnJS } from 'react-native-reanimated';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
 import NavHeader from '../../../components/NavHeader';
 
 const ScanScreen = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [scannedValue, setScannedValue] = useState<string | null>(null);
   const [isTorchOn, setIsTorchOn] = useState(false);
   const device = useCameraDevice('back');
 
@@ -43,18 +41,18 @@ const ScanScreen = () => {
   }, []);
 
   // 处理扫码逻辑
-  useFrameProcessor((frame) => {
-    'worklet';
-    const barcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE]);
-    if (barcodes.length > 0) {
-      runOnJS(setScannedValue)(barcodes[0].value);
-    }
-  }, [setScannedValue]);
+  // useFrameProcessor((frame) => {
+  //   'worklet';
+  //   const barcodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE]);
+  //   if (barcodes.length > 0) {
+  //     runOnJS(setScannedValue)(barcodes[0].value);
+  //   }
+  // }, [setScannedValue]);
 
-  // 重置扫码值
-  const resetScan = () => {
-    setScannedValue(null);
-  };
+  // // 重置扫码值
+  // const resetScan = () => {
+  //   setScannedValue(null);
+  // };
   // 重新请求相机权限
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
@@ -79,7 +77,7 @@ const ScanScreen = () => {
   if (hasPermission === null) {
     return <>
       <NavHeader
-        title='扫描'
+        backgroundColor='transparent'
         back={true}
       />
       <View style={styles.container}>
@@ -94,7 +92,7 @@ const ScanScreen = () => {
   if (!device) {
     return <>
       <NavHeader
-        title='扫描'
+        backgroundColor='transparent'
         back={true}
       />
       <View style={styles.container}>
@@ -109,7 +107,7 @@ const ScanScreen = () => {
   if (hasPermission === false) {
     return <>
       <NavHeader
-        title='扫描'
+        backgroundColor='transparent'
         back={true}
       />
       <View style={styles.container}><Text>相机权限被拒绝</Text>
@@ -122,7 +120,7 @@ const ScanScreen = () => {
   return (
     <View style={styles.container}>
       <NavHeader
-        title="扫描"
+        backgroundColor='transparent'
         back={true}
       />
       <Camera
@@ -133,22 +131,24 @@ const ScanScreen = () => {
       />
 
       {/* 扫码结果显示 */}
-      {scannedValue && (
+      {/* {scannedValue && (
         <View style={styles.overlay}>
           <Text style={styles.text}>Scanned: {scannedValue}</Text>
           <TouchableOpacity style={styles.button} onPress={resetScan}>
-            <Text style={styles.buttonText}>Scan Again</Text>
+            <Text style={styles.buttonText}>重新扫码</Text>
           </TouchableOpacity>
         </View>
-      )}
+      )} */}
 
       {/* 切换闪光灯按钮 */}
-      <TouchableOpacity
-        style={[styles.button, styles.torchButton]}
-        onPress={() => setIsTorchOn(!isTorchOn)}
-      >
-        <Text style={styles.buttonText}>{isTorchOn ? 'Turn Off Torch' : 'Turn On Torch'}</Text>
-      </TouchableOpacity>
+      <View style={styles.torchButtonView}>
+        <TouchableOpacity
+          style={[styles.button, styles.torchButton]}
+          onPress={() => setIsTorchOn(!isTorchOn)}
+        >
+          <Text style={styles.buttonText}>{isTorchOn ? '关闭闪光灯' : '打开闪光灯'}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -156,12 +156,19 @@ const ScanScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   camera: {
     flex: 1,
+    height: '100%',
     width: '100%',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
   },
   overlay: {
     position: 'absolute',
@@ -187,9 +194,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
-  torchButton: {
+  torchButtonView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
     bottom: 20,
+    left: 0,
+    right: 0,
+  },
+  torchButton: {
     backgroundColor: '#007BFF',
   },
 });

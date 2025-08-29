@@ -1,12 +1,12 @@
-import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
 import { useTheme } from '../hooks/useTheme';
 import Icon from '@react-native-vector-icons/feather';
-import Modal from 'react-native-modal';
 import { useCallback, useState } from 'react';
 import ThemedText from './ThemedText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import BottomModal from './BottomModal';
 
 export default function TextTabbar({ state, descriptors, navigation }: any) {
   // console.log("🚀 ~ TextTabbar ~ state, descriptors, navigation:", state, descriptors, navigation)
@@ -14,12 +14,6 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
   const insets = useSafeAreaInsets();
   const { buildHref } = useLinkBuilder();
   const [isModalVisible, setModalVisible] = useState(false);
-  const [height, setHeight] = useState(0);
-  // console.log("🚀 ~ TextTabbar ~ height:", height)
-
-  const getHeight = (e: any) => {
-    setHeight(e.nativeEvent.layout.height);
-  }
 
   const closeModal = useCallback(() => {
     setModalVisible(!isModalVisible);
@@ -37,7 +31,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
 
   return (
     <>
-      <View onLayout={getHeight} style={[styles.container, { height: 50 + insets.bottom, backgroundColor: state.index === 1 ? '#222' : backgroundColor }]}>
+      <View style={[styles.container, { height: 50 + insets.bottom, backgroundColor: state.index === 1 ? '#222' : backgroundColor }]}>
         {state.routes.map((route: { key: string | number; name: string; params: object | undefined; }, index: any) => {
           const { options } = descriptors[route.key];
           const label =
@@ -100,25 +94,13 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
           );
         })}
       </View>
-      <Modal
+      <BottomModal
         isVisible={isModalVisible}
         onBackdropPress={closeModal}
-        onSwipeComplete={closeModal}
         onModalHide={onModalHide}
         onModalShow={onModalShow}
-        useNativeDriver={true}
-        // useNativeDriverForBackdrop={true}
-        hideModalContentWhileAnimating={true}
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
-        // animationInTiming={350}
-        // animationOutTiming={350}
-        // backdropTransitionInTiming={0}
-        backdropTransitionOutTiming={1}
-        backdropOpacity={0.3}
-        style={styles.modal}
       >
-        <View style={[styles.modalContent, { backgroundColor: backgroundColor }]}>
+        {/* <View style={[styles.modalContent, { backgroundColor: backgroundColor }]}> */}
           <View style={styles.settingOption}>
             <ThemedText style={styles.settingOptionText}>从相册选择</ThemedText>
           </View>
@@ -143,8 +125,8 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
               <ThemedText style={[styles.modalButtonText]}>取消</ThemedText>
             </TouchableOpacity>
           </View>
-        </View>
-      </Modal>
+        {/* </View> */}
+      </BottomModal>
     </>
   );
 }
