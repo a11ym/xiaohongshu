@@ -1,6 +1,6 @@
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
-import { Text, PlatformPressable } from '@react-navigation/elements';
+import { Text } from '@react-navigation/elements';
 import { useTheme } from '../hooks/useTheme';
 import Icon from '@react-native-vector-icons/feather';
 import { useCallback, useState } from 'react';
@@ -67,7 +67,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
           };
 
           return (
-            <PlatformPressable
+            <Pressable
               href={buildHref(route.name, route.params)}
               accessibilityState={isFocused ? { selected: true } : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -90,7 +90,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
                     {label}
                   </Text>
               }
-            </PlatformPressable>
+            </Pressable>
           );
         })}
       </View>

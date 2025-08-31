@@ -7,6 +7,7 @@
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import DrawerNavigator from './app/navigation/DrawerNavigator';
 // import HomeStack from './app/navigation/HomeStack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
 import { useTheme } from './app/hooks/useTheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -17,12 +18,14 @@ export default function App() {
   const { isDarkMode } = useTheme();
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NavigationContainer ref={navigationRef}>
-        <DrawerNavigator />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <NavigationContainer ref={navigationRef}>
+          <DrawerNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 

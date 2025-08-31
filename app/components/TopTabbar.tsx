@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Platform, StyleSheet, Pressable } from 'react-native';
+import { View, Platform, StyleSheet, Pressable } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/feather';
@@ -21,7 +21,7 @@ export default function TopTabBar({ state, descriptors, navigation }: MaterialTo
     getLayout
   }, [width])
   const openDrawer = () => {
-      navigation.dispatch({ type: 'OPEN_DRAWER' });
+    navigation.dispatch({ type: 'OPEN_DRAWER' });
   }
 
   return (
@@ -67,7 +67,7 @@ export default function TopTabBar({ state, descriptors, navigation }: MaterialTo
           };
 
           return (
-            <TouchableOpacity
+            <Pressable
               key={route.key}
               onLayout={getLayout}
               href={buildHref(route.name, route.params)}
@@ -86,7 +86,7 @@ export default function TopTabBar({ state, descriptors, navigation }: MaterialTo
               {isFocused && (
                 <View style={styles.indicator} />
               )}
-            </TouchableOpacity>
+            </Pressable>
           );
         })}
         <View style={styles.searchContainer}>

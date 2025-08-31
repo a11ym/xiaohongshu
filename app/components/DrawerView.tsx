@@ -1,7 +1,7 @@
 // components/CustomDrawerContent.js
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+// import { DrawerContentScrollView } from '@react-navigation/drawer';
 import Ionicons from '@react-native-vector-icons/feather';
 import ThemedText from './ThemedText';
 import { useTheme } from '../hooks/useTheme';
@@ -12,62 +12,62 @@ const DrawerView = (props: any) => {
   const { backgroundColor, containerBackgroundColor, isDarkMode } = useTheme();
   return (
     <View style={{ flex: 1, backgroundColor: containerBackgroundColor }}>
-      {/* <View style={{ height: insets.top }} /> */}
-      <DrawerContentScrollView
+      <View style={{ height: insets.top + 20 }} />
+      <ScrollView
         showsVerticalScrollIndicator={false}
         style={[styles.container]} {...props}>
         <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
-            <ThemedText style={styles.customItemText}>发现好友</ThemedText>
+            <Ionicons name="user-plus" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <ThemedText style={styles.customItemText}>添加好友</ThemedText>
           </TouchableOpacity>
         </View>
-        <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
+        {/* <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
             <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>小红书兴趣季</ThemedText>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="octagon" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>创作者中心</ThemedText>
           </TouchableOpacity>
         </View>
         <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="file-text" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>我的草稿</ThemedText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="message-square" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>我的评论</ThemedText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="monitor" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>浏览记录</ThemedText>
           </TouchableOpacity>
         </View>
         <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="shopping-bag" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>订单</ThemedText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="shopping-cart" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>购物车</ThemedText>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="wind" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>钱包</ThemedText>
           </TouchableOpacity>
         </View>
@@ -75,7 +75,7 @@ const DrawerView = (props: any) => {
         <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="compass" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>小程序</ThemedText>
           </TouchableOpacity>
         </View>
@@ -83,18 +83,18 @@ const DrawerView = (props: any) => {
         <View style={[styles.menuItem, { backgroundColor: backgroundColor }]}>
           <TouchableOpacity style={[styles.customItem]}
             onPress={() => { props.navigation.navigate('Home', { screen: 'Settings' }) }}>
-            <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+            <Ionicons name="hard-drive" size={22} color={isDarkMode ? "#fff" : "#000"} />
             <ThemedText style={styles.customItemText}>社区公约</ThemedText>
           </TouchableOpacity>
         </View>
-      </DrawerContentScrollView>
+      </ScrollView>
       <View style={[styles.bottom, { paddingBottom: insets.bottom + 20 }]}>
         <TouchableOpacity style={styles.bottomItem}>
-          <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+          <Ionicons name="camera" size={22} color={isDarkMode ? "#fff" : "#000"} />
           <ThemedText style={styles.bottomItemText}>扫一扫</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomItem}>
-          <Ionicons name="settings" size={22} color={isDarkMode ? "#fff" : "#000"} />
+          <Ionicons name="help-circle" size={22} color={isDarkMode ? "#fff" : "#000"} />
           <ThemedText style={styles.bottomItemText}>帮助与客服</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomItem}
@@ -110,6 +110,7 @@ const DrawerView = (props: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 16,
   },
   menuItem: {
     borderRadius: 8,

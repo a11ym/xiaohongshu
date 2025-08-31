@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -110,11 +110,10 @@ const CustomTabBar = ({ state, navigation, descriptors }: any) => {
             const isFocused = state.index === index;
 
             return (
-              <TouchableOpacity
+              <Pressable
                 key={route.key}
                 onPress={() => handleTabPress(route, index)}
                 onLayout={(e) => onTabLayout(index, e)}
-                activeOpacity={0.7}
               >
                 <View style={[
                   styles.tabItem,
@@ -127,7 +126,7 @@ const CustomTabBar = ({ state, navigation, descriptors }: any) => {
                     {label}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </Pressable>
             );
           })}
         </Animated.View>
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   activeText: {
-    color: '#6200EE',
+    color:'#000',
     fontWeight: '600',
   },
 });
