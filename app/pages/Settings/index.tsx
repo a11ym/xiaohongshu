@@ -6,7 +6,7 @@ import ContainerView from '../../components/ContainerView'
 const Settings = ({ onLogout }: { onLogout: (name: string) => void }) => {
 
   return (
-    <ContainerView style={{ flex: 1 }}>
+    <ContainerView>
       <NavHeader title="设置" back={true} />
       <List onLogout={onLogout} />
     </ContainerView>

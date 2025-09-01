@@ -35,7 +35,7 @@ const FlashListView = () => {
   }
 
   return (
-    <ContainerView style={{ flex: 1 }}>
+    <ContainerView>
       <FlashList
         data={DATA}
         masonry

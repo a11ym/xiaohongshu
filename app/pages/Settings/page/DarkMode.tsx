@@ -15,7 +15,7 @@ const DarkMode = () => {
   } = ThemeManager();
 
   return (
-    <ContainerView style={{ flex: 1 }}>
+    <ContainerView>
       <NavHeader title="深色模式" back={true} />
       <View style={styles.container}>
         <View style={styles.item}>

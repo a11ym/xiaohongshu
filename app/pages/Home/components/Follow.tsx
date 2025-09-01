@@ -34,7 +34,7 @@ const Follow = () => {
     navigation.navigate('Detail', { itemId: item.id, item })
   }
   return (
-    <ContainerView style={{ flex: 1 }}>
+    <ContainerView>
       <FlashList
         data={DATA}
         masonry
@@ -65,7 +65,6 @@ const Follow = () => {
             </View>
           </Pressable>
         }
-        estimatedItemSize={200}
       />
     </ContainerView>
   )

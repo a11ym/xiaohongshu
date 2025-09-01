@@ -5,6 +5,7 @@ import MessageList from './components/MessageList';
 import NavHeader from '../../components/NavHeader';
 import Feather from '@react-native-vector-icons/feather';
 import ThemedText from '../../components/ThemedText';
+import ContainerView from '../../components/ContainerView';
 const RightComponent = ({ color }: { color: string }) => (
   <View style={[styles.rightContainer]}>
     <Feather name="users" size={24} color={color} />
@@ -15,14 +16,14 @@ const RightComponent = ({ color }: { color: string }) => (
 const Message = () => {
   const { iconColor, backgroundColor } = useTheme()
   return (
-    <>
+    <ContainerView>
       <NavHeader
         backgroundColor={backgroundColor}
         title="消息"
         rightComponent={<RightComponent color={iconColor} />}
       />
       <MessageList></MessageList>
-    </>
+    </ContainerView>
   )
 }
 

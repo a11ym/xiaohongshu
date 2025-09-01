@@ -12,7 +12,7 @@ const General = () => {
   }
 
   return (
-    <ContainerView style={{ flex: 1 }}>
+    <ContainerView>
       <NavHeader title="通用设置" back={true} />
       <View style={styles.container}>
         <ThemedText>显示</ThemedText>

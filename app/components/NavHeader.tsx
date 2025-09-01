@@ -27,7 +27,10 @@ const NavHeader = ({
   const { iconColor } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor, paddingTop: insets.top + 10 }]}>
+    <View style={[styles.container, { backgroundColor, 
+    // paddingLeft: insets.left + 10,
+    // paddingRight: insets.right + 10,
+    paddingTop: insets.top + 10 }]}>
       <View style={styles.headerContainer}>
         {/* 左侧容器 */}
         <View style={styles.leftContainer}>

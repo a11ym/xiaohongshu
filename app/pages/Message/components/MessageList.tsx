@@ -18,7 +18,9 @@ const MessageList = () => {
     setMessageList(messageData)
   }, [])
   return (
-    <View style={[styles.container,{ backgroundColor }]}>
+    <View style={[styles.container, {
+      backgroundColor,
+    }]}>
       <IconText />
       <FlatList
         data={messageList}
@@ -30,7 +32,7 @@ const MessageList = () => {
               <ThemedText>{item.content}</ThemedText>
             </View>
           </View>
-        )}/>
+        )} />
     </View>
   )
 }

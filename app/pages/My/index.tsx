@@ -60,7 +60,6 @@ const My = () => {
   // 顶部导航栏样式动画
   const topNavStyle = useAnimatedStyle(() => {
     return {
-      paddingTop: insets.top,
       height: navHeight.value + insets.top,
       backgroundColor: navBackgroundColor.value,
     }
@@ -98,7 +97,11 @@ const My = () => {
   }
 
   return (
-    <Animated.View style={styles.container}>
+    <Animated.View style={[styles.container, {
+      paddingTop: insets.top,
+      paddingLeft: insets.left,
+      paddingRight: insets.right,
+    }]}>
       {/* 顶部导航栏 */}
       <Animated.View style={[styles.topNav, topNavStyle]}>
         <TouchableOpacity style={styles.backButton}>
@@ -463,7 +466,6 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    width,
   },
   stickyText: {
     fontSize: 20,

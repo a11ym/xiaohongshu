@@ -31,7 +31,11 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
 
   return (
     <>
-      <View style={[styles.container, { height: 50 + insets.bottom, backgroundColor: state.index === 1 ? '#222' : backgroundColor }]}>
+      <View style={[styles.container, { 
+        height: 50 + insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+        backgroundColor: state.index === 1 ? '#222' : backgroundColor }]}>
         {state.routes.map((route: { key: string | number; name: string; params: object | undefined; }, index: any) => {
           const { options } = descriptors[route.key];
           const label =

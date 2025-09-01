@@ -25,7 +25,10 @@ export default function TopTabBar({ state, descriptors, navigation }: MaterialTo
   }
 
   return (
-    <View style={[styles.TopTabBarContainer, { backgroundColor, paddingTop: insets.top }]}>
+    <View style={[styles.TopTabBarContainer, { backgroundColor, 
+    paddingLeft: insets.left + 12,
+    paddingRight: insets.right + 12,
+    paddingTop: insets.top }]}>
       <View style={styles.container}>
         <View style={styles.leftContainer}>
           <Pressable
@@ -106,7 +109,6 @@ export default function TopTabBar({ state, descriptors, navigation }: MaterialTo
 
 const styles = StyleSheet.create({
   TopTabBarContainer: {
-    paddingHorizontal: 12,
     flexDirection: 'row',
   },
   container: {

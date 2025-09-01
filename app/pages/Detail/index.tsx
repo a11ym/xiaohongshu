@@ -35,7 +35,7 @@ const RightComponent = () => {
 const Details = ({ route }: { route: any }) => {
   console.log("🚀 ~ Details ~ route:", route)
   return (
-    <ContainerView style={{ flex: 1 }}>
+    <ContainerView>
       <NavHeader
         // title={route.params.item.id}
         back={true}
