@@ -69,7 +69,6 @@ const HomeStack = () => {
       console.log(error)
     }
   }
-  console.log(Platform.OS);
   
   return (
     <Stack.Navigator

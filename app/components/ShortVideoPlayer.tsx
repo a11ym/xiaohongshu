@@ -99,7 +99,7 @@ const ShortVideoPlayer = () => {
   const [likes, setLikes] = useState(videos.map(video => video.likes));
   const [progress, setProgress] = useState(0);
   const [showComments, setShowComments] = useState(false);
-  const videoRefs = useRef<VideoRef[]>([]);
+  const videoRef = useRef(null);
 
   const insets = useSafeAreaInsets();
 
@@ -154,7 +154,7 @@ const ShortVideoPlayer = () => {
       <View style={[styles.videoContainer, { height: height - 50 - insets.bottom, paddingBottom: insets.bottom }]}>
         {/* 视频播放器 */}
         <Video
-          ref={ref => (videoRefs.current[index] = ref)}
+          ref={videoRef}
           source={{ uri: item.uri }}
           //处理竖屏和横屏
           style={styles.video}

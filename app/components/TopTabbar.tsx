@@ -1,34 +1,28 @@
+import React from 'react';
 import { View, Platform, StyleSheet, Pressable } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/feather';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
-import { useEffect, useState } from 'react';
 import Animated from 'react-native-reanimated';
 import { useTheme } from '../hooks/useTheme';
 export default function TopTabBar({ state, descriptors, navigation }: MaterialTopTabBarProps) {
-  const [width, setWidth] = useState(0);
   const { buildHref } = useLinkBuilder();
   const { backgroundColor, tabBarFontColor, isDarkMode } = useTheme();
   const insets = useSafeAreaInsets();
-  const getLayout = (e) => {
-    setWidth(e.nativeEvent.layout.width)
-    console.log(e.nativeEvent.layout);
-  };
-  console.log(Platform.OS)
 
-  useEffect(() => {
-    getLayout
-  }, [width])
   const openDrawer = () => {
     navigation.dispatch({ type: 'OPEN_DRAWER' });
   }
 
   return (
-    <View style={[styles.TopTabBarContainer, { backgroundColor, 
-    paddingLeft: insets.left + 12,
-    paddingRight: insets.right + 12,
-    paddingTop: insets.top }]}>
+    <View style={[styles.TopTabBarContainer,
+    {
+      backgroundColor,
+      paddingLeft: insets.left,
+      paddingRight: insets.right,
+      paddingTop: insets.top
+    }]}>
       <View style={styles.container}>
         <View style={styles.leftContainer}>
           <Pressable
@@ -72,7 +66,6 @@ export default function TopTabBar({ state, descriptors, navigation }: MaterialTo
           return (
             <Pressable
               key={route.key}
-              onLayout={getLayout}
               href={buildHref(route.name, route.params)}
               accessibilityRole={Platform.OS === 'web' ? 'link' : 'button'}
               accessibilityState={isFocused ? { selected: true } : {}}
@@ -114,6 +107,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flex: 1,
+    paddingHorizontal: 12,
     paddingVertical: 8
   },
   leftContainer: {

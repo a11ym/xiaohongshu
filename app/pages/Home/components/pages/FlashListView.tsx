@@ -66,7 +66,6 @@ const FlashListView = () => {
             </View>
           </Pressable>
         }
-        estimatedItemSize={200}
       />
     </ContainerView>
   )

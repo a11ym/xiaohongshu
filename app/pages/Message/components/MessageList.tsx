@@ -10,6 +10,7 @@ type Message = {
   content: string,
   date: string,
   image: string
+  avatar: string
 }
 const MessageList = () => {
   const [messageList, setMessageList] = useState<Message[]>([])
@@ -26,7 +27,7 @@ const MessageList = () => {
         data={messageList}
         renderItem={({ item }) => (
           <View style={styles.content} key={item.id}>
-            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{ uri: item.image }}></Image>
+            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{ uri: item.avatar }}></Image>
             <View style={styles.contentText}>
               <ThemedText>{item.title}</ThemedText>
               <ThemedText>{item.content}</ThemedText>

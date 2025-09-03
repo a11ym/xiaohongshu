@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Platform, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,9 +8,46 @@ import Animated, {
 } from 'react-native-reanimated';
 import FontAwesome from '@react-native-vector-icons/feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-const { width } = Dimensions.get('window');
 import { useNavigation } from '@react-navigation/native';
 import BottomModal from '../../components/BottomModal';
+
+const MyHeader = (props: any) => {
+  const { openSidebar, openScan, toggleModal } = props;
+  const insets = useSafeAreaInsets();
+  return (
+    <View style={[styles.topNavContainer, {
+      paddingTop: insets.top,
+      left: insets.left,
+      right: insets.right,
+    }]}>
+      <Animated.View style={[styles.topNav]} >
+        <Pressable style={styles.backButton}>
+          <FontAwesome onPress={openSidebar} name="menu" size={24} color="white" />
+        </Pressable>
+        {/* 头像 */}
+        <Animated.Image
+          source={{ uri: 'https://picsum.photos/200/200' }}
+          // style={[avatarStyle]}
+          resizeMode="cover"
+        />
+        <View style={styles.menuButtonContainer}>
+          {
+            Platform.OS !== 'web' && <Pressable
+              onPress={openScan}>
+              <FontAwesome name="camera" size={24} color="white" />
+            </Pressable>
+          }
+          <Pressable
+            onPress={toggleModal}>
+            <FontAwesome name="share-2" size={24} color="white" />
+          </Pressable>
+        </View>
+
+      </Animated.View>
+    </View>
+  )
+}
+
 const My = () => {
   const navigation = useNavigation();
   // console.log("🚀 ~ My ~ navigation:", navigation);
@@ -36,7 +73,6 @@ const My = () => {
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       const y = event.contentOffset.y;
-      // console.log("🚀 ~ My ~ y:", y)
       // setSticky(y > stickyOffset); // 滚动距离超过stickyOffset时固定
       // 根据滚动位置调整动画值
       navBackgroundColor.value = withSpring(y > 100 ? '#f12' : 'transparent');
@@ -60,7 +96,7 @@ const My = () => {
   // 顶部导航栏样式动画
   const topNavStyle = useAnimatedStyle(() => {
     return {
-      height: navHeight.value + insets.top,
+      height: navHeight.value,
       backgroundColor: navBackgroundColor.value,
     }
   }, [navHeight]);
@@ -98,37 +134,10 @@ const My = () => {
 
   return (
     <Animated.View style={[styles.container, {
-      paddingTop: insets.top,
       paddingLeft: insets.left,
       paddingRight: insets.right,
     }]}>
-      {/* 顶部导航栏 */}
-      <Animated.View style={[styles.topNav, topNavStyle]}>
-        <TouchableOpacity style={styles.backButton}>
-          <FontAwesome onPress={openSidebar} name="menu" size={24} color="white" />
-        </TouchableOpacity>
-        {/* 头像 */}
-        <Animated.Image
-          source={{ uri: 'https://picsum.photos/200/200' }}
-          style={[avatarStyle]}
-          resizeMode="cover"
-        />
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-          {
-            Platform.OS !== 'web' && <TouchableOpacity
-              onPress={openScan}
-              style={styles.menuButton}>
-              <FontAwesome name="camera" size={24} color="white" />
-            </TouchableOpacity>
-          }
-          <TouchableOpacity
-            onPress={toggleModal}
-            style={styles.menuButton}>
-            <FontAwesome name="share-2" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-
-      </Animated.View>
+      <MyHeader openSidebar={openSidebar} openScan={openScan} toggleModal={toggleModal} />
       {/* 内容区域 */}
       <Animated.ScrollView
         // showsHorizontalScrollIndicator={false}
@@ -291,26 +300,26 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
   },
-  topNav: {
-    flex: 1,
-    flexDirection: 'row',
-    // justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    alignItems: 'center',
+  topNavContainer: {
     position: 'absolute',
-    left: 0,
-    right: 0,
-    zIndex: 10,
+    zIndex: 1,
+  },
+  topNav: {
+    flexDirection: 'row',
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 8
   },
 
   backButton: {
     flex: 1,
-    width: 30,
-    height: 30,
   },
-  menuButton: {
-    width: 30,
-    height: 30,
+  menuButtonContainer: {
+    flex: 1,
+    gap: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   },
 
   avatarContainer: {

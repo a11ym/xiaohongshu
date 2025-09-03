@@ -31,11 +31,12 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
 
   return (
     <>
-      <View style={[styles.container, { 
+      <View style={[styles.container, {
         height: 50 + insets.bottom,
         paddingLeft: insets.left,
         paddingRight: insets.right,
-        backgroundColor: state.index === 1 ? '#222' : backgroundColor }]}>
+        backgroundColor: state.index === 1 ? '#222' : backgroundColor
+      }]}>
         {state.routes.map((route: { key: string | number; name: string; params: object | undefined; }, index: any) => {
           const { options } = descriptors[route.key];
           const label =
@@ -105,30 +106,30 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
         onModalShow={onModalShow}
       >
         {/* <View style={[styles.modalContent, { backgroundColor: backgroundColor }]}> */}
-          <View style={styles.settingOption}>
-            <ThemedText style={styles.settingOptionText}>从相册选择</ThemedText>
-          </View>
+        <View style={styles.settingOption}>
+          <ThemedText style={styles.settingOptionText}>从相册选择</ThemedText>
+        </View>
 
-          <View style={styles.settingOption}>
-            <ThemedText style={styles.settingOptionText}>相机</ThemedText>
-            <ThemedText style={styles.settingOptionText}>拍照与直播</ThemedText>
-          </View>
+        <View style={styles.settingOption}>
+          <ThemedText style={styles.settingOptionText}>相机</ThemedText>
+          <ThemedText style={styles.settingOptionText}>拍照与直播</ThemedText>
+        </View>
 
-          <TouchableOpacity style={styles.settingOption} onPress={() => {
-            closeModal();
-            navigation.navigate('TextView');
-          }}>
-            <ThemedText style={styles.settingOptionText}>写文字</ThemedText>
+        <TouchableOpacity style={styles.settingOption} onPress={() => {
+          closeModal();
+          navigation.navigate('TextView');
+        }}>
+          <ThemedText style={styles.settingOptionText}>写文字</ThemedText>
+        </TouchableOpacity>
+
+        <View style={styles.modalFooter}>
+          <TouchableOpacity
+            style={[styles.modalButton]}
+            onPress={() => setModalVisible(false)}
+          >
+            <ThemedText style={[styles.modalButtonText]}>取消</ThemedText>
           </TouchableOpacity>
-
-          <View style={styles.modalFooter}>
-            <TouchableOpacity
-              style={[styles.modalButton]}
-              onPress={() => setModalVisible(false)}
-            >
-              <ThemedText style={[styles.modalButtonText]}>取消</ThemedText>
-            </TouchableOpacity>
-          </View>
+        </View>
         {/* </View> */}
       </BottomModal>
     </>
