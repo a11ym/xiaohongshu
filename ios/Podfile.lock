@@ -1648,7 +1648,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-pager-view (6.8.1):
+  - react-native-pager-view (6.9.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2967,7 +2967,7 @@ SPEC CHECKSUMS:
   React-logger: 2f0d40bc8e648fbb1ff3b6580ad54189a8753290
   React-Mapbuffer: 9a7c65078c6851397c1999068989e4fc239d0c80
   React-microtasksnativemodule: 4f1ef719ba6c7ebbd2d75346ffa2916f9b4771c9
-  react-native-pager-view: adf5c4ae45a4ce743b0ff2855bda83ffce13b4c4
+  react-native-pager-view: 45d9ceba0da0a157252979dcfcf0973d5a1e3896
   react-native-safe-area-context: 339885703b6dd1be2bce42d9c0b0350c21180032
   react-native-vector-icons-feather: cbcb1e81cc67ea1e84a26cc5332557e6c3a70767
   react-native-video: 56f7fa97175e9ca4c195c3d2f0a43405f4e03e12

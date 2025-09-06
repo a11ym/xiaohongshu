@@ -1,4 +1,3 @@
-import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useColorScheme } from "react-native";
 
 export const useTheme = () => {

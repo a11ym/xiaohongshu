@@ -49,7 +49,7 @@ const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
   }, []);
 
   return (
-    <ContainerView style={{ backgroundColor: 'red' }}>
+    <ContainerView>
       <ThemedView style={styles.headerContainer}>
         <ThemedText>小红书</ThemedText>
         <ThemedText>你的生活兴趣社区</ThemedText>
@@ -118,107 +118,104 @@ const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
 export default SignIn
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  // },
-  // headerContainer: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
-  // sginInButton: {
-  //   // width: 300,
-  //   // height: 50,
-  //   backgroundColor: '#ff5777',
-  //   borderRadius: 25,
-  //   flexDirection: 'row',
-  //   paddingHorizontal: 100,
-  //   paddingVertical: 12,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   marginTop: 20
-  // },
-  // textContainer: {
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   flexDirection: 'row',
-  //   flexWrap: 'wrap',
-  //   marginTop: 10
-  // },
-  // footerContainer: {
-  //   // paddingBottom: 200,
-  //   alignItems: 'center',
-  //   flexDirection: 'column',
-  // },
+  container: {
+    flex: 1,
+  },
+  headerContainer: {
+    flex: 1,
+    gap: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sginInButton: {
+    backgroundColor: '#ff5777',
+    borderRadius: 25,
+    flexDirection: 'row',
+    paddingHorizontal: 100,
+    paddingVertical: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
+  },
+  textContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10
+  },
+  footerContainer: {
+    // paddingBottom: 200,
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
 
-  // modalContainer: {
-  //   backgroundColor: 'white',
-  //   borderTopRightRadius: 20,
-  //   borderTopLeftRadius: 20,
-  //   height: '50%',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
-  // triggerButton: {
-  //   backgroundColor: '#007BFF',
-  //   paddingVertical: 12,
-  //   paddingHorizontal: 24,
-  //   borderRadius: 8,
-  // },
-  // triggerText: {
-  //   color: 'white',
-  //   fontSize: 16,
-  //   fontWeight: 'bold',
-  // },
-  // bottomSheetContainer: {
-  //   // backgroundColor: 'red',
-  //   // marginHorizontal: 24,
-  //   backgroundColor: 'yellow'
-  // },
-  // sheetBackground: {
-  //   backgroundColor: 'white',
-  //   borderTopLeftRadius: 20,
-  //   borderTopRightRadius: 20,
-  // },
-  // sheetHandle: {
-  //   backgroundColor: '#e0e0e0',
-  //   height: 4,
-  //   width: 40,
-  //   alignSelf: 'center',
-  //   marginVertical: 8,
-  //   borderRadius: 2,
-  // },
-  // sheetTitle: {
-  //   fontSize: 18,
-  //   fontWeight: 'bold',
-  //   marginBottom: 20,
-  //   textAlign: 'center',
-  // },
-  // loginOption: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   paddingVertical: 15,
-  //   borderBottomWidth: 1,
-  //   borderBottomColor: '#eee',
-  // },
-  // optionIcon: {
-  //   fontSize: 20,
-  //   // marginRight: 15,
-  // },
-  // optionTitle: {
-  //   fontSize: 16,
-  // },
-  // contentContainer: {
-  //   flex: 1,
-  //   alignItems: 'center',
-  //   backgroundColor: 'red'
-  // },
-  // loginButton: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   backgroundColor: 'white',
-  //   borderRadius: 25,
-  //   marginTop: 20
-  // }
+  modalContainer: {
+    backgroundColor: 'white',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    height: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  triggerButton: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  triggerText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  bottomSheetContainer: {
+    backgroundColor: 'yellow'
+  },
+  sheetBackground: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  sheetHandle: {
+    backgroundColor: '#e0e0e0',
+    height: 4,
+    width: 40,
+    alignSelf: 'center',
+    marginVertical: 8,
+    borderRadius: 2,
+  },
+  sheetTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  loginOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  optionIcon: {
+    fontSize: 20,
+    // marginRight: 15,
+  },
+  optionTitle: {
+    fontSize: 16,
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: 'red'
+  },
+  loginButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 25,
+    marginTop: 20
+  }
 })

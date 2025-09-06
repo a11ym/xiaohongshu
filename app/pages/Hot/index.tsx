@@ -121,9 +121,6 @@ const Hot = () => {
         windowSize={2} // 维护前后总共2个窗口的渲染
       />
     </View>
-    // <ContainerVideo>
-    //   <Text style={{ fontSize: 20, color: '#000',position: 'absolute', top: 150, left: 50}} onPress={handle}>切换</Text>
-    // </ContainerVideo>
   )
 }
 

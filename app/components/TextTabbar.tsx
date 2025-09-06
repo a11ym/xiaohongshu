@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
-import { useLinkBuilder } from '@react-navigation/native';
+// import { useLinkBuilder } from '@react-navigation/native';
 import { Text } from '@react-navigation/elements';
 import { useTheme } from '../hooks/useTheme';
 import Icon from '@react-native-vector-icons/feather';
@@ -12,7 +12,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
   // console.log("🚀 ~ TextTabbar ~ state, descriptors, navigation:", state, descriptors, navigation)
   const { backgroundColor, tabBarFontColor } = useTheme();
   const insets = useSafeAreaInsets();
-  const { buildHref } = useLinkBuilder();
+  // const { buildHref } = useLinkBuilder();
   const [isModalVisible, setModalVisible] = useState(false);
 
   const closeModal = useCallback(() => {
@@ -28,6 +28,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
   const onModalShow = useCallback(() => {
     console.log('Modal完全显示');
   }, []);
+  const backgroundColorActive = state.index === 1 ? '#222' : backgroundColor;
 
   return (
     <>
@@ -35,7 +36,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
         height: 50 + insets.bottom,
         paddingLeft: insets.left,
         paddingRight: insets.right,
-        backgroundColor: state.index === 1 ? '#222' : backgroundColor
+        backgroundColor: backgroundColorActive
       }]}>
         {state.routes.map((route: { key: string | number; name: string; params: object | undefined; }, index: any) => {
           const { options } = descriptors[route.key];
@@ -73,7 +74,7 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
 
           return (
             <Pressable
-              href={buildHref(route.name, route.params)}
+              // href={buildHref(route.name, route.params)}
               accessibilityState={isFocused ? { selected: true } : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
               testID={options.tabBarButtonTestID}

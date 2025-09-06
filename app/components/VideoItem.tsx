@@ -1,6 +1,6 @@
 // VideoItem.js
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Pressable, ActivityIndicator, Image } from 'react-native';
 import Video from 'react-native-video';
 // 假设你已经安装并配置了 react-native-vector-icons
 import Icon from '@react-native-vector-icons/feather';
@@ -91,8 +91,19 @@ const VideoItem = ({ item, isFocused }: { item: any; isFocused: boolean }) => {
 
       {/* 底部和侧边的UI覆盖层 */}
       <View style={styles.bottomSection}>
-        <Text style={styles.userText}>{item.username}</Text>
+        <View style={styles.userInfo}>
+          <Image source={{ uri: item.avatar }} style={styles.avatar} />
+          <Text style={styles.userText}>{item.username}</Text>
+          <TouchableOpacity style={styles.followButton}>
+            <Text style={styles.followText}>关注</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.descriptionText}>{item.title}</Text>
+        <View style={styles.hashtagContainer}>
+          {item.hashtags.map((tag: string, i: number) => (
+            <Text key={i} style={styles.hashtag}>{tag}</Text>
+          ))}
+        </View>
       </View>
 
       <View style={styles.sideSection}>
@@ -168,9 +179,35 @@ const styles = StyleSheet.create({
   },
   bottomSection: {
     position: 'absolute',
-    bottom: 80,
+    bottom: 8,
     left: 10,
     right: 100, // 给右侧按钮留出空间
+    gap: 10,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  followButton: {
+    borderRadius: 30,
+    backgroundColor: '#ff0058',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+  },
+  followText: {
+    color: 'white',
+    fontSize: 14,
   },
   userText: {
     color: 'white',
@@ -181,6 +218,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     marginTop: 5,
+  },
+  hashtagContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  hashtag: {
+    color: '#a0d2ff',
+    fontSize: 14,
+    marginRight: 10,
   },
   sideSection: {
     position: 'absolute',

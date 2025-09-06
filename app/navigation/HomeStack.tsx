@@ -93,7 +93,7 @@ const HomeStack = () => {
               }}
             />
             {
-              Platform.OS !== 'web' &&  <Stack.Screen name="ScanScreen" component={ScanScreen} />
+              // Platform.OS !== 'web' &&  <Stack.Screen name="ScanScreen" component={ScanScreen} />
             }
             
             {/* <Stack.Screen name="Search" component={Search} /> */}

@@ -87,7 +87,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
   const onModalHide = useCallback(() => {
     console.log('Modal完全隐藏');
   }, []);
-  
+
   // 完全显示modal后的回调
   const onModalShow = useCallback(() => {
     console.log('Modal完全显示');
@@ -105,7 +105,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
                 onPress={() => handleOpenGeneral(index)}
                 style={({ pressed }) => [styles.containerContent, pressed && { backgroundColor: '#eee' }]}
                 key={index}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                <View style={styles.card}>
                   <Feather name={item.icon} size={24} color={iconColor} />
                   <View style={styles.containerItem}>
                     <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart.length - 1 ? 0 : StyleSheet.hairlineWidth }]}>
@@ -126,7 +126,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
               <Pressable
                 style={({ pressed }) => [styles.containerContent, pressed && { backgroundColor: '#eee' }]}
                 key={index}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                <View style={styles.card}>
                   <Feather name={item.icon} size={24} color={iconColor} />
                   <View style={styles.containerItem}>
                     <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart2.length - 1 ? 0 : 0.5 }]}>
@@ -147,7 +147,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
               <Pressable
                 style={({ pressed }) => [styles.containerContent, pressed && { backgroundColor: '#eee' }]}
                 key={index}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                <View style={styles.card}>
                   <Feather name={item.icon} size={24} color={iconColor} />
                   <View style={styles.containerItem}>
                     <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart3.length - 1 ? 0 : 0.5 }]}>
@@ -258,6 +258,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  card: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10
   },
   text: {
     fontSize: 16,

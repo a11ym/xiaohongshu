@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Platform, StyleSheet, Pressable } from 'react-native';
-import { useLinkBuilder } from '@react-navigation/native';
+// import { useLinkBuilder } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/feather';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 import Animated from 'react-native-reanimated';
 import { useTheme } from '../hooks/useTheme';
 export default function TopTabBar({ state, descriptors, navigation }: MaterialTopTabBarProps) {
-  const { buildHref } = useLinkBuilder();
+  // const { buildHref } = useLinkBuilder();
   const { backgroundColor, tabBarFontColor, isDarkMode } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -66,7 +66,7 @@ export default function TopTabBar({ state, descriptors, navigation }: MaterialTo
           return (
             <Pressable
               key={route.key}
-              href={buildHref(route.name, route.params)}
+              // href={buildHref(route.name, route.params)}
               accessibilityRole={Platform.OS === 'web' ? 'link' : 'button'}
               accessibilityState={isFocused ? { selected: true } : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}

@@ -12,6 +12,13 @@ import { StatusBar } from 'react-native';
 import { useTheme } from './app/hooks/useTheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React from 'react';
+const linking = {
+  prefixes: [],
+  config: {
+    screens: {
+    },
+  },
+}
 export default function App() {
   const navigationRef = useNavigationContainerRef();
   console.log("🚀 ~ App ~ navigationRef:", navigationRef)
@@ -21,7 +28,9 @@ export default function App() {
     <GestureHandlerRootView>
       <SafeAreaProvider>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer
+          ref={navigationRef}
+          linking={linking}>
           <DrawerNavigator />
         </NavigationContainer>
       </SafeAreaProvider>

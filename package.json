@@ -8,8 +8,9 @@
     "lint": "eslint .",
     "start": "react-native start",
     "copy:android": "bash copy-public-to-android.sh",
-    "dev:web": "vite --host",
-    "build:web": "vite build",
+    "web:dev": "vite --host",
+    "web:build": "vite build",
+    "web:preview": "vite preview",
     "test": "jest"
   },
   "dependencies": {
@@ -32,9 +33,10 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.80.1",
+    "react-native-collapsible-tab-view": "^8.0.1",
     "react-native-gesture-handler": "^2.27.1",
     "react-native-modal": "^14.0.0-rc.1",
-    "react-native-pager-view": "^6.8.1",
+    "react-native-pager-view": "^6.9.1",
     "react-native-reanimated": "^3.18.0",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.11.1",
@@ -65,6 +67,7 @@
     "prettier": "2.8.8",
     "react-test-renderer": "19.1.0",
     "typescript": "5.0.4",
+    "vite-plugin-babel": "^1.3.2",
     "vite-plugin-commonjs": "^0.10.4"
   },
   "engines": {
