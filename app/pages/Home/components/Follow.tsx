@@ -6,6 +6,7 @@ import ThemedText from "../../../components/ThemedText";
 import { useTheme } from "../../../hooks/useTheme";
 import { useNavigation } from "@react-navigation/native";
 import Icon from '@react-native-vector-icons/feather'
+import CustomRefreshControl from "../../../components/CustomRefreshControl";
 
 interface Item {
   id: number;
@@ -33,39 +34,46 @@ const Follow = () => {
     console.log("🚀 ~ handlePress ~ item:", item.id)
     navigation.navigate('Detail', { itemId: item.id, item })
   }
+  const handleRefresh = () => {
+    setRefreshing(true)
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 2000)
+  }
   return (
     <ContainerView>
-      <FlashList
-        data={DATA}
-        masonry
-        numColumns={2}
-        refreshing={refreshing}
-        onRefresh={() => {
-          setRefreshing(true)
-          setTimeout(() => {
-            setRefreshing(false)
-          }, 2000)
-        }}
-        renderItem={({ item }) =>
-          <Pressable
-            onPress={() => handlePress(item)}
-            style={[styles.container, { backgroundColor: darkContainerBackgroundColor }]}
-            key={item.id} >
-            <Image source={{ uri: item?.image_url }} style={styles.image} />
-            <View style={styles.contentContainer}>
-              <ThemedText style={styles.title}>{item?.title}</ThemedText>
-              <ThemedText style={styles.content}>{item?.content}</ThemedText>
-              <View style={styles.userInfo}>
-                <Image source={{ uri: item?.avatar }} style={styles.avatar} />
-                <ThemedText style={{ marginLeft: 5 }}>User</ThemedText>
-                <View style={{ flex: 1 }} />
-                <Icon name="heart" size={12} color="#ddd" />
-                <ThemedText style={{ marginLeft: 5 }}>12</ThemedText>
+      <CustomRefreshControl
+        isRefreshing={refreshing}
+        onRefresh={handleRefresh}>
+        <FlashList
+          data={DATA}
+          masonry
+          numColumns={2}
+          scrollEventThrottle={16}
+          keyExtractor={(item) => item.id.toString()}
+          // refreshing={refreshing}
+          // onRefresh={() => null}
+          renderItem={({ item }) =>
+            <Pressable
+              onPress={() => handlePress(item)}
+              style={[styles.container, { backgroundColor: darkContainerBackgroundColor }]}
+              key={item.id} >
+              <Image source={{ uri: item?.image_url }} style={styles.image} />
+              <View style={styles.contentContainer}>
+                <ThemedText style={styles.title}>{item?.title}</ThemedText>
+                <ThemedText style={styles.content}>{item?.content}</ThemedText>
+                <View style={styles.userInfo}>
+                  <Image source={{ uri: item?.avatar }} style={styles.avatar} />
+                  <ThemedText style={{ marginLeft: 5 }}>User</ThemedText>
+                  <View style={{ flex: 1 }} />
+                  <Icon name="heart" size={12} color="#ddd" />
+                  <ThemedText style={{ marginLeft: 5 }}>12</ThemedText>
+                </View>
               </View>
-            </View>
-          </Pressable>
-        }
-      />
+            </Pressable>
+          }
+        />
+      </CustomRefreshControl>
     </ContainerView>
   )
 }
