@@ -14,6 +14,17 @@ import DarkMode from '../pages/Settings/page/DarkMode';
 import WebView from '../pages/WebView';
 import TextView from '../pages/TextView';
 const Stack = createNativeStackNavigator();
+const config = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
 
 const HomeStack = () => {
   const [isSignedIn, setIsSignedIn] = useState(false)
@@ -88,6 +99,12 @@ const HomeStack = () => {
               name="Detail"
               component={Detail}
               options={{
+                animation:'none',
+                // presentation: 'transparentModal'
+                // transitionSpec: {
+                //   open: config,
+                //   close: config,
+                // },
                 // headerShown: true,
                 // header: (props) => <NavHeader {...props} />
               }}
@@ -97,7 +114,7 @@ const HomeStack = () => {
             }
             
             {/* <Stack.Screen name="Search" component={Search} /> */}
-            <Stack.Group screenOptions={{ presentation: 'containedModal' }}>
+            <Stack.Group screenOptions={{animation:'none' }}>
               <Stack.Screen name="Search" component={Search} />
             </Stack.Group>
             <Stack.Group screenOptions={{ presentation: 'fullScreenModal' }}>
