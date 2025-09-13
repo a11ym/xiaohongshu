@@ -5,11 +5,11 @@
  * @format
  */
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
-import DrawerNavigator from './app/navigation/DrawerNavigator';
+import DrawerNavigator from './src/navigation/DrawerNavigator';
 // import HomeStack from './app/navigation/HomeStack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
-import { useTheme } from './app/hooks/useTheme';
+import { useTheme } from './src/hooks/useTheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React from 'react';
 const linking = {
@@ -21,7 +21,7 @@ const linking = {
 }
 export default function App() {
   const navigationRef = useNavigationContainerRef();
-  console.log("🚀 ~ App ~ navigationRef:", navigationRef)
+  // console.log("🚀 ~ App ~ navigationRef:", navigationRef)
   const { isDarkMode } = useTheme();
 
   return (

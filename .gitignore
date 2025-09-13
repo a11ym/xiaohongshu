@@ -74,5 +74,6 @@ yarn-error.log
 !.yarn/sdks
 !.yarn/versions
 
-app/assets/video
+# src/assets/video
+src/assets/video/*
 dist

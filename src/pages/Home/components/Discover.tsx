@@ -2,7 +2,7 @@ import React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import DiscoverTopTabbar from '../../../components/DiscoverTopTabbar';
 const Tab = createMaterialTopTabNavigator();
-import FlashListView from '../components/pages/FlashListView'
+import FlashListView from './pages/FlashListView'
 import { Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
 const tabs = [
