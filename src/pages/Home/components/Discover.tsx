@@ -23,7 +23,6 @@ const Discover = () => {
       {
         tabs.map(tab => (
           <Tab.Screen key={tab.name} name={tab.name} options={{ tabBarLabel: tab.label }} >
-            {/* {props => <Item {...props} name={tab.name} label={tab.label} />} */}
             {() => <FlashListView />}
           </Tab.Screen>
         ))

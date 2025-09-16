@@ -1,33 +1,21 @@
 import { FlatList, Image, StyleSheet, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ThemedText from '../../../components/ThemedText'
-import messageData from '../data.json'
 import IconText from './IconText'
 import { useTheme } from '../../../hooks/useTheme'
-type Message = {
-  id: number,
-  title: string,
-  content: string,
-  date: string,
-  image: string
-  avatar: string
-}
+import data from '../data'
 const MessageList = () => {
-  const [messageList, setMessageList] = useState<Message[]>([])
   const { backgroundColor } = useTheme()
-  useEffect(() => {
-    setMessageList(messageData)
-  }, [])
   return (
     <View style={[styles.container, {
       backgroundColor,
     }]}>
       <IconText />
       <FlatList
-        data={messageList}
+        data={data}
         renderItem={({ item }) => (
           <View style={styles.content} key={item.id}>
-            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{ uri: item.avatar }}></Image>
+            <Image style={styles.avatar} source={{ uri: item.avatar }}></Image>
             <View style={styles.contentText}>
               <ThemedText>{item.title}</ThemedText>
               <ThemedText>{item.content}</ThemedText>
@@ -43,6 +31,11 @@ export default MessageList
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
   },
   content: {
     flex: 1,

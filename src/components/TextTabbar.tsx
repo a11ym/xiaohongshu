@@ -1,5 +1,4 @@
 import { View, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
-// import { useLinkBuilder } from '@react-navigation/native';
 import { Text } from '@react-navigation/elements';
 import { useTheme } from '../hooks/useTheme';
 import Icon from '@react-native-vector-icons/feather';
@@ -12,7 +11,6 @@ export default function TextTabbar({ state, descriptors, navigation }: any) {
   // console.log("🚀 ~ TextTabbar ~ state, descriptors, navigation:", state, descriptors, navigation)
   const { backgroundColor, tabBarFontColor } = useTheme();
   const insets = useSafeAreaInsets();
-  // const { buildHref } = useLinkBuilder();
   const [isModalVisible, setModalVisible] = useState(false);
 
   const closeModal = useCallback(() => {

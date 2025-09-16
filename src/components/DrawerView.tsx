@@ -1,7 +1,5 @@
-// components/CustomDrawerContent.js
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-// import { DrawerContentScrollView } from '@react-navigation/drawer';
 import Ionicons from '@react-native-vector-icons/feather';
 import ThemedText from './ThemedText';
 import { useTheme } from '../hooks/useTheme';

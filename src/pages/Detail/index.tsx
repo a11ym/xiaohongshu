@@ -1,22 +1,23 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, useWindowDimensions, View } from 'react-native'
 import React from 'react'
 import NavHeader from '../../components/NavHeader'
 import ContainerView from '../../components/ContainerView'
 import ThemedText from '../../components/ThemedText'
+import { RouteProp } from '@react-navigation/native'
+import { HomeStackParamList } from '../../navigation/HomeStack'
+import { Data } from '../../pages/Home/Data'
+import Animated from 'react-native-reanimated'
+type DetailRouteParam = RouteProp<HomeStackParamList, 'Detail'>
 
-interface Item {
-  id: number;
-  title: string;
-  content: string;
-  image_url: string;
-  avatar: string;
+type Props = {
+  route: DetailRouteParam
 }
 
-const LeftComponent = ({ itemData }: { itemData: Item }) => {
+const LeftComponent = ({ leftData }: { leftData: Data }) => {
   return (
     <View style={styles.leftContainer}>
-      <Image source={{ uri: itemData.avatar }} style={styles.leftAvatar}></Image>
-      <ThemedText>{itemData.content}</ThemedText>
+      <Image source={{ uri: leftData.avatar }} style={styles.leftAvatar} />
+      <ThemedText>{leftData.name}</ThemedText>
     </View>
   )
 }
@@ -25,35 +26,43 @@ const RightComponent = () => {
   return (
     <View style={styles.rightContainer}>
       <View style={styles.rightItem}>
-        <ThemedText style={{ color: 'red' }}>关注</ThemedText>
+        <ThemedText style={styles.rightText}>关注</ThemedText>
       </View>
       <ThemedText>Right</ThemedText>
     </View>
   )
 }
 
-const Details = ({ route }: { route: any }) => {
+const Details = ({ route }: Props) => {
   console.log("🚀 ~ Details ~ route:", route)
+  const { item } = route.params
+  const { width } = useWindowDimensions()
   return (
-    <ContainerView>
-      <NavHeader
-        // title={route.params.item.id}
-        back={true}
-        leftComponent={<LeftComponent itemData={route.params.item} />}
-        rightComponent={<RightComponent />}
-      />
-      <View>
-        <Image source={{ uri: route.params.item.image_url }} style={{ width: 200, height: 200 }}></Image>
-        <ThemedText>{route.params.item.content}</ThemedText>
-        <ThemedText>{route.params.item.title}</ThemedText>
-      </View>
-    </ContainerView>
+    <Animated.View style={styles.container}>
+      <ContainerView>
+        <NavHeader
+          back={true}
+          leftComponent={<LeftComponent leftData={item} />}
+          rightComponent={<RightComponent />}
+        />
+        <View>
+          <Animated.Image
+            sharedTransitionTag={item.name}
+            source={{ uri: item.image_url }} style={{ width: width, height: width }} />
+          <ThemedText>{item.content}</ThemedText>
+          <ThemedText>{item.title}</ThemedText>
+        </View>
+      </ContainerView>
+    </Animated.View>
   )
 }
 
 export default Details
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   leftAvatar: {
     width: 30,
     height: 30,
@@ -76,5 +85,12 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: 'red',
     borderWidth: 1,
+  },
+  rightText: {
+    color: 'red',
+  },
+  image: {
+    width: '100%',
+    height: 200,
   }
 })

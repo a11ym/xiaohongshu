@@ -1,14 +1,16 @@
-import { Pressable, StyleSheet, Text, View, } from 'react-native'
+import { Pressable, StyleSheet, View, } from 'react-native'
 import React from 'react'
 import NavHeader from '../../../components/NavHeader'
 import ContainerView from '../../../components/ContainerView'
 import ThemedText from '../../../components/ThemedText'
 import Feather from '@react-native-vector-icons/feather'
 import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { HomeStackParamList } from '../../../navigation/HomeStack'
 const General = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>()
   const handleOpen = () => {
-    navigation.navigate('DarkMode' as never)
+    navigation.navigate('DarkMode')
   }
 
   return (
@@ -43,9 +45,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   itemTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: 'black'
+    alignItems: 'flex-start',
   },
   itemRight: {
     flexDirection: 'row',

@@ -2,15 +2,19 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeStack from './HomeStack';
 import DrawerView from '../components/DrawerView';
-const Drawer = createDrawerNavigator();
 
-function DrawerNavigator() {
+type DrawerStackParamList = {
+  Home: undefined;
+  Settings: undefined;
+}
+
+const DrawerNavigator = () => {
+  const Drawer = createDrawerNavigator<DrawerStackParamList>();
   return (
     <Drawer.Navigator
       initialRouteName='Home'
       drawerContent={(props) => <DrawerView {...props} />}
       screenOptions={{
-        // popToTopOnBlur: true, // 返回时回到顶部
         headerShown: false,
         swipeEdgeWidth: 0, //滑动距离
         drawerType: 'front', // 'back', 'front', 'slide', 'permanent'

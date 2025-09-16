@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Platform, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Platform, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -66,7 +66,7 @@ const My = () => {
   const headerHeight = useSharedValue(350); // 顶部区域初始高度
   const navHeight = useSharedValue(50); // 顶部导航栏高度
   const avatarOpacity = useSharedValue(0); // 头像透明度
-  const avatarSize = useSharedValue(30); // 头像大小
+  // const avatarSize = useSharedValue(30); // 头像大小
   const navBackgroundColor = useSharedValue('transparent');
 
   // 滚动事件处理
@@ -94,25 +94,25 @@ const My = () => {
   }, [navHeight])
 
   // 顶部导航栏样式动画
-  const topNavStyle = useAnimatedStyle(() => {
-    return {
-      height: navHeight.value,
-      backgroundColor: navBackgroundColor.value,
-    }
-  }, [navHeight]);
+  // const topNavStyle = useAnimatedStyle(() => {
+  //   return {
+  //     height: navHeight.value,
+  //     backgroundColor: navBackgroundColor.value,
+  //   }
+  // }, [navHeight]);
 
 
 
   // 头像样式动画
-  const avatarStyle = useAnimatedStyle(() => ({
-    width: avatarSize.value,
-    height: avatarSize.value,
-    borderRadius: avatarSize.value / 2,
-    opacity: avatarOpacity.value,
-    borderWidth: 2,
-    borderColor: 'white',
-    elevation: 5,
-  }), [avatarSize, avatarOpacity]);
+  // const avatarStyle = useAnimatedStyle(() => ({
+  //   width: avatarSize.value,
+  //   height: avatarSize.value,
+  //   borderRadius: avatarSize.value / 2,
+  //   opacity: avatarOpacity.value,
+  //   borderWidth: 2,
+  //   borderColor: 'white',
+  //   elevation: 5,
+  // }), [avatarSize, avatarOpacity]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 

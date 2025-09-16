@@ -1,28 +1,17 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import { View, Platform, StyleSheet, Pressable } from 'react-native';
-// import { useLinkBuilder } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/feather';
-import { MaterialTopTabBarProps, useTabAnimation } from '@react-navigation/material-top-tabs';
+import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 import Animated from 'react-native-reanimated';
 import { useTheme } from '../hooks/useTheme';
-import { useNavigation } from "@react-navigation/native";
-export default function TopTabBar({ state, descriptors,navigation  }: MaterialTopTabBarProps) {
-  // const { buildHref } = useLinkBuilder();
+export default function TopTabBar({ state, descriptors, navigation }: MaterialTopTabBarProps) {
   const { backgroundColor, tabBarFontColor, isDarkMode } = useTheme();
   const insets = useSafeAreaInsets();
-  // const { position } = useTabAnimation();
   // console.log("🚀 ~ TopTabBar ~ position:", position)
-
-  // const navigation = useNavigation()
   const openDrawer = () => {
     navigation.dispatch({ type: 'OPEN_DRAWER' });
   }
-  // useEffect(()=>{
-  //   navigation.setOptions({
-  //     animation:'none'
-  //   })
-  // },[navigation])
 
   return (
     <View style={[styles.TopTabBarContainer,
@@ -40,11 +29,9 @@ export default function TopTabBar({ state, descriptors,navigation  }: MaterialTo
             <Ionicons name="menu" size={24} color={isDarkMode ? '#fff' : '#000'} />
           </Pressable>
         </View>
-
-
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
-          const label =
+          const label: any =
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined

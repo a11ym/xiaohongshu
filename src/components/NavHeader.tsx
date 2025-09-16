@@ -5,8 +5,10 @@ import Feather from '@react-native-vector-icons/feather';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
 import ThemedText from './ThemedText';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { HomeStackParamList } from '../navigation/HomeStack';
 
-interface NavHeaderProps {
+type NavHeaderProps = {
   leftComponent?: ReactNode;
   centerComponent?: ReactNode;
   rightComponent?: ReactNode;
@@ -23,14 +25,16 @@ const NavHeader = ({
   backgroundColor,
 }: NavHeaderProps) => {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>()
   const { iconColor } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor, 
-    // paddingLeft: insets.left + 10,
-    // paddingRight: insets.right + 10,
-    paddingTop: insets.top + 10 }]}>
+    <View style={[styles.container, {
+      backgroundColor,
+      // paddingLeft: insets.left + 10,
+      // paddingRight: insets.right + 10,
+      paddingTop: insets.top + 10
+    }]}>
       <View style={styles.headerContainer}>
         {/* 左侧容器 */}
         <View style={styles.leftContainer}>

@@ -28,7 +28,7 @@ const ThemeManager = () => {
     };
 
     loadSettings();
-  }, []);
+  }, [systemTheme]);
 
   // 监听系统主题变化（仅当 followSystemTheme 为 true 时生效）
   useEffect(() => {
@@ -42,17 +42,17 @@ const ThemeManager = () => {
   }, [followSystemTheme]);
 
   // 保存用户偏好
-  const saveSettings = async (isDark, follow) => {
+  const saveSettings = async (isDark: boolean, followSystem: boolean) => {
     try {
       await AsyncStorage.setItem('isDarkMode', String(isDark));
-      await AsyncStorage.setItem('followSystem', String(follow));
+      await AsyncStorage.setItem('followSystem', String(followSystem));
     } catch (error) {
       console.error('Failed to save theme settings:', error);
     }
   };
 
   // 切换跟随系统 Switch
-  const toggleFollowSystem = (value) => {
+  const toggleFollowSystem = (value: boolean) => {
     setFollowSystemTheme(value);
     saveSettings(value ? false : isDarkMode, value);
     if (value) {
@@ -64,7 +64,7 @@ const ThemeManager = () => {
   };
 
   // 切换暗黑模式 Switch（仅当未跟随系统时可用）
-  const toggleDarkMode = (value) => {
+  const toggleDarkMode = (value: boolean) => {
     if (!followSystemTheme) {
       setIsDarkMode(value);
       Appearance.setColorScheme(value ? 'dark' : 'light'); // 设置主题

@@ -35,8 +35,6 @@ const Index = () => {
         component={Add} />
       <Tab.Screen name="Message"
         options={{
-          // headerShown: true,
-          // header: (props) => <MessageHeader {...props} />,
           tabBarLabel: '消息',
           headerTitle: '消息',
         }}

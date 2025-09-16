@@ -5,79 +5,26 @@ import ThemedText from '../../../components/ThemedText'
 import { useTheme } from '../../../hooks/useTheme'
 import Modal from 'react-native-modal'
 import { useNavigation } from '@react-navigation/native'
-const List = ({ onLogout }: { onLogout: () => void }) => {
+import { useAuth } from '../../../contexts/AuthContext'
+import { listData, listData2, listData3, listData4, ListData } from '../data'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { HomeStackParamList } from '../../../navigation/HomeStack'
+const List = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>()
   const { iconColor, backgroundColor, containerBackgroundColor } = useTheme()
-  const navigation = useNavigation()
-  const renderListDataPart = [
-    {
-      title: '账号与安全',
-      icon: 'user',
-    },
-    {
-      title: '通用设置',
-      icon: 'info',
-    },
-    {
-      title: '通知设置',
-      icon: 'help-circle',
-    },
-    {
-      title: '隐私设置',
-      icon: 'lock',
-    }
-  ]
-  const renderListDataPart2 = [
-    {
-      title: '存储空间',
-      icon: 'info',
-    },
-    {
-      title: '内容偏好调节',
-      icon: 'help-circle',
-    },
-    {
-      title: '收获地址',
-      icon: 'lock',
-    },
-    {
-      title: '添加小组件',
-      icon: 'lock',
-    },
-    {
-      title: '未成年人模式',
-      icon: 'lock',
-    }
-  ]
-  const renderListDataPart3 = [
-    {
-      title: '帮助与客服',
-      icon: 'info',
-    },
-    {
-      title: '关于小红书',
-      icon: 'help-circle',
-    },
-  ]
-  const renderListDataPart4 = [
-    {
-      title: '切换账号',
-      icon: ''
-    },
-    {
-      title: '退出登录',
-      icon: ''
-    }
-  ]
+  const { logout } = useAuth()
   const [isModalVisible, setModalVisible] = useState(false)
+
+
   const closeModal = useCallback(() => {
     setModalVisible(!isModalVisible);
   }, [isModalVisible]);
-  const handleOpen = (index) => {
+  const handleOpen = (index: number) => {
     if (index === 1) {
       setModalVisible(true)
     }
   }
-  const handleOpenGeneral = (index) => {
+  const handleOpenGeneral = (index: number) => {
     if (index === 1) {
       navigation.navigate('General')
     }
@@ -93,13 +40,17 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
     console.log('Modal完全显示');
   }, []);
 
+  const handleLogout = () => {
+    console.log('退出登录')
+    logout()
+  }
 
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: containerBackgroundColor }]}>
       <View style={[styles.containerPart, { backgroundColor }]}>
         {
-          renderListDataPart.map((item, index) => {
+          listData.map((item: ListData, index: number) => {
             return (
               <Pressable
                 onPress={() => handleOpenGeneral(index)}
@@ -108,7 +59,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
                 <View style={styles.card}>
                   <Feather name={item.icon} size={24} color={iconColor} />
                   <View style={styles.containerItem}>
-                    <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart.length - 1 ? 0 : StyleSheet.hairlineWidth }]}>
+                    <View style={[styles.contentItem, { borderBottomWidth: index === listData.length - 1 ? 0 : StyleSheet.hairlineWidth }]}>
                       <ThemedText style={styles.text}>{item.title}</ThemedText>
                       <Feather name="chevron-right" size={24} color={iconColor} />
                     </View>
@@ -121,7 +72,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
       </View>
       <View style={[styles.containerPart, { backgroundColor }]}>
         {
-          renderListDataPart2.map((item, index) => {
+          listData2.map((item: ListData, index: number) => {
             return (
               <Pressable
                 style={({ pressed }) => [styles.containerContent, pressed && { backgroundColor: '#eee' }]}
@@ -129,7 +80,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
                 <View style={styles.card}>
                   <Feather name={item.icon} size={24} color={iconColor} />
                   <View style={styles.containerItem}>
-                    <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart2.length - 1 ? 0 : 0.5 }]}>
+                    <View style={[styles.contentItem, { borderBottomWidth: index === listData2.length - 1 ? 0 : 0.5 }]}>
                       <ThemedText style={styles.text}>{item.title}</ThemedText>
                       <Feather name="chevron-right" size={24} color={iconColor} />
                     </View>
@@ -142,7 +93,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
       </View>
       <View style={[styles.containerPart, { backgroundColor }]}>
         {
-          renderListDataPart3.map((item, index) => {
+          listData3.map((item: ListData, index: number) => {
             return (
               <Pressable
                 style={({ pressed }) => [styles.containerContent, pressed && { backgroundColor: '#eee' }]}
@@ -150,7 +101,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
                 <View style={styles.card}>
                   <Feather name={item.icon} size={24} color={iconColor} />
                   <View style={styles.containerItem}>
-                    <View style={[styles.contentItem, { borderBottomWidth: index === renderListDataPart3.length - 1 ? 0 : 0.5 }]}>
+                    <View style={[styles.contentItem, { borderBottomWidth: index === listData3.length - 1 ? 0 : 0.5 }]}>
                       <ThemedText style={styles.text}>{item.title}</ThemedText>
                       <Feather name="chevron-right" size={24} color={iconColor} />
                     </View>
@@ -163,7 +114,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
       </View>
       <View style={[styles.containerPart, { backgroundColor }]}>
         {
-          renderListDataPart4.map((item, index) => {
+          listData4.map((item: ListData, index: number) => {
             return (
               <Pressable
                 key={index}
@@ -173,7 +124,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
                 <View
                   style={styles.containerItem}
                 >
-                  <View style={[styles.textContent, { borderBottomWidth: index === renderListDataPart4.length - 1 ? 0 : 0.5 }]}>
+                  <View style={[styles.textContent, { borderBottomWidth: index === listData4.length - 1 ? 0 : 0.5 }]}>
                     <ThemedText style={styles.text}>{item.title}</ThemedText>
                   </View>
                 </View>
@@ -214,7 +165,7 @@ const List = ({ onLogout }: { onLogout: () => void }) => {
             </Pressable>
             <Pressable
               style={({ pressed }) => [styles.modalContent, pressed && { backgroundColor: '#eee' }]}
-              onPress={onLogout}>
+              onPress={handleLogout}>
               <View style={styles.modalItem}>
                 <ThemedText >退出登录</ThemedText>
               </View>

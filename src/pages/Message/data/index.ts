@@ -1,4 +1,13 @@
-[
+export type MessageItem = {
+  id: number;
+  title: string;
+  content: string;
+  date: string;
+  image: string;
+  isRead: boolean;
+  avatar: string;
+}
+const data = [
   {
     "id": 1,
     "title": "John Doe",
@@ -188,4 +197,5 @@
     "isRead": true,
     "avatar": "https://picsum.photos/100/100"
   }
-]
+];
+export default data;

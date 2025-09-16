@@ -1,83 +1,80 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type User = {
-  id: string;
-  email: string;
-  token: string;
-};
-
 type AuthContextType = {
-  user: User | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  isSignedIn: boolean;
+  login: (token: string) => void;
+  logout: () => void;
+  register: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [isSignedIn, setIsSignedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(true);
 
+  //检查用户是否登录
   useEffect(() => {
-    const bootstrapAsync = async () => {
+    const checkSignInStatus = async () => {
       try {
-        const userData = await AsyncStorage.getItem('user');
-        setUser(userData ? JSON.parse(userData) : null);
-      } catch (e) {
-        console.error('Failed to load user data', e);
+        const token = await AsyncStorage.getItem('auth_token')
+        if (token) {
+          setIsSignedIn(!!token)//!!token将token转换为布尔值
+        }
+      } catch (error) {
+        console.log(error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
+    checkSignInStatus()
+  }, [])
 
-    bootstrapAsync();
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    // 这里应该是实际的API调用
-    const mockUser: User = {
-      id: '1',
-      email,
-      token: 'mock-token',
-    };
-    
-    await AsyncStorage.setItem('user', JSON.stringify(mockUser));
-    setUser(mockUser);
-  };
+  const login = async (token: string) => {
+    try {
+      await AsyncStorage.setItem('auth_token', token)
+      // 模拟登录延迟
+      setTimeout(() => {
+        setIsSignedIn(true)
+      }, 2000)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const logout = async () => {
-    await AsyncStorage.removeItem('user');
-    setUser(null);
-  };
+    try {
+      await AsyncStorage.removeItem('auth_token')
+      setIsSignedIn(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-  const register = async (email: string, password: string) => {
-    // 这里应该是实际的API调用
-    const mockUser: User = {
-      id: '2',
-      email,
-      token: 'mock-token',
-    };
-    
-    await AsyncStorage.setItem('user', JSON.stringify(mockUser));
-    setUser(mockUser);
+  const register = async () => {
   };
 
   const value: AuthContextType = {
-    user,
+    isSignedIn,
     isLoading,
     login,
     logout,
     register,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within an AuthProvider');
+  if (!context) throw new Error('AuthContext必须在AuthProvider中使用');
   return context;
 };  

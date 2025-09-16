@@ -5,9 +5,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { width: screenWidth } = Dimensions.get('window');
 
 const CustomTabBar = ({ state, descriptors, navigation }: any) => {
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef<ScrollView>(null);
   // 使用一个 ref 来存储每个 tab 的布局信息 (x, width)
-  const tabsLayoutRef = useRef([]);
+  const tabsLayoutRef = useRef<{ x: number; width: number }[]>([]);
   const { backgroundColor, tabBarFontColor } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -40,7 +40,7 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewContent}
       >
-        {state.routes.map((route, index) => {
+        {state.routes.map((route: any, index: number) => {
           const { options } = descriptors[route.key];
           const label =
             options.tabBarLabel !== undefined

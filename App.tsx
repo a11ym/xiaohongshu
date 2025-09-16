@@ -6,11 +6,11 @@
  */
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import DrawerNavigator from './src/navigation/DrawerNavigator';
-// import HomeStack from './app/navigation/HomeStack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
 import { useTheme } from './src/hooks/useTheme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthProvider } from './src/contexts/AuthContext';
 import React from 'react';
 const linking = {
   prefixes: [],
@@ -31,7 +31,9 @@ export default function App() {
         <NavigationContainer
           ref={navigationRef}
           linking={linking}>
-          <DrawerNavigator />
+          <AuthProvider>
+            <DrawerNavigator />
+          </AuthProvider>
         </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>

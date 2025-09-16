@@ -1,10 +1,8 @@
-import { Appearance, StyleSheet, Switch, Text, View } from 'react-native'
-import React, { use, useEffect, useState } from 'react'
+import { StyleSheet, Switch, View } from 'react-native'
+import React from 'react'
 import NavHeader from '../../../components/NavHeader'
 import ContainerView from '../../../components/ContainerView'
 import ThemedText from '../../../components/ThemedText'
-import { useColorScheme } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import ThemeManager from '../../../utils/ThemeManager'
 const DarkMode = () => {
   const {
@@ -23,9 +21,8 @@ const DarkMode = () => {
             <ThemedText>深色模式</ThemedText>
           </View>
           <View style={styles.itemRight}>
-            <Switch 
-            // disabled={followSystemTheme} 
-            value={isDarkMode} onValueChange={toggleDarkMode}></Switch>
+            <Switch
+              value={isDarkMode} onValueChange={toggleDarkMode}></Switch>
           </View>
         </View>
         <View style={styles.item}>
@@ -55,9 +52,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   itemTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: 'black'
+    // fontSize: 16,
+    // fontWeight: '500',
+    // color: 'black'
   },
   itemRight: {
     flexDirection: 'row',

@@ -1,26 +1,28 @@
-import { Button, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ActivityIndicator, Button, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useRef } from 'react'
 import ThemedView from '../../components/ThemedView'
 import ThemedText from '../../components/ThemedText'
 import Feather from '@react-native-vector-icons/feather'
 import { useTheme } from '../../hooks/useTheme'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
   BottomSheetView,
   BottomSheetModal,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
 import ContainerView from '../../components/ContainerView'
-const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
-  const { iconColor, backgroundColor } = useTheme()
-  const insets = useSafeAreaInsets()
+import { useAuth } from '../../contexts/AuthContext'
+const SignIn = () => {
+  const { iconColor } = useTheme()
+  const { login, isLoading } = useAuth()
 
   const handleSubmit = () => {
     console.log('登录')
+    console.log("🚀 ~ SignIn ~ isLoading:", isLoading)
     //模拟登录
     const mockLogin = 'xiaohongshu'
-
-    onLogin(mockLogin)
+    // const mockPassword = '123456'
+    // setIsChecked(true)
+    login(mockLogin)
   }
 
   // 登录选项数据 - 可动态增减
@@ -56,6 +58,9 @@ const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
       </ThemedView>
       <ThemedView style={styles.footerContainer}>
         <Pressable onPress={handleSubmit} style={styles.sginInButton}>
+          {
+            isLoading && <ActivityIndicator />
+          }
           <ThemedText>一键登录</ThemedText>
         </Pressable>
         <View style={styles.textContainer}>
@@ -76,16 +81,6 @@ const SignIn = ({ onLogin }: { onLogin: (name: string) => void }) => {
         <Button title="Close" onPress={() => handleClosePress()} />
       </ThemedView>
 
-      {/* <ScrollView
-        contentContainerStyle={{ backgroundColor: 'green' }}>
-        {
-          Array(100).fill(0).map((item, index) => (
-            <View>
-              <Text key={index}>{index}</Text>
-            </View>
-          ))
-        }
-      </ScrollView> */}
       {/* 底部弹窗 */}
 
       <BottomSheetModalProvider>
