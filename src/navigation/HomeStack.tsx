@@ -55,7 +55,9 @@ const HomeStack = () => {
             <Stack.Screen name="Index" component={Index} />
             <Stack.Screen name="Detail" component={Detail}
               options={{
-                animation: 'slide_from_right',
+                // animation: 'slide_from_right',
+                animation: 'none',
+                presentation: 'transparentModal'
               }}
             />
             <Stack.Group screenOptions={{ animation: 'none' }}>

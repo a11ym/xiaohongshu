@@ -11,7 +11,7 @@ const Overlay = ({ active }: Props) => {
     return {
       display: active.value ? 'flex' : 'none',
     }
-  })
+  },[active])
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <Pressable

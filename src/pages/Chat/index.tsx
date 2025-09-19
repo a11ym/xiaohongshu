@@ -12,7 +12,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import Overlay from '../../components/Overlay'
 import Drawer from '../../components/Drawer'
-import { data } from './data'
+import { data } from './data' 
 import LottieView from 'lottie-react-native'
 
 
@@ -72,7 +72,7 @@ const Chat = () => {
         }
       },
       onPanResponderRelease: onPanRelease,
-      onPanResponderTerminate: onPanRelease
+      // onPanResponderTerminate: onPanRelease
     })
   )
 
@@ -98,7 +98,7 @@ const Chat = () => {
       ],
       borderRadius: active.value ? withTiming(20) : withTiming(0),
     }
-  })
+  },[progress])
 
   const pullDownAnimatedStyle = useAnimatedStyle(() => {
     return {
@@ -108,7 +108,7 @@ const Chat = () => {
         },
       ],
     }
-  })
+  },[pullDownPosition])
 
   const refreshLoaderAnimatedStyle = useAnimatedStyle(() => {
     return {
@@ -116,7 +116,7 @@ const Chat = () => {
       height: pullDownPosition.value,
       top: pullDownPosition.value - 20,
     }
-  })
+  },[pullDownPosition])
 
   const renderItem = ({ item }: { item: any }) => {
     return (

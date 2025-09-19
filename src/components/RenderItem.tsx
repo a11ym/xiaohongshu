@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native'
-import React from 'react'
+import React, { useRef } from 'react'
 import ThemedText from './ThemedText'
 import Feather from '@react-native-vector-icons/feather'
 import { useNavigation } from '@react-navigation/native';
@@ -17,13 +17,30 @@ type Props = {
 const RenderItem = ({ item, index }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>()
   const { darkContainerBackgroundColor } = useTheme()
-
+  const viewRef = useRef<View>(null)
+  const handlePress = () => {
+    //测量
+    if (viewRef.current) {
+      viewRef.current.measure((x, y, width, height, pageX, pageY) => {
+        const origin = {
+          x: pageX,
+          y: pageY,
+          width,
+          height
+        }
+        // onPress(item,origin)
+        navigation.navigate('Detail', { item, origin } as { item: Data; origin: { x: number; y: number; width: number; height: number } })
+      })
+    }
+  }
+  // const onPress = (item, origin) => {
+  //   navigation.navigate('Detail', { item, origin })
+  // }
   return (
     <Animated.View entering={FadeInDown.delay(200 * index)}>
       <Pressable
-        onPress={() => {
-          navigation.navigate('Detail', { item: item })
-        }}
+        ref={viewRef}
+        onPress={handlePress}
         style={[styles.container, { backgroundColor: darkContainerBackgroundColor }]}
         key={item.id} >
         <Animated.Image sharedTransitionTag={item.name} source={{ uri: item.image_url }} style={styles.image} />

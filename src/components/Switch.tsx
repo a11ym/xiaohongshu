@@ -58,7 +58,7 @@ const Switch = ({ value, disabled = false, handleSwitch, activeTrackStyle = 'gre
       backgroundColor,
       opacity: 1,
     }
-  })
+  },[value, disabled, activeTrackStyle, inactiveTrackStyle])
 
   const thumbStyle = useAnimatedStyle(() => {
 
@@ -75,7 +75,7 @@ const Switch = ({ value, disabled = false, handleSwitch, activeTrackStyle = 'gre
         })
       }],
     }
-  })
+  },[value, thumbColor])
 
   return (
     <TouchableWithoutFeedback
