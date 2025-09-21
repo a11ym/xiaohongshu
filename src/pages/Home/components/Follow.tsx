@@ -1,6 +1,6 @@
 // import { FlashList } from "@shopify/flash-list";
 import React from "react";
-// import ContainerView from "../../../components/ContainerView";
+import ContainerView from "../../../components/ContainerView";
 import CustomRefreshControl from "../../../components/CustomRefreshControl";
 // import RenderItem from "../../../components/RenderItem";
 // import data from "../../../pages/Home/Data";
@@ -15,8 +15,9 @@ const Follow = () => {
   //   }, 2000)
   // }
   return (
-    <CustomRefreshControl />
-    // <Search />
+    <ContainerView>
+      <CustomRefreshControl />
+    </ContainerView>
     // <ContainerView>
     //   <CustomRefreshControl
     //     isRefreshing={refreshing}

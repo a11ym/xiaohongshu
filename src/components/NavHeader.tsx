@@ -35,17 +35,17 @@ const NavHeader = ({
       backgroundColor,
       // paddingLeft: insets.left + 10,
       // paddingRight: insets.right + 10,
-      paddingTop: insets.top + 10
+      paddingTop: insets.top
     }]}>
       <View style={styles.headerContainer}>
         {/* 左侧容器 */}
         <View style={styles.leftContainer}>
-          {back && <Pressable onPress={() => onGobackPress ? onGobackPress() : navigation.goBack()}><Feather name='chevron-left' size={30} color={iconColor} /></Pressable>}
+          {back && <Pressable style={styles.icon} onPress={() => onGobackPress ? onGobackPress() : navigation.goBack()}><Feather name='chevron-left' size={30} color={iconColor} /></Pressable>}
           {leftComponent && <>{leftComponent}</>}
         </View>
         {/* 中间容器 */}
         <View style={styles.centerContainer}>
-          {centerComponent ? <Pressable>{centerComponent}</Pressable> : <ThemedText style={styles.title}>{title}</ThemedText>}
+          {centerComponent ? <Pressable>{centerComponent}</Pressable> : <ThemedText numberOfLines={1} ellipsizeMode="tail" style={styles.title}>{title}</ThemedText>}
         </View>
         {/* 右侧容器 */}
         <View style={styles.rightContainer}>
@@ -64,13 +64,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 10,
-    paddingBottom: 10,
+    paddingVertical: 10,
   },
   headerContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
   leftContainer: {
     flex: 1,
@@ -79,13 +78,18 @@ const styles = StyleSheet.create({
     gap: 10,
     justifyContent: 'flex-start',
   },
+  icon: {
+  },
   centerContainer: {
-    // flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    maxWidth: '80%',
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    overflow: 'hidden',
   },
   rightContainer: {
     flex: 1,

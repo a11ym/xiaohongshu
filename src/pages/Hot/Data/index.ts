@@ -51,6 +51,18 @@ const videoData: VideoData[] = [
   },
   {
     id: '4',
+    uri: require('../../../assets/video/4.mp4'),
+    title: '城市霓虹下的舞蹈',
+    username: '舞蹈达人小美',
+    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+    likes: 12500,
+    comments: 320,
+    shares: 150,
+    music: '流行音乐 - 节奏感十足',
+    hashtags: ['#舞蹈', '#城市夜景', '#时尚']
+  },
+  {
+    id: '5',
     uri: 'https://assets.mixkit.co/videos/preview/mixkit-man-doing-tricks-with-skateboard-in-a-parking-lot-34557-large.mp4',
     title: '滑板公园技巧秀',
     username: '滑板小子',

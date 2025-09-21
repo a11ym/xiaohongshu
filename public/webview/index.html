@@ -286,6 +286,7 @@
     <div class="card" v-show="activeTab === 'form'">
       <div class="card-title">
         <h2>动态表单编辑器</h2>
+        <button @click="sendMessageToNative('hello from webview')">发送消息给原生</button>
       </div>
       
       <div class="info-panel">
@@ -754,6 +755,9 @@
         };
       },
       methods: {
+        sendMessageToNative(message) {
+          window.ReactNativeWebView.postMessage(message)
+        },
         // 添加教育经历
         addEducation() {
           this.formData.education.push({
